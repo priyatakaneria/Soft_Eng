@@ -9,7 +9,7 @@ package cluedo.gameLogic;
  *
  * @author Tymek
  */
-public class Character {
+public class Character implements ClueType {
 
     public enum CharacterType {
         
