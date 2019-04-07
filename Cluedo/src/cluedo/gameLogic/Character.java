@@ -7,8 +7,30 @@ package cluedo.gameLogic;
 
 /**
  *
- * @author Jamie
+ * @author Tymek
  */
 public class Character {
+
+    public enum CharacterType {
+        
+        ColMustard("Col Mustard"), ProfPlum("Prof Plum"), RevGreen("Rev Green"), MrsPeacock("Mrs Peacock"), MissScarlett("Miss Scarlett"), MrsWhite("Mrs White");
+
+        private final String nameString;
+
+        CharacterType(String name) {
+            this.nameString = name;
+        }
+
+    };
     
+    private CharacterType characterName;
+    
+    public Character(CharacterType characterName) {
+        this.characterName = characterName;
+    }
+    
+    public CharacterType getCharacterName() {
+        return this.characterName;
+    }
+
 }
