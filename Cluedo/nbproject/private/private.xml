@@ -3,7 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Jamie/OneDrive/Uni%20Work/Year%202/Term%202/Software%20Engineering/Soft_Eng/JavaFXApplication1/src/cluedo/gameLogic/Player.java</file>
+            <file>file:/C:/Users/jamie/OneDrive/Uni%20Work/Year%202/Term%202/Software%20Engineering/Soft_Eng/Cluedo/src/cluedo/gameLogic/Character.java</file>
+            <file>file:/C:/Users/jamie/OneDrive/Uni%20Work/Year%202/Term%202/Software%20Engineering/Soft_Eng/Cluedo/test/cluedo/gameLogic/DiceTest.java</file>
+            <file>file:/C:/Users/jamie/OneDrive/Uni%20Work/Year%202/Term%202/Software%20Engineering/Soft_Eng/Cluedo/src/cluedo/gameLogic/Dice.java</file>
+            <file>file:/C:/Users/jamie/OneDrive/Uni%20Work/Year%202/Term%202/Software%20Engineering/Soft_Eng/Cluedo/test/cluedo/gameLogic/CharacterTest.java</file>
         </group>
     </open-files>
 </project-private>
