@@ -27,7 +27,7 @@ public class Character {
 
     };
     
-    private CharacterType characterName;
+    private final CharacterType characterName;
     
     public Character(CharacterType characterName) {
         this.characterName = characterName;
