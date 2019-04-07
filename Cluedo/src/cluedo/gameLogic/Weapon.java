@@ -7,8 +7,8 @@ package cluedo.gameLogic;
 
 /**
  *
- * @author Jamie
+ * @author Tymek
  */
-public class Weapon {
+public class Weapon implements ClueType {
     
 }

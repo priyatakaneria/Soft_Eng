@@ -11,13 +11,4 @@ package cluedo.gameLogic;
  */
 public class Card {
 
-    private final ClueType cardType;
-
-    public Card(ClueType card) {
-        this.cardType = card;
-    }
-
-    public ClueType getCardType() {
-        return this.cardType;
-    }
 }

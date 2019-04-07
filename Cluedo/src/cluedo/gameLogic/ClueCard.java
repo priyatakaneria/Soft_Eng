@@ -7,8 +7,16 @@ package cluedo.gameLogic;
 
 /**
  *
- * @author Jamie
+ * @author Tymek
  */
 public class ClueCard {
-    
+    private final ClueType cardType;
+
+    public ClueCard(ClueType card) {
+        this.cardType = card;
+    }
+
+    public ClueType getCardType() {
+        return this.cardType;
+    }
 }

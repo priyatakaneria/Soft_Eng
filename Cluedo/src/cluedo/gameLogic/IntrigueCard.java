@@ -7,7 +7,7 @@ package cluedo.gameLogic;
 
 /**
  *
- * @author Jamie
+ * @author Tymek
  */
 public class IntrigueCard {
     

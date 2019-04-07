@@ -7,8 +7,8 @@ package cluedo.gameLogic;
 
 /**
  *
- * @author Jamie
+ * @author Tymek
  */
-public class Room {
+public class Room implements ClueType {
     
 }
