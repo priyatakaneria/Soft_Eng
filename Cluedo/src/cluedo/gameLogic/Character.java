@@ -20,6 +20,10 @@ public class Character {
         CharacterType(String name) {
             this.nameString = name;
         }
+        
+        public String getCharacterStringName() {
+            return this.nameString;
+        }
 
     };
     
