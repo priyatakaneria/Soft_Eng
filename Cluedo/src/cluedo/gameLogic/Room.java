@@ -9,8 +9,9 @@ package cluedo.gameLogic;
  *
  * @author Tymek
  */
-public class Room implements ClueType {
-    
+public class Room extends BoardSpace implements ClueType
+{
+
     public enum RoomType
     {
 
@@ -29,13 +30,13 @@ public class Room implements ClueType {
         {
             return this.nameString;
         }
-
     };
 
     private final RoomType roomName;
 
     public Room(RoomType roomName)
     {
+        super(6);
         this.roomName = roomName;
     }
 
@@ -43,5 +44,5 @@ public class Room implements ClueType {
     {
         return this.roomName;
     }
-    
+
 }
