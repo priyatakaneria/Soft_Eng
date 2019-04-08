@@ -14,7 +14,8 @@ public class Weapon implements ClueType {
     public enum WeaponType
     {
 
-        dagger("dagger"), candlestick("candlestick"), revolver("revolver"), rope("rope"), leadPiping("lead piping"), spanner("spanner");
+        dagger("dagger"), candlestick("candlestick"), revolver("revolver"),
+        rope("rope"), leadPiping("lead piping"), spanner("spanner");
 
         private final String nameString;
 

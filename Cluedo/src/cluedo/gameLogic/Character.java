@@ -15,7 +15,8 @@ public class Character implements ClueType
     public enum CharacterType
     {
 
-        ColMustard("Col Mustard"), ProfPlum("Prof Plum"), RevGreen("Rev Green"), MrsPeacock("Mrs Peacock"), MissScarlett("Miss Scarlett"), MrsWhite("Mrs White");
+        ColMustard("Col Mustard"), ProfPlum("Prof Plum"), RevGreen("Rev Green"),
+        MrsPeacock("Mrs Peacock"), MissScarlett("Miss Scarlett"), MrsWhite("Mrs White");
 
         private final String nameString;
 
