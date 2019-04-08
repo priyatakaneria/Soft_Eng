@@ -11,4 +11,37 @@ package cluedo.gameLogic;
  */
 public class Room implements ClueType {
     
+    public enum RoomType
+    {
+
+        study("study"), hall("hall"), lounge("lounge"), diningRoom("dining room"),
+        kitchen("kitchen"), ballRoom("ball room"), conservatory("conservatory"),
+        billardRoom("billard room"), library("library");
+
+        private final String nameString;
+
+        RoomType(String name)
+        {
+            this.nameString = name;
+        }
+
+        public String getRoomStringName()
+        {
+            return this.nameString;
+        }
+
+    };
+
+    private final RoomType roomName;
+
+    public Room(RoomType roomName)
+    {
+        this.roomName = roomName;
+    }
+
+    public RoomType getRoomName()
+    {
+        return this.roomName;
+    }
+    
 }

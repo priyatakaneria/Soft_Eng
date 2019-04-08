@@ -11,4 +11,35 @@ package cluedo.gameLogic;
  */
 public class Weapon implements ClueType {
     
+    public enum WeaponType
+    {
+
+        dagger("dagger"), candlestick("candlestick"), revolver("revolver"), rope("rope"), leadPiping("lead piping"), spanner("spanner");
+
+        private final String nameString;
+
+        WeaponType(String name)
+        {
+            this.nameString = name;
+        }
+
+        public String getWeaponStringName()
+        {
+            return this.nameString;
+        }
+
+    };
+
+    private final WeaponType weaponName;
+
+    public Weapon(WeaponType weaponName)
+    {
+        this.weaponName = weaponName;
+    }
+
+    public WeaponType getCharacterName()
+    {
+        return this.weaponName;
+    }
+    
 }
