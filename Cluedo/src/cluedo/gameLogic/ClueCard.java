@@ -9,7 +9,7 @@ package cluedo.gameLogic;
  *
  * @author Tymek
  */
-public class ClueCard {
+public class ClueCard extends Card {
     private final ClueType cardType;
 
     public ClueCard(ClueType card) {
