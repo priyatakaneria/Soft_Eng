@@ -13,10 +13,11 @@ public class ClueCard extends Card {
     private final ClueType cardType;
 
     public ClueCard(ClueType card) {
+        super(CardType.Clue);
         this.cardType = card;
     }
 
-    public ClueType getCardType() {
+    public ClueType getClueType() {
         return this.cardType;
     }
 }

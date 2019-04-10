@@ -10,5 +10,18 @@ package cluedo.gameLogic;
  * @author Tymek
  */
 public enum IntrigueType {
-    
-}
+
+    extraTurn("extra turn"), throwAgain("throw again"), teleport("teleport"),
+    avoidSuggestion("avoid suggestion");
+
+    private final String nameString;
+
+    IntrigueType(String name) {
+        this.nameString = name;
+    }
+
+    public String getCharacterStringName() {
+        return this.nameString;
+    }
+
+};

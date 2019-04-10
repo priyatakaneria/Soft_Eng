@@ -38,7 +38,7 @@ public class Weapon implements ClueType {
         this.weaponName = weaponName;
     }
 
-    public WeaponType getCharacterName()
+    public WeaponType getWeaponName()
     {
         return this.weaponName;
     }

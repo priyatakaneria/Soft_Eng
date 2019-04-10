@@ -9,6 +9,19 @@ package cluedo.gameLogic;
  *
  * @author Tymek
  */
-public class IntrigueCard {
+public class IntrigueCard extends Card {
+    
+    private final IntrigueType intrigueName;
+
+    public IntrigueCard(IntrigueType cardName)
+    {
+        super(CardType.Intrigue);
+        this.intrigueName = cardName;
+    }
+
+    public IntrigueType getIntrigueType()
+    {
+        return this.intrigueName;
+    }
     
 }
