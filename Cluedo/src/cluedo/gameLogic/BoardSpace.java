@@ -109,5 +109,4 @@ public abstract class BoardSpace
     {
         this.occupantLimit = occupantLimit;
     }
-
 }

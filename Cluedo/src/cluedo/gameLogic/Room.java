@@ -32,6 +32,7 @@ public class Room extends BoardSpace implements ClueType
         }
     };
 
+    private SecretPassage secretPassage;
     private final RoomType roomName;
 
     public Room(RoomType roomName)
@@ -40,6 +41,12 @@ public class Room extends BoardSpace implements ClueType
         this.roomName = roomName;
     }
 
+    public Room(RoomType roomName, SecretPassage secretPassage)
+    {
+        super(6);
+        this.roomName = roomName;
+    }
+    
     public RoomType getRoomName()
     {
         return this.roomName;

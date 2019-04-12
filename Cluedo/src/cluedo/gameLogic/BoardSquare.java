@@ -36,11 +36,27 @@ public class BoardSquare extends BoardSpace
 
     /**
      * Sets isIntrigue to a new value.
+     *
      * @param isIntrigue The new value to set isIntrigue to
      */
     public void setIntrigue(boolean isIntrigue)
     {
         this.isIntrigue = isIntrigue;
+    }
+
+    /**
+     * @return A suitable ASCII symbol to represent a square of the board.
+     */
+    @Override
+    public String toString()
+    {
+        if (isIntrigue)
+        {
+            return "? ";
+        } else
+        {
+            return "# ";
+        }
     }
 
 }

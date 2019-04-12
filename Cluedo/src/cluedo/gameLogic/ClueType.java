@@ -9,6 +9,7 @@ package cluedo.gameLogic;
  *
  * @author Tymek
  */
-public interface ClueType {
-    
+public interface ClueType
+{
+
 }
