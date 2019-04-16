@@ -15,7 +15,7 @@ public class Player
 {
     private ArrayList<ClueCard> card;
     private Character character;
-    private DetectiveTable detectiveTable;  // To be implemented later
+    //private DetectiveTable detectiveTable;  // To be implemented later
 
     public Player(Character character)
     {
@@ -35,12 +35,12 @@ public class Player
     
     public boolean makeAccusation(Character character, Room room, Weapon weapon)
     {
-        
+        return false;
     }
     
     public ClueCard respondToSuggestion(Suggestion suggestion)
     {
-        
+        return null;
     }
     
     public void markDetectiveTable(ClueType cluetype, Player clueGiver)
