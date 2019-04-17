@@ -10,6 +10,6 @@ package cluedo.gameLogic;
  * @author tymoteuszilczyszyn
  */
 public enum DetNoteType {
-    doesntHaveClue, mightHaveClu, hasClue;
+    doesntHaveClue, mightHaveClue, hasClue;
     
 }
