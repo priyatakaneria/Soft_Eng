@@ -13,6 +13,7 @@ public class SecretPassage extends BoardSpace
 {
     private Room roomA;
     private Room roomB;
+    private int roomNoA;
 
     public SecretPassage(Room roomA, Room roomB)
     {
@@ -21,6 +22,19 @@ public class SecretPassage extends BoardSpace
         this.roomB = roomB;
         super.setAdjacent(2, roomA);
         super.setAdjacent(0, roomB);
+    }
+    
+    public SecretPassage(Room roomA)
+    {
+        super(0);
+        this.roomA = roomA;
+        super.setAdjacent(2, roomA);
+    }
+    
+    public SecretPassage(int roomNoA)
+    {
+        super(0);
+        this.roomNoA = roomNoA;
     }
 
     /**

@@ -6,6 +6,7 @@
 package cluedo.gameLogic;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * An abstract implementation of an arbitrary space that players can enter on
@@ -17,7 +18,7 @@ public abstract class BoardSpace
 {
 
     private ArrayList<Player> occupants;
-    private BoardSpace[] adjacency;
+    private HashMap<Integer, ArrayList<BoardSpace>> adjacency;
     private int occupantLimit;
 
     /**
@@ -30,7 +31,11 @@ public abstract class BoardSpace
     {
         this.occupants = new ArrayList<>();
         this.occupantLimit = occupantLimit;
-        this.adjacency = new BoardSpace[4];
+        this.adjacency = new HashMap<>();
+        for (int i = 0; i < 4; i++)
+        {
+            this.adjacency.put(i, new ArrayList<>());
+        }
     }
 
     /**
@@ -69,7 +74,7 @@ public abstract class BoardSpace
     /**
      * @return The array describing any adjacent spaces.
      */
-    public BoardSpace[] getAdjacency()
+    public HashMap<Integer, ArrayList<BoardSpace>> getAdjacency()
     {
         return adjacency;
     }
@@ -85,11 +90,19 @@ public abstract class BoardSpace
      */
     public void setAdjacent(int index, BoardSpace space)
     {
+        adjacency.get(index).add(space);
+        if (!space.getAdjacency().get((index + 2) % 4).contains(this))
+        {
+            space.setAdjacent((index + 2) % 4, this);
+        }
+        
+        /*
         adjacency[index] = space;
         if (space.getAdjacency()[(index + 2) % 4] != this)
         {
             space.setAdjacent((index + 2) % 4, this);
         }
+        */
     }
 
     /**

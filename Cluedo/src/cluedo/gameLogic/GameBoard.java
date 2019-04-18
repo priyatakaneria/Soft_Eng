@@ -5,6 +5,7 @@
  */
 package cluedo.gameLogic;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Stack;
@@ -15,17 +16,19 @@ import java.util.Stack;
  */
 public class GameBoard
 {
+
     private Dice dice;
     private HashMap<Integer, HashMap<Integer, BoardSpace>> grid;
+    // private ArrayList<Room> rooms;
 
     public GameBoard()
     {
         dice = new Dice(2);
         grid = emptyGrid(24);
-        insertBoardSpace(0, 0, new BoardSquare(false));
+        /*insertBoardSpace(0, 0, new BoardSquare(false));
         insertBoardSpace(0, 1, new BoardSquare(false));
         insertBoardSpace(0, 2, new BoardSquare(false));
-        insertBoardSpace(0, 3, new BoardSquare(false));
+        insertBoardSpace(0, 3, new BoardSquare(false));*/
     }
 
     public GameBoard(int width)
@@ -33,7 +36,7 @@ public class GameBoard
         dice = new Dice(2);
         grid = emptyGrid(width);
     }
-    
+
     /**
      * Creates a new HashMap with multiple sub-HashMaps representing the rows
      * and columns of a game board. Used to initialise different board
@@ -59,30 +62,61 @@ public class GameBoard
      * @param x The x coord to insert at
      * @param y The y coord to insert at
      * @param bs The BoardSpace to insert
+     * @param north The space to the north
+     * @param east The space to the east
+     * @param south The space to the south
+     * @param west The space to the west
+     */
+    public void insertBoardSpace(int x, int y, BoardSpace bs, BoardSpace north, BoardSpace east, BoardSpace south, BoardSpace west)
+    {
+        grid.get(x).put(y, bs);
+        bs.setAdjacent(0, north);
+        bs.setAdjacent(1, east);
+        bs.setAdjacent(2, south);
+        bs.setAdjacent(3, west);
+    }
+
+    /**
+     * Inserts a BoardSpace into the grid, bypassing the ugly .get().put()
+     * syntax.
+     *
+     * @param x The x coord to insert at
+     * @param y The y coord to insert at
+     * @param bs The BoardSpace to insert
      */
     public void insertBoardSpace(int x, int y, BoardSpace bs)
     {
         grid.get(x).put(y, bs);
     }
-    
+
     public BoardSpace getBoardSpace(int x, int y)
     {
         return grid.get(x).get(y);
     }
-    
+
     public int[] getSpaceCoords(BoardSpace bs)
     {
         int[] coords = new int[2];
-        found = false;
-        for (HashMap<Integer, HashMap<Intger, Board row : grid)
+        boolean found = false;
+        for (int i = 0; i < grid.size() && !found; i++)
         {
-            
+            HashMap<Integer, BoardSpace> row = grid.get(i);
+            for (int j = 0; j < row.size() && !found; j++)
+            {
+                if (bs == row.get(j))
+                {
+                    found = true;
+                    coords[0] = i;
+                    coords[1] = j;
+                }
+            }
         }
-        coords[0] = grid.
+        return coords;
     }
 
     private class Pair
     {
+
         private int distance;
         private BoardSpace boardSpace;
 
@@ -130,11 +164,15 @@ public class GameBoard
                         {
                             try
                             {
-                                Pair nextChild = new Pair(next.getDistance() + 1, next.getBoardSpace().getAdjacency()[i]);
-                                if (!toDo.contains(nextChild.getBoardSpace()) && !seen.contains(nextChild.getBoardSpace()))
+                                for (int j = 0; j < next.getBoardSpace().getAdjacency().size(); j++)
                                 {
-                                    toDo.add(nextChild);
+                                    Pair nextChild = new Pair(next.getDistance() + 1, next.getBoardSpace().getAdjacency().get(i).get(j));
+                                    if (!toDo.contains(nextChild.getBoardSpace()) && !seen.contains(nextChild.getBoardSpace()))
+                                    {
+                                        toDo.add(nextChild);
+                                    }
                                 }
+                                
                             } catch (NullPointerException npe)
                             {
                                 /*
@@ -143,9 +181,10 @@ public class GameBoard
                                  */
                             }
                         }
-                    } else
+                    }
+                    else
                     {
-                         
+                        possibleMoves.add(next.getBoardSpace());
                     }
                 }
             }
