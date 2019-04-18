@@ -5,7 +5,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cluedo.gameLogic;
+package cluedo.gameLogic.player;
+import cluedo.gameLogic.Character;
+import cluedo.gameLogic.ClueCard;
+import cluedo.gameLogic.ClueType;
+import cluedo.gameLogic.Suggestion;
+import cluedo.gameLogic.Weapon;
+import cluedo.gameLogic.gameBoard.Room;
 import java.util.ArrayList;
 /**
  *

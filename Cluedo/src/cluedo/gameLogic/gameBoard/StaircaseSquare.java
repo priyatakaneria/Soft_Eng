@@ -3,25 +3,26 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cluedo.gameLogic;
+package cluedo.gameLogic.gameBoard;
 
 /**
  *
- * @author Jamie Thelin
+ * @author Jamie
  */
-public class EmptySquare extends BoardSpace
+public class StaircaseSquare extends EmptySquare
 {
-    public EmptySquare()
+
+    public StaircaseSquare()
     {
-        super(0);
+        super();
     }
-    
+
     /**
-     * @return An '_' character to represent an empty space.
+     * @return An '/' character to represent a square in the staircase space.
      */
     @Override
     public String toString()
     {
-        return "_ ";
+        return "/ ";
     }
 }

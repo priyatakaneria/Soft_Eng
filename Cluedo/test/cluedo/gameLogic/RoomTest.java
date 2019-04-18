@@ -5,7 +5,8 @@
  */
 package cluedo.gameLogic;
 
-import cluedo.gameLogic.Room.RoomType;
+import cluedo.gameLogic.gameBoard.Room;
+import cluedo.gameLogic.gameBoard.Room.RoomType;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;

@@ -5,6 +5,9 @@
  */
 package cluedo.gameLogic;
 
+import cluedo.gameLogic.gameBoard.BoardSquare;
+import cluedo.gameLogic.gameBoard.GameBoard;
+import cluedo.gameLogic.gameBoard.BoardSpace;
 import java.util.HashSet;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -54,7 +57,7 @@ public class GameBoardTest
         
         for (BoardSpace bs : avail)
         {
-            
+            System.out.println(bs);
         }
     }
 }

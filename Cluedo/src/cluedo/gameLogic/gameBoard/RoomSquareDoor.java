@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cluedo.gameLogic;
+package cluedo.gameLogic.gameBoard;
 
 /**
  *
- * @author tymoteuszilczyszyn
+ * @author Jamie
  */
-public enum DetNoteType {
-    doesntHaveClue, mightHaveClue, hasClue;
+public class RoomSquareDoor extends RoomSquare
+{
     
 }

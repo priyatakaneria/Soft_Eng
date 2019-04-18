@@ -3,17 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cluedo.gameLogic;
+package cluedo.gameLogic.player;
 
 /**
  *
- * @author Jamie
+ * @author tymoteuszilczyszyn
  */
-public class BoardSquareDoor extends BoardSquare
-{
-
-    public BoardSquareDoor(boolean isIntrigue)
-    {
-        super(isIntrigue);
-    }
+public enum DetNoteType {
+    doesntHaveClue, mightHaveClue, hasClue;
+    
 }
