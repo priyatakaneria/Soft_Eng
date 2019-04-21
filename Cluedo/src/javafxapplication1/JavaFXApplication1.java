@@ -103,8 +103,10 @@ public class JavaFXApplication1 extends Application {
         button1.setLayoutY(520);
         //layout1.setAlignment(button1, Pos.CENTER);
         //layout1.setAlignment(button4, Pos.BOTTOM_CENTER);
+        final URL pngResource = getClass().getResource("Cluedo-HomepageTest.png");
         layout1.getChildren().addAll(button1, button4);
-        BackgroundImage myBI= new BackgroundImage(new Image("Cluedo-Homepage.jpg",500,650,false,true),
+        Image image = new Image(getClass().getResourceAsStream("Cluedo-HomepageTest.png"),500,650,false,true);
+        BackgroundImage myBI= new BackgroundImage(image,
         BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
         BackgroundSize.DEFAULT);
         //then you set to your node
