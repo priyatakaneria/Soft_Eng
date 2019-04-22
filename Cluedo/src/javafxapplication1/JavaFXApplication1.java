@@ -6,7 +6,9 @@
 package javafxapplication1;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Optional;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -23,6 +25,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
@@ -49,14 +52,15 @@ public class JavaFXApplication1 extends Application {
     
     private Pane root = new Pane();
     private Scene scene1, scene2;
-    private String multiplayer, time;
+    private String time;
+    private ArrayList<String> playerNames = new ArrayList<String>();
     private AnimationTimer timer;
     private Label lblTime = new Label("0 .s");
-    private int seconds;
+    private int seconds, multiplayer;
+    private MediaPlayer mediaPlayer;
     
     @Override
     public void start(Stage primaryStage){        
-        
         //Media media = new Media("file://CLUE.mp3"); //replace /Movies/test.mp3 with your file
         //MediaPlayer player = new MediaPlayer(media); 
         //player.setAutoPlay(true);
@@ -69,9 +73,9 @@ public class JavaFXApplication1 extends Application {
         
         final URL resource = getClass().getResource("CLUE.mp3");
         final Media media = new Media(resource.toString());
-        final MediaPlayer mediaPlayer = new MediaPlayer(media);
+        mediaPlayer = new MediaPlayer(media);
         mediaPlayer.play();
-        
+                
         Button button1, button3, button4;
         Stage window = primaryStage;        
      
@@ -99,7 +103,7 @@ public class JavaFXApplication1 extends Application {
               
         button1 = new Button("Start game");
         button4 = new Button("Exit menu");
-        button1.setOnAction(e -> setSize(window));
+        button1.setOnAction(e -> setStage(window));
         button4.setOnAction(e -> window.close());
         
         //label1, sizeInput, label2, r, a, d, 
@@ -118,7 +122,7 @@ public class JavaFXApplication1 extends Application {
         cb.getSelectionModel().selectedIndexProperty().addListener(new 
             ChangeListener<Number>(){
                 public void changed(ObservableValue ov, Number value, Number new_value){
-                    multiplayer = players[new_value.intValue()];
+                    multiplayer = Integer.parseInt(players[new_value.intValue()]);
                     System.out.println(multiplayer);
                 }
             });
@@ -144,11 +148,14 @@ public class JavaFXApplication1 extends Application {
         launch(args);
     }
     
-    public void setSize(Stage window){
+    public void setStage(Stage window){
         createContent(window);
-        window.setScene(scene2);    
-        
-        }
+        window.setScene(scene2);  
+        for(int x=1; x<=multiplayer; x++){
+            setPlayerNames(x);
+        }        
+        System.out.println(playerNames);
+    }
     
     public void createContent(Stage primaryStage){
       
@@ -182,7 +189,7 @@ public class JavaFXApplication1 extends Application {
         int numFill = 0;
         Stage window = primaryStage;        
         Button button2 = new Button("Exit Game");
-        button2.setOnAction(e -> {window.setScene(scene1); window.close(); Platform.runLater(() -> new JavaFXApplication1().start(new Stage()));});
+        button2.setOnAction(e -> {mediaPlayer.pause(); window.setScene(scene1); window.close(); Platform.runLater(() -> new JavaFXApplication1().start(new Stage()));});
      
         int screenSizeX = (50);
         int screenSizeY = (50+35);
@@ -194,5 +201,18 @@ public class JavaFXApplication1 extends Application {
         scene2 = new Scene(root, screenSizeX, screenSizeY);
     }
     
+    public void setPlayerNames(int playerNumber){
+        TextInputDialog dialog = new TextInputDialog("");
+        dialog.setTitle("Player " + playerNumber + " name");
+        dialog.setHeaderText("Please enter the name of Player " + playerNumber);
+        dialog.setContentText("Player " + playerNumber + ":");
+
+        // Traditional way to get the response value.
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()){
+            String playerName = result.get();
+            playerNames.add(playerName);
+        }
+    }
 }
 
