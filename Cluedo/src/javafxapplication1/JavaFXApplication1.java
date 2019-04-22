@@ -12,12 +12,14 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
@@ -35,6 +37,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 /**
@@ -45,7 +49,7 @@ public class JavaFXApplication1 extends Application {
     
     private Pane root = new Pane();
     private Scene scene1, scene2;
-    private String difficulty, time;
+    private String multiplayer, time;
     private AnimationTimer timer;
     private Label lblTime = new Label("0 .s");
     private int seconds;
@@ -71,7 +75,9 @@ public class JavaFXApplication1 extends Application {
         Button button1, button3, button4;
         Stage window = primaryStage;        
      
-        //Label label1 = new Label("Enter Size:");
+        Label label1 = new Label("Number of Players:");
+        final String[] players = new String[]{"1", "2", "3", "4", "5", "6"};
+        ChoiceBox cb = new ChoiceBox(FXCollections.observableArrayList("1", "2", "3", "4", "5", "6"));
         //TextField sizeInput = new TextField();
         //Label label2 = new Label("Difficulty:");
         //ToggleButton r = new RadioButton("Easy");
@@ -99,16 +105,30 @@ public class JavaFXApplication1 extends Application {
         //label1, sizeInput, label2, r, a, d, 
         
         Pane layout1 = new Pane();
-        button1.setLayoutX(225);
-        button1.setLayoutY(520);
+        button1.setLayoutX(218);
+        button1.setLayoutY(551);
+        button4.setLayoutX(432);
+        label1.setLayoutX(167);
+        label1.setLayoutY(480);             
+        label1.setTextFill(Color.web("FFFFFF"));
+        label1.setFont(new Font("Calibri", 15));
+        cb.setLayoutX(297);
+        cb.setLayoutY(478);
+        
+        cb.getSelectionModel().selectedIndexProperty().addListener(new 
+            ChangeListener<Number>(){
+                public void changed(ObservableValue ov, Number value, Number new_value){
+                    multiplayer = players[new_value.intValue()];
+                    System.out.println(multiplayer);
+                }
+            });
+        
         //layout1.setAlignment(button1, Pos.CENTER);
         //layout1.setAlignment(button4, Pos.BOTTOM_CENTER);
-        final URL pngResource = getClass().getResource("Cluedo-HomepageTest.png");
-        layout1.getChildren().addAll(button1, button4);
+        layout1.getChildren().addAll(label1, cb, button1, button4);
         Image image = new Image(getClass().getResourceAsStream("Cluedo-HomepageTest.png"),500,650,false,true);
-        BackgroundImage myBI= new BackgroundImage(image,
-        BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
-        BackgroundSize.DEFAULT);
+        BackgroundImage myBI= new BackgroundImage(image,BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, 
+        BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
         //then you set to your node
         layout1.setBackground(new Background(myBI));           
         scene1 = new Scene(layout1, 500, 650);       
