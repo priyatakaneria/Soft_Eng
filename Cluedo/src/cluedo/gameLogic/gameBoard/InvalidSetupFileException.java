@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cluedo.gameLogic;
+package cluedo.gameLogic.gameBoard;
 
 /**
  *
- * @author Tymek
+ * @author Jamie
  */
-public interface ClueType
+public class InvalidSetupFileException extends Exception
 {
-
+    public InvalidSetupFileException(){}
 }
