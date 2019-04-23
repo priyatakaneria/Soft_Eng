@@ -11,5 +11,15 @@ package cluedo.gameLogic.gameBoard;
  */
 public class RoomSquareDoor extends RoomSquare
 {
-    
+
+    public RoomSquareDoor()
+    {
+        super(-1);
+    }
+
+    @Override
+    public String toString()
+    {
+        return "[]";
+    }
 }

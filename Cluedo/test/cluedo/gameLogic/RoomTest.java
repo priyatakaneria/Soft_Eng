@@ -31,7 +31,7 @@ public class RoomTest
         r1 = RoomType.ballRoom;
         room1 = new Room(r1);
 
-        r2 = RoomType.billardRoom;
+        r2 = RoomType.billiardRoom;
         room2 = new Room(r2);
 
         r3 = RoomType.conservatory;
@@ -54,7 +54,7 @@ public class RoomTest
     public void testGetRoomName()
     {
         RoomType e1 = RoomType.ballRoom;
-        RoomType e2 = RoomType.billardRoom;
+        RoomType e2 = RoomType.billiardRoom;
         RoomType e3 = RoomType.conservatory;
 
         assertEquals(e1, room1.getRoomName());

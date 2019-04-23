@@ -19,7 +19,7 @@ public class Room extends BoardSpace implements ClueType
 
         study("study"), hall("hall"), lounge("lounge"), diningRoom("dining room"),
         kitchen("kitchen"), ballRoom("ball room"), conservatory("conservatory"),
-        billardRoom("billard room"), library("library");
+        billiardRoom("billiard room"), library("library");
 
         private final String nameString;
 
@@ -52,6 +52,12 @@ public class Room extends BoardSpace implements ClueType
     public RoomType getRoomName()
     {
         return this.roomName;
+    }
+
+    @Override
+    public String toString()
+    {
+        return roomName.getRoomStringName();
     }
 
 }

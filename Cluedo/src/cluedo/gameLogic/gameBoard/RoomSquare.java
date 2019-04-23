@@ -14,12 +14,18 @@ public class RoomSquare extends BoardSpace
     private Room belongsTo;
     private int roomNo;
     
+    public RoomSquare(int roomNo)
+    {
+        super(0);
+        this.roomNo = roomNo;
+    }
+    
     public RoomSquare()
     {
         super(0);
     }
 
-    public Room getBelongsTo()
+    public Room belongsTo()
     {
         return belongsTo;
     }
@@ -37,6 +43,12 @@ public class RoomSquare extends BoardSpace
     public void setRoomNo(int roomNo)
     {
         this.roomNo = roomNo;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "" + roomNo + " ";
     }
     
     
