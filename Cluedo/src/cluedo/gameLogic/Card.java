@@ -7,8 +7,39 @@ package cluedo.gameLogic;
 
 /**
  *
- * @author Jamie
+ * @author Tymek
  */
 public class Card {
     
+    public enum CardType
+    {
+
+        Clue("Clue"), Intrigue("Intrigue");
+
+        private final String nameString;
+
+        CardType(String name)
+        {
+            this.nameString = name;
+        }
+
+        public String getCardStringName()
+        {
+            return this.nameString;
+        }
+
+    };
+
+    private final CardType cardName;
+
+    public Card(CardType cardName)
+    {
+        this.cardName = cardName;
+    }
+
+    public CardType getCardName()
+    {
+        return this.cardName;
+    }
+
 }
