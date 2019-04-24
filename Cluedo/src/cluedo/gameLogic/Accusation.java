@@ -9,6 +9,7 @@ package cluedo.gameLogic;
  *
  * @author Jamie
  */
-public class Accusation {
-    
+public class Accusation
+{
+
 }
