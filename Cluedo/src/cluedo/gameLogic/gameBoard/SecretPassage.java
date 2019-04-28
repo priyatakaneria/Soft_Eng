@@ -79,4 +79,17 @@ public class SecretPassage extends BoardSpace
     {
         this.roomB = roomB;
     }
+
+    public int getRoomNoA()
+    {
+        return roomNoA;
+    }
+    
+    @Override
+    public String toString()
+    {
+        return "" + roomNoA + " ";
+    }
+    
+    
 }

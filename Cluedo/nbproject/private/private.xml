@@ -3,14 +3,18 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Jamie/OneDrive/Uni%20Work/Year%202/Term%202/Software%20Engineering/Soft_Eng/Cluedo/src/cluedo/gameLogic/SecretPassage.java</file>
-            <file>file:/C:/Users/Jamie/OneDrive/Uni%20Work/Year%202/Term%202/Software%20Engineering/Soft_Eng/Cluedo/src/cluedo/gameLogic/BoardSquare.java</file>
-            <file>file:/C:/Users/Jamie/OneDrive/Uni%20Work/Year%202/Term%202/Software%20Engineering/Soft_Eng/Cluedo/src/cluedo/gameLogic/GameBoard.java</file>
-            <file>file:/C:/Users/Jamie/OneDrive/Uni%20Work/Year%202/Term%202/Software%20Engineering/Soft_Eng/Cluedo/src/cluedo/gameLogic/BoardSpace.java</file>
+            <file>file:/C:/Users/Jamie/OneDrive/Uni%20Work/Year%202/Term%202/Software%20Engineering/Soft_Eng/Cluedo/src/cluedo/gameLogic/gameBoard/BoardConstructor.java</file>
+            <file>file:/C:/Users/Jamie/OneDrive/Uni%20Work/Year%202/Term%202/Software%20Engineering/Soft_Eng/Cluedo/src/cluedo/gameLogic/gameBoard/Room.java</file>
+            <file>file:/C:/Users/Jamie/OneDrive/Uni%20Work/Year%202/Term%202/Software%20Engineering/Soft_Eng/Cluedo/src/cluedo/gameLogic/ClueType.java</file>
+            <file>file:/C:/Users/Jamie/OneDrive/Uni%20Work/Year%202/Term%202/Software%20Engineering/Soft_Eng/Cluedo/src/cluedo/gameLogic/Character.java</file>
+            <file>file:/C:/Users/Jamie/OneDrive/Uni%20Work/Year%202/Term%202/Software%20Engineering/Soft_Eng/Cluedo/test/cluedo/gameLogic/BoardSquareTest.java</file>
             <file>file:/C:/Users/Jamie/OneDrive/Uni%20Work/Year%202/Term%202/Software%20Engineering/Soft_Eng/Cluedo/test/cluedo/gameLogic/BoardConstructorTest.java</file>
+            <file>file:/C:/Users/Jamie/OneDrive/Uni%20Work/Year%202/Term%202/Software%20Engineering/Soft_Eng/Cluedo/src/cluedo/gameLogic/Envelope.java</file>
             <file>file:/C:/Users/Jamie/OneDrive/Uni%20Work/Year%202/Term%202/Software%20Engineering/Soft_Eng/Cluedo/test/cluedo/gameLogic/GameBoardTest.java</file>
-            <file>file:/C:/Users/Jamie/OneDrive/Uni%20Work/Year%202/Term%202/Software%20Engineering/Soft_Eng/Cluedo/src/cluedo/gameLogic/BoardConstructor.java</file>
-            <file>file:/C:/Users/Jamie/OneDrive/Uni%20Work/Year%202/Term%202/Software%20Engineering/Soft_Eng/Cluedo/src/cluedo/gameLogic/Room.java</file>
+            <file>file:/C:/Users/Jamie/OneDrive/Uni%20Work/Year%202/Term%202/Software%20Engineering/Soft_Eng/Cluedo/src/cluedo/gameLogic/ClueCard.java</file>
+            <file>file:/C:/Users/Jamie/OneDrive/Uni%20Work/Year%202/Term%202/Software%20Engineering/Soft_Eng/Cluedo/src/cluedo/gameLogic/Card.java</file>
+            <file>file:/C:/Users/Jamie/OneDrive/Uni%20Work/Year%202/Term%202/Software%20Engineering/Soft_Eng/Cluedo/src/cluedo/gameLogic/Weapon.java</file>
+            <file>file:/C:/Users/Jamie/OneDrive/Uni%20Work/Year%202/Term%202/Software%20Engineering/Soft_Eng/Cluedo/src/cluedo/gameLogic/gameBoard/GameBoard.java</file>
         </group>
     </open-files>
 </project-private>

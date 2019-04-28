@@ -29,7 +29,17 @@ public class BoardConstructor
         {
             throw e;
         }
+    }
 
+    public BoardConstructor(String fileName) throws FileNotFoundException
+    {
+        try
+        {
+            fileInput = new BufferedReader(new FileReader("customisation/board layout/" + fileName));
+        } catch (FileNotFoundException e)
+        {
+            throw e;
+        }
     }
 
     public GameBoard createBoard() throws InvalidSetupFileException
@@ -39,20 +49,26 @@ public class BoardConstructor
             int width = Integer.parseInt(fileInput.readLine().substring(6));
             int height = Integer.parseInt(fileInput.readLine().substring(7));
             gb = new GameBoard(width);
-
             // ignores the x coord line in the setupfile
             fileInput.readLine();
 
             for (int y = 1; y <= height; y++)
             {
-                // discards the initial two characters in ech line of the setup file so that only the squares data are read.
+                // discards the initial two characters in each line of the setup file so that only the squares' data are read.
                 fileInput.read();
                 fileInput.read();
                 for (int x = 1; x <= width; x++)
                 {
+                    // System.out.println("[" + x + "," + y +"]");
                     gb.insertBoardSpace(x, y, readBoardSquare());
                 }
+                fileInput.readLine();
             }
+            fileInput.close();
+
+            gb.createRooms();
+            gb.createClueDeck();
+            gb.setAdjacencies();
             return gb;
         } catch (IOException e)
         {
@@ -72,7 +88,7 @@ public class BoardConstructor
         {
             throw new InvalidSetupFileException();
         }
-
+        
         if (input[0] == '[' && input[2] == ']')
         {
             char symbol = input[1];
@@ -92,45 +108,49 @@ public class BoardConstructor
             else if (symbol == 'd')
             {
                 newSquare = new BoardSquareDoor(false);
-            }
+            } // Room Door Square
             else if (symbol == 'e')
             {
-                newSquare = new BoardSquare(false);
-                gb.setStartSquare(Character.CharacterType.MrsWhite, (BoardSquare) newSquare);
+                newSquare = new RoomSquareDoor();
             }// Character Start Squares:
             else if (symbol == 'w')
             {
                 newSquare = new BoardSquare(false);
                 gb.setStartSquare(Character.CharacterType.MrsWhite, (BoardSquare) newSquare);
-            }
-            else if (symbol == 'g')
+            } else if (symbol == 'g')
             {
                 newSquare = new BoardSquare(false);
                 gb.setStartSquare(Character.CharacterType.RevGreen, (BoardSquare) newSquare);
-            }
-            else if (symbol == 'p')
+            } else if (symbol == 'p')
             {
                 newSquare = new BoardSquare(false);
                 gb.setStartSquare(Character.CharacterType.MrsPeacock, (BoardSquare) newSquare);
-            }
-            else if (symbol == 'l')
+            } else if (symbol == 'l')
             {
                 newSquare = new BoardSquare(false);
                 gb.setStartSquare(Character.CharacterType.ProfPlum, (BoardSquare) newSquare);
-            }
-            else if (symbol == 's')
+            } else if (symbol == 's')
             {
                 newSquare = new BoardSquare(false);
                 gb.setStartSquare(Character.CharacterType.MissScarlett, (BoardSquare) newSquare);
-            }
-            else if (symbol == 'm')
+            } else if (symbol == 'm')
             {
                 newSquare = new BoardSquare(false);
                 gb.setStartSquare(Character.CharacterType.ColMustard, (BoardSquare) newSquare);
-            }
-            else if (symbol == 'w')
+            } // Room numbers:
+            else
             {
-                newSquare = new BoardSquare(false);
+                try
+                {
+                    int roomNo = Integer.parseInt("" + input[1]);
+                    if (roomNo > 0)
+                    {
+                        newSquare = new RoomSquare(roomNo);
+                    }
+                } catch (NumberFormatException nfe)
+                {
+                    throw new InvalidSetupFileException();
+                }
             }
         } else if (input[0] == '(' && input[2] == ')')
         {
@@ -146,7 +166,11 @@ public class BoardConstructor
                 throw new InvalidSetupFileException();
             }
 
+        } else
+        {
+            throw new InvalidSetupFileException();
         }
         return newSquare;
     }
+
 }
