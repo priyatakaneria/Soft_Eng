@@ -9,6 +9,18 @@ package cluedo.gameLogic.player;
  *
  * @author Jamie
  */
-public class AIPlayer {
+public class AIPlayer extends Player
+{
+
+     
+    private double confidence;
+
+    public AIPlayer(double confidence, cluedo.gameLogic.Character character, cluedo.gameLogic.gameBoard.GameBoard gb) 
+    {
+        super(character, gb);
+        this.confidence = confidence;
+    }
+    
+    
     
 }

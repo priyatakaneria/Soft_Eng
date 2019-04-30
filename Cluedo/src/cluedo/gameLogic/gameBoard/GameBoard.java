@@ -66,6 +66,8 @@ public class GameBoard
         return eGrid;
     }
 
+     
+    
     /**
      * Inserts a BoardSpace into the grid, bypassing the ugly .get().put()
      * syntax.
@@ -78,6 +80,7 @@ public class GameBoard
      * @param south The space to the south
      * @param west The space to the west
      */
+    
     public void insertBoardSpace(int x, int y, BoardSpace bs, BoardSpace north, BoardSpace east, BoardSpace south, BoardSpace west)
     {
         grid.get(x).put(y, bs);
@@ -147,6 +150,17 @@ public class GameBoard
             }
         }
         return coords;
+    }
+    
+    /**
+     * Gets & returns the game board's grid (ie. all of its board spaces, 
+     * respective board space positions and board space properties. 
+     * 
+     * @return The Hashmap representing the board's grid. 
+     */
+    public HashMap<Integer, HashMap<Integer, BoardSpace>> getGrid() 
+    {
+        return grid;
     }
 
     /**

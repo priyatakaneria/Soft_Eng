@@ -5,10 +5,19 @@
  */
 package cluedo.gameLogic;
 
+import cluedo.gameLogic.gameBoard.Room;
+import cluedo.gameLogic.player.Player;
+
 /**
  *
  * @author Jamie
  */
-public class Suggestion {
-    
+public class Suggestion extends AccuSuggest
+{
+
+    public Suggestion(Room room, Weapon weapon, Character character, Player asker) {
+        super(room, weapon, character, asker);
+    }
+
+        
 }

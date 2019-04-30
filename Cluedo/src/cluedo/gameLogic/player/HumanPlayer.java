@@ -5,10 +5,22 @@
  */
 package cluedo.gameLogic.player;
 
+import cluedo.gameLogic.Character;
+
 /**
  *
  * @author Jamie
  */
-public class HumanPlayer {
+public class HumanPlayer extends Player
+{
+
+    public HumanPlayer(Character character, cluedo.gameLogic.gameBoard.GameBoard gb) {
+        super(character, gb);
+    }
+    
+    public void writeNotes(String notes)
+    {
+        
+    }
     
 }
