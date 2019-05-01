@@ -67,6 +67,7 @@ public class BoardConstructor
             fileInput.close();
 
             gb.createRooms();
+            gb.createClueDeck();
             gb.setAdjacencies();
             return gb;
         } catch (IOException e)
