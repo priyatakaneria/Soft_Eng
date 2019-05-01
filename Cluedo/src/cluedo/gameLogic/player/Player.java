@@ -57,6 +57,12 @@ public class Player
     public void setCharacter(Character character) {
         this.character = character;
     }
+
+    public void setDetNotes(DetectiveNotes detNotes) {
+        this.detNotes = detNotes;
+    }
+    
+    
     
     public boolean Move(cluedo.gameLogic.gameBoard.BoardSpace space)
     {
