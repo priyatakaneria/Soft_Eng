@@ -172,5 +172,5 @@ public class BoardConstructor
         }
         return newSquare;
     }
-
+    
 }

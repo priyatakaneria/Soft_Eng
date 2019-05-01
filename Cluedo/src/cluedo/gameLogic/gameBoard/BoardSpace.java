@@ -63,6 +63,23 @@ public abstract class BoardSpace
         }
         return false;
     }
+    
+    /**
+     * Removes a player from a space, providing it is currently there. 
+     *
+     * @param p The player object to remove from the space.
+     * @return true if the player was removed successfully, false if the space 
+     * does not contain the player. 
+     */
+    public boolean removeOccupant(Player p)
+    {
+        if (occupants.contains(p))
+        {
+            occupants.remove(p);
+            return true;
+        }
+        return false;
+    }
 
     /**
      * @return The list of Players currently in the space.
