@@ -118,9 +118,16 @@ public class Player
         return null;
     }
     
-    public boolean makeAccusation(Character character, Room room, Weapon weapon)
+    public boolean makeAccusation(Character character, Room room, Weapon weapon, cluedo.gameLogic.Envelope envelope)
     {
-       return false;
+        if (character.equals(envelope.getCharacter()) && room.equals(envelope.getRoom()) && weapon.equals(envelope.getWeapon()))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
     
     public void markDetectiveTable(ClueType cluetype, Player clueGiver)

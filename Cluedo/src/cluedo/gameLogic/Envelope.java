@@ -29,4 +29,18 @@ public class Envelope
         // waiting for accusation and player implementations...
         // return (accusation.getCharacter() == character && accusation.getRoom() == room && accusation.getWeapon() == weapon);
     }
+
+    public Card getCharacter() {
+        return character;
+    }
+
+    public Card getRoom() {
+        return room;
+    }
+
+    public Card getWeapon() {
+        return weapon;
+    }
+    
+    
 }
