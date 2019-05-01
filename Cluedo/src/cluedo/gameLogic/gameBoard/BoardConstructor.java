@@ -116,27 +116,27 @@ public class BoardConstructor
             else if (symbol == 'w')
             {
                 newSquare = new BoardSquare(false);
-                gb.setStartSquare(Character.CharacterType.MrsWhite, (BoardSquare) newSquare);
+                gb.setStartSquare(Character.MrsWhite, (BoardSquare) newSquare);
             } else if (symbol == 'g')
             {
                 newSquare = new BoardSquare(false);
-                gb.setStartSquare(Character.CharacterType.RevGreen, (BoardSquare) newSquare);
+                gb.setStartSquare(Character.RevGreen, (BoardSquare) newSquare);
             } else if (symbol == 'p')
             {
                 newSquare = new BoardSquare(false);
-                gb.setStartSquare(Character.CharacterType.MrsPeacock, (BoardSquare) newSquare);
+                gb.setStartSquare(Character.MrsPeacock, (BoardSquare) newSquare);
             } else if (symbol == 'l')
             {
                 newSquare = new BoardSquare(false);
-                gb.setStartSquare(Character.CharacterType.ProfPlum, (BoardSquare) newSquare);
+                gb.setStartSquare(Character.ProfPlum, (BoardSquare) newSquare);
             } else if (symbol == 's')
             {
                 newSquare = new BoardSquare(false);
-                gb.setStartSquare(Character.CharacterType.MissScarlett, (BoardSquare) newSquare);
+                gb.setStartSquare(Character.MissScarlett, (BoardSquare) newSquare);
             } else if (symbol == 'm')
             {
                 newSquare = new BoardSquare(false);
-                gb.setStartSquare(Character.CharacterType.ColMustard, (BoardSquare) newSquare);
+                gb.setStartSquare(Character.ColMustard, (BoardSquare) newSquare);
             } // Room numbers:
             else
             {

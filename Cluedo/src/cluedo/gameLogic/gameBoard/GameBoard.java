@@ -29,7 +29,7 @@ public class GameBoard
 
     private Dice dice;
     private HashMap<Integer, HashMap<Integer, BoardSpace>> grid;
-    private HashMap<Character.CharacterType, BoardSquare> startingSquares;
+    private HashMap<Character, BoardSquare> startingSquares;
     private HashMap<Integer, Room> rooms;
     private int width;
     
@@ -98,12 +98,12 @@ public class GameBoard
         Stack<Card> weaponDeck = new Stack<>();
         Stack<Card> characterDeck = new Stack<>();
 
-        characterDeck.push(new ClueCard(new Character(Character.CharacterType.ColMustard)));
-        characterDeck.push(new ClueCard(new Character(Character.CharacterType.MissScarlett)));
-        characterDeck.push(new ClueCard(new Character(Character.CharacterType.MrsPeacock)));
-        characterDeck.push(new ClueCard(new Character(Character.CharacterType.MrsWhite)));
-        characterDeck.push(new ClueCard(new Character(Character.CharacterType.ProfPlum)));
-        characterDeck.push(new ClueCard(new Character(Character.CharacterType.RevGreen)));
+        characterDeck.push(new ClueCard(Character.ColMustard));
+        characterDeck.push(new ClueCard(Character.MissScarlett));
+        characterDeck.push(new ClueCard(Character.MrsPeacock));
+        characterDeck.push(new ClueCard(Character.MrsWhite));
+        characterDeck.push(new ClueCard(Character.ProfPlum));
+        characterDeck.push(new ClueCard(Character.RevGreen));
         
         try
         {
@@ -118,12 +118,12 @@ public class GameBoard
             throw new InvalidSetupFileException();
         }
 
-        weaponDeck.push(new ClueCard(new Weapon(Weapon.WeaponType.candlestick)));
-        weaponDeck.push(new ClueCard(new Weapon(Weapon.WeaponType.dagger)));
-        weaponDeck.push(new ClueCard(new Weapon(Weapon.WeaponType.leadPiping)));
-        weaponDeck.push(new ClueCard(new Weapon(Weapon.WeaponType.revolver)));
-        weaponDeck.push(new ClueCard(new Weapon(Weapon.WeaponType.rope)));
-        weaponDeck.push(new ClueCard(new Weapon(Weapon.WeaponType.spanner)));
+        weaponDeck.push(new ClueCard(Weapon.candlestick));
+        weaponDeck.push(new ClueCard(Weapon.dagger));
+        weaponDeck.push(new ClueCard(Weapon.leadPiping));
+        weaponDeck.push(new ClueCard(Weapon.revolver));
+        weaponDeck.push(new ClueCard(Weapon.rope));
+        weaponDeck.push(new ClueCard(Weapon.spanner));
 
         
         
@@ -527,7 +527,7 @@ public class GameBoard
      * @param character The character who starts st the specified BoardSquare
      * @param bs The BoardSquare at which the specified character starts at.
      */
-    public void setStartSquare(Character.CharacterType character, BoardSquare bs)
+    public void setStartSquare(Character character, BoardSquare bs)
     {
         startingSquares.put(character, bs);
     }

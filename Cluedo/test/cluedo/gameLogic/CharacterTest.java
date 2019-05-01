@@ -5,7 +5,7 @@
  */
 package cluedo.gameLogic;
 
-import cluedo.gameLogic.Character.CharacterType;
+import cluedo.gameLogic.Character;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -21,20 +21,20 @@ public class CharacterTest
     {
     }
 
-    private CharacterType c1, c2, c3;
-    private Character character1, character2, character3;
+    private Character c1, c2, c3;
+    // private Character character1, character2, character3;
 
     @Before
     public void setUp()
     {
-        c1 = CharacterType.ColMustard;
-        character1 = new Character(c1);
+        c1 = Character.ColMustard;
+        // character1 = new Character(c1);
 
-        c2 = CharacterType.MissScarlett;
-        character2 = new Character(c2);
+        c2 = Character.MissScarlett;
+        // character2 = new Character(c2);
 
-        c3 = CharacterType.MrsPeacock;
-        character3 = new Character(c3);
+        c3 = Character.MrsPeacock;
+        // character3 = new Character(c3);
     }
 
     @Test
@@ -44,22 +44,8 @@ public class CharacterTest
         String s2 = "Miss Scarlett";
         String s3 = "Mrs Peacock";
 
-        assertEquals(s1, c1.getCharacterStringName());
-        assertEquals(s2, c2.getCharacterStringName());
-        assertEquals(s3, c3.getCharacterStringName());
+        assertEquals(s1, c1.getCharacterName());
+        assertEquals(s2, c2.getCharacterName());
+        assertEquals(s3, c3.getCharacterName());
     }
-
-    @Test
-    public void testGetCharacterName()
-    {
-        CharacterType e1 = CharacterType.ColMustard;
-        CharacterType e2 = CharacterType.MissScarlett;
-        CharacterType e3 = CharacterType.MrsPeacock;
-
-        assertEquals(e1, character1.getCharacterName());
-        assertEquals(e2, character2.getCharacterName());
-        assertEquals(e3, character3.getCharacterName());
-
-    }
-
 }
