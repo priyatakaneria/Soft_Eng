@@ -12,6 +12,8 @@ import cluedo.gameLogic.ClueType;
 import cluedo.gameLogic.Suggestion;
 import cluedo.gameLogic.Weapon;
 import cluedo.gameLogic.gameBoard.Room;
+import cluedo.gameLogic.gameBoard.GameBoard;
+import cluedo.gameLogic.gameBoard.BoardSpace;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.HashMap;
@@ -25,11 +27,12 @@ public class Player
     private ArrayList<ClueCard> clueHand;
     private Character character;
     private DetectiveNotes detNotes;
-    private cluedo.gameLogic.gameBoard.GameBoard gb;
+    private GameBoard gb;
+    private String playerName;
      
     //Add Gameboard as Parameter
    
-    public Player(Character character, cluedo.gameLogic.gameBoard.GameBoard gb)
+    public Player(Character character, String playerName, GameBoard gb)
     {
         clueHand = new ArrayList<>();
         this.character = character;
@@ -64,7 +67,7 @@ public class Player
     
     
     
-    public boolean Move(cluedo.gameLogic.gameBoard.BoardSpace space)
+    public boolean Move(BoardSpace space)
     {
         //Main Method needs to instantiate BoardConstructor. Once this is done, the GameBoard's hashmap can be referenced from non-static context. Or BoardConstructor needs to be static. 
         //This is so player is removed from previous space. 
@@ -76,9 +79,9 @@ public class Player
             while (j.hasNext())
             {
                 Map.Entry boardspace = (Map.Entry)j.next();
-                if (((cluedo.gameLogic.gameBoard.BoardSpace)boardspace.getValue()).getOccupants().contains(this))
+                if (((BoardSpace)boardspace.getValue()).getOccupants().contains(this))
                 {
-                    ((cluedo.gameLogic.gameBoard.BoardSpace)boardspace.getValue()).removeOccupant(this);
+                    ((BoardSpace)boardspace.getValue()).removeOccupant(this);
                 }
             }
         }

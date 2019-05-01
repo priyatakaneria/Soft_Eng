@@ -12,8 +12,8 @@ package cluedo.gameLogic;
 public enum Character implements ClueType
 {
 
-    ColMustard("Col Mustard"), ProfPlum("Prof Plum"), RevGreen("Rev Green"),
-    MrsPeacock("Mrs Peacock"), MissScarlett("Miss Scarlett"), MrsWhite("Mrs White");
+    MissScarlett("Miss Scarlett"), ColMustard("Col Mustard"), MrsWhite("Mrs White"),
+    RevGreen("Rev Green"), ProfPlum("Prof Plum"), MrsPeacock("Mrs Peacock");
     
     private final String nameString;
 

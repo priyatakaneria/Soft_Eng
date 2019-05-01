@@ -22,24 +22,18 @@ public class BoardConstructor
 
     public BoardConstructor() throws FileNotFoundException
     {
-        try
-        {
-            fileInput = new BufferedReader(new FileReader("customisation/board layout/default.txt"));
-        } catch (FileNotFoundException e)
-        {
-            throw e;
-        }
+        fileInput = new BufferedReader(new FileReader("customisation/board layout/default.txt"));
     }
 
+    /**
+     * subject to change depending on how the input is given from GUI
+     * 
+     * @param fileName
+     * @throws FileNotFoundException 
+     */
     public BoardConstructor(String fileName) throws FileNotFoundException
     {
-        try
-        {
-            fileInput = new BufferedReader(new FileReader("customisation/board layout/" + fileName));
-        } catch (FileNotFoundException e)
-        {
-            throw e;
-        }
+        fileInput = new BufferedReader(new FileReader("customisation/board layout/" + fileName));
     }
 
     public GameBoard createBoard() throws InvalidSetupFileException

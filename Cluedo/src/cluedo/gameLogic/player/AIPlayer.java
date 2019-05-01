@@ -5,6 +5,9 @@
  */
 package cluedo.gameLogic.player;
 
+import cluedo.gameLogic.gameBoard.GameBoard;
+import cluedo.gameLogic.Character;
+
 /**
  *
  * @author Jamie
@@ -15,9 +18,9 @@ public class AIPlayer extends Player
      
     private double confidence;
 
-    public AIPlayer(double confidence, cluedo.gameLogic.Character character, cluedo.gameLogic.gameBoard.GameBoard gb) 
+    public AIPlayer(double confidence, Character character, String aiName, GameBoard gb) 
     {
-        super(character, gb);
+        super(character, aiName, gb);
         this.confidence = confidence;
     }
     
