@@ -60,10 +60,6 @@ public class Player
     public void setCharacter(Character character) {
         this.character = character;
     }
-
-    public void setDetNotes(DetectiveNotes detNotes) {
-        this.detNotes = detNotes;
-    }
     
     
     
@@ -90,9 +86,9 @@ public class Player
         //If this doesn't work, change the grid field in BoardSpace to public, and reference directly (not through getGrid method). 
     }
     
-    public void makeSuggestion(Character character, Room room, Weapon weapon)
+    public Suggestion makeSuggestion(Character character, Room room, Weapon weapon)
     {
-        
+        return new Suggestion(room, weapon, character, this);
     }
     
        
@@ -139,9 +135,9 @@ public class Player
         }
     }
     
-    public void markDetectiveTable(ClueType cluetype, Player clueGiver)
+    public void markDetectiveTable(ClueType cluetype, Player clueGiver, DetNoteType dnt)
     {
-        
+        detNotes.markTable(clueGiver, cluetype, dnt);
     }
     
     public ClueCard enquirePlayer(Suggestion suggestion, Player player)

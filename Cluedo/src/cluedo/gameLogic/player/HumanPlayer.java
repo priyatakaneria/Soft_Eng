@@ -21,7 +21,7 @@ public class HumanPlayer extends Player
     
     public void writeNotes(String notes)
     {
-        //
+        getDetNotes().writeNotes(notes);
     }
     
 }
