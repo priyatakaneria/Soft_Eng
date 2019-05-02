@@ -32,6 +32,7 @@ public class TurnManager
 
     private GameBoard gameBoard;
     private Queue<Player> playerQueue;
+    private ArrayList<Player> allPlayers;
     private Player currPlayer;
     private Application GUI;
 
@@ -100,6 +101,7 @@ public class TurnManager
     {
         // Create human and AI players and add them to the player queue
         playerQueue = new LinkedList();
+        allPlayers = new ArrayList<>();
 
         int currAiPlayers = 0;
         Player newPlayer;
@@ -123,6 +125,7 @@ public class TurnManager
                 newPlayer = new AIPlayer(0, c, c.getCharacterName(), gameBoard, gameBoard.getStartingSquares().get(c));
                 // newPlayer.Move());
             }
+            allPlayers.add(newPlayer);
         }
 
         // deal cards
@@ -280,7 +283,7 @@ public class TurnManager
             } //
             else if (playerPosition instanceof Room)
             {
-                Suggestion newSuggestion;
+                Suggestion newSuggestion = null;
                 if (ai)
                 {
                     /**
@@ -300,6 +303,19 @@ public class TurnManager
                      */
                     newSuggestion = GUI.makeSuggestion(player);
                 }
+                /**
+                 * move players into the room they are called into for a suggestion
+                 */
+                for (Player p : allPlayers)
+                {
+                    if (p.getCharacter() == newSuggestion.getCharacter())
+                    {
+                        p.Move(newSuggestion.getRoom());
+                    }
+                }
+                /**
+                 * find the set of possibe clues from a player's hand
+                 */
                 ArrayList<ClueCard> possibleClues = new ArrayList<>();
                 Player nextEnquiry = null;
                 while (playerQueue.peek() != player && possibleClues.size() == 0)

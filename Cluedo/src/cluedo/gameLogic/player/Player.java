@@ -91,27 +91,8 @@ public class Player
     public boolean Move(BoardSpace space)
     {
         currentPosition.removeOccupant(this);
-        space.addOccupant(this);
-
-        //Main Method needs to instantiate BoardConstructor. Once this is done, the GameBoard's hashmap can be referenced from non-static context. Or BoardConstructor needs to be static. 
-        //This is so player is removed from previous space. 
-//        Iterator i = gb.getGrid().entrySet().iterator();
-//        while (i.hasNext())
-//        {
-//            Map.Entry innerHm = (Map.Entry)i.next();
-//            Iterator j = ((HashMap)innerHm.getValue()).entrySet().iterator();
-//            while (j.hasNext())
-//            {
-//                Map.Entry boardspace = (Map.Entry)j.next();
-//                if (((BoardSpace)boardspace.getValue()).getOccupants().contains(this))
-//                {
-//                    ((BoardSpace)boardspace.getValue()).removeOccupant(this);
-//                }
-//            }
-//        }
+        currentPosition = space;
         return space.addOccupant(this);
-
-        //If this doesn't work, change the grid field in BoardSpace to public, and reference directly (not through getGrid method). 
     }
 
     public Suggestion makeSuggestion(Character character, Room room, Weapon weapon)
