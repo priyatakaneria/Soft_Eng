@@ -71,6 +71,16 @@ public class GameBoard
         intrigueDeck = createIntrigueDeck();
     }
 
+    /**
+     * rolls a pair of dice and returns the value
+     *
+     * @return int between 2 and 12 representing a dice roll
+     */
+    public int rollDice()
+    {
+        return dice.roll();
+    }
+
     public HashMap<Character, BoardSquare> getStartingSquares()
     {
         return startingSquares;
@@ -92,9 +102,9 @@ public class GameBoard
     }
 
     /**
-     * creates and shuffles the pack of intrigue cards
+     * creates and shuffles the pack of intrigue cards.
      *
-     * @return a shuffled
+     * @return a shuffled deck of intrigue cards
      */
     public LinkedList<Card> createIntrigueDeck()
     {
@@ -153,7 +163,7 @@ public class GameBoard
         shuffleDeck(roomDeck);
         shuffleDeck(weaponDeck);
 
-        envelope = new Envelope(characterDeck.pop(), roomDeck.pop(), weaponDeck.pop());
+        envelope = new Envelope((ClueCard) characterDeck.pop(), (ClueCard) roomDeck.pop(), (ClueCard) weaponDeck.pop());
 
         LinkedList<Card> masterDeck = new LinkedList<>();
         masterDeck.addAll(characterDeck);
@@ -523,7 +533,7 @@ public class GameBoard
                             for (int j = 0; j < next.getAdjacency().get(i).size(); j++)
                             {
                                 BoardSpace nextChild = next.getAdjacency().get(i).get(j);
-                                if (!toDo.contains(nextChild) && !seen.contains(nextChild))
+                                if (!toDo.contains(nextChild) && !seen.contains(nextChild) && !nextChild.isFull())
                                 {
                                     distanceMappings.put(nextChild, distanceMappings.get(next) + 1);
                                     toDo.add(nextChild);
@@ -531,9 +541,9 @@ public class GameBoard
                             }
                         } catch (NullPointerException npe)
                         {
-                            /*
-                             * Adjacency array was null in this location
-                             * i.e. there is no board space in that direction
+                            /**
+                             * Adjacency array was null in this location i.e.
+                             * there is no board space in that direction
                              */
                         }
                         // ToDo: sort out boardSquareDoors not working!!

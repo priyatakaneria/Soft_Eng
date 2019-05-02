@@ -1,15 +1,15 @@
-
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package cluedo.gameLogic.player;
+
 import cluedo.gameLogic.Character;
 import cluedo.gameLogic.ClueCard;
 import cluedo.gameLogic.ClueType;
 import cluedo.gameLogic.IntrigueCard;
+import cluedo.gameLogic.IntrigueType;
 import cluedo.gameLogic.Suggestion;
 import cluedo.gameLogic.Weapon;
 import cluedo.gameLogic.gameBoard.Room;
@@ -19,12 +19,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.HashMap;
 import java.util.Map;
+
 /**
  *
  * @author Jamie
  */
 public class Player
 {
+
     private ArrayList<ClueCard> clueHand;
     private ArrayList<IntrigueCard> intrigueHand;
     private Character character;
@@ -32,9 +34,9 @@ public class Player
     private GameBoard gb;
     private String playerName;
     private BoardSpace currentPosition;
-     
+    private boolean playerLost;
+
     //Add Gameboard as Parameter
-   
     public Player(Character character, String playerName, GameBoard gb, BoardSpace start)
     {
         clueHand = new ArrayList<>();
@@ -43,25 +45,41 @@ public class Player
         detNotes = new DetectiveNotes();
         this.gb = gb;
         currentPosition = start;
+        playerLost = false;
     }
-    
-    public DetectiveNotes getDetNotes() {
+
+    public boolean hasPlayerLost()
+    {
+        return playerLost;
+    }
+
+    public void setPlayerLost(boolean playerLost)
+    {
+        this.playerLost = playerLost;
+    }
+
+    public DetectiveNotes getDetNotes()
+    {
         return detNotes;
     }
 
-    public ArrayList<ClueCard> getClueHand() {
+    public ArrayList<ClueCard> getClueHand()
+    {
         return clueHand;
     }
 
-    public void addClueCard(ClueCard card) {
+    public void addClueCard(ClueCard card)
+    {
         clueHand.add(card);
     }
 
-    public Character getCharacter() {
+    public Character getCharacter()
+    {
         return character;
     }
 
-    public void setCharacter(Character character) {
+    public void setCharacter(Character character)
+    {
         this.character = character;
     }
 
@@ -69,12 +87,12 @@ public class Player
     {
         return currentPosition;
     }
-    
+
     public boolean Move(BoardSpace space)
     {
         currentPosition.removeOccupant(this);
         space.addOccupant(this);
-        
+
         //Main Method needs to instantiate BoardConstructor. Once this is done, the GameBoard's hashmap can be referenced from non-static context. Or BoardConstructor needs to be static. 
         //This is so player is removed from previous space. 
 //        Iterator i = gb.getGrid().entrySet().iterator();
@@ -92,72 +110,122 @@ public class Player
 //            }
 //        }
         return space.addOccupant(this);
-        
+
         //If this doesn't work, change the grid field in BoardSpace to public, and reference directly (not through getGrid method). 
     }
-    
+
     public Suggestion makeSuggestion(Character character, Room room, Weapon weapon)
     {
         return new Suggestion(room, weapon, character, this);
     }
-    
-       
-    public ClueCard respondToSuggestion(Suggestion suggestion)
+
+    /**
+     * Accepts a suggestion and returns all the possible clues to give.
+     *
+     * @param suggestion the suggestion to check against
+     * @return ArrayList of ClueCards corresponding to the possible clues to
+     * give.
+     */
+    public ArrayList<ClueCard> respondToSuggestion(Suggestion suggestion)
     {
-        String name;
+        ArrayList<ClueCard> possibleClues = new ArrayList<>();
+        ClueType clueType;
         for (ClueCard clue : clueHand)
         {
-            name = clue.getClueType().getClass().getSimpleName().toString();
-            if (name.equals("Weapon"))
+            clueType = clue.getClueType();
+            if (clueType instanceof Weapon)
             {
-                if (suggestion.getWeapon().equals(clue.getClueType()))
+                if (suggestion.getWeapon() == clueType)
                 {
-                    return clue;
+                    possibleClues.add(clue);
                 }
-            }
-            else if (name.equals("Room"))
+            } //
+            else if (clueType instanceof Room)
             {
-                if (suggestion.getRoom().equals(clue.getClueType()))
+                if (suggestion.getRoom() == clueType)
                 {
-                    return clue;
+                    possibleClues.add(clue);
                 }
-            }
-            else if (name.equals("Character"))
+            } //
+            else if (clueType instanceof Character)
             {
-                if (suggestion.getCharacter().equals(clue.getClueType()))
+                if (suggestion.getCharacter() == clueType)
                 {
-                    return clue;
+                    possibleClues.add(clue);
                 }
             }
         }
         return null;
     }
-    
+
     public boolean makeAccusation(Character character, Room room, Weapon weapon, cluedo.gameLogic.Envelope envelope)
     {
         if (character.equals(envelope.getCharacter()) && room.equals(envelope.getRoom()) && weapon.equals(envelope.getWeapon()))
         {
             return true;
-        }
-        else
+        } else
         {
             return false;
         }
     }
-    
+
     public void markDetectiveTable(ClueType cluetype, Player clueGiver, DetNoteType dnt)
     {
         detNotes.markTable(clueGiver, cluetype, dnt);
     }
-    
-    public ClueCard enquirePlayer(Suggestion suggestion, Player player)
+
+    /**
+     * possible not needed?
+     *
+     * @param suggestion
+     * @param player
+     * @return
+     */
+    public ArrayList<ClueCard> enquirePlayer(Suggestion suggestion, Player player)
     {
-         return player.respondToSuggestion(suggestion);
+        return player.respondToSuggestion(suggestion);
     }
-    
+
     public void addIntrigueCard(IntrigueCard ic)
     {
         intrigueHand.add(ic);
     }
-    
+
+    /**
+     * Searches through the intrigueHand until the corresponding intrigue type
+     * is found, and removes it.
+     *
+     * @param it the IntrigueType to look for
+     * @return the card removed from the hand
+     */
+    public IntrigueCard removeIntrigueCard(IntrigueType it)
+    {
+        IntrigueCard foundCard = null;
+        for (IntrigueCard ic : intrigueHand)
+        {
+            if (ic.getIntrigueType() == it)
+            {
+                foundCard = ic;
+            }
+        }
+        if (foundCard != null)
+        {
+            intrigueHand.remove(foundCard);
+        }
+        return foundCard;
+    }
+
+    public boolean hasIntrigueType(IntrigueType it)
+    {
+        IntrigueCard foundCard = null;
+        for (IntrigueCard ic : intrigueHand)
+        {
+            if (ic.getIntrigueType() == it)
+            {
+                foundCard = ic;
+            }
+        }
+        return foundCard != null;
+    }
+
 }

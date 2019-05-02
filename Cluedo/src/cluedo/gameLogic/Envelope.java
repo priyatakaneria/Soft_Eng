@@ -2,6 +2,7 @@ package cluedo.gameLogic;
 
 import cluedo.gameLogic.gameBoard.Room;
 import cluedo.gameLogic.player.Player;
+import cluedo.gameLogic.Character;
 
 /**
  * Stores the murder scenario for each game. this consists of a Character, Room
@@ -12,33 +13,31 @@ import cluedo.gameLogic.player.Player;
 public class Envelope
 {
 
-    private Card character;
-    private Card room;
-    private Card weapon;
+    private Character character;
+    private Room room;
+    private Weapon weapon;
 
-    public Envelope(Card character, Card room, Card weapon)
+    public Envelope(ClueCard character, ClueCard room, ClueCard weapon)
     {
-        this.character = character;
-        this.room = room;
-        this.weapon = weapon;
+        this.character = (Character)((ClueCard) character).getClueType();
+        this.room = (Room) ((ClueCard) room).getClueType();
+        this.weapon = (Weapon) ((ClueCard) weapon).getClueType();
     }
     
     public boolean checkEnvelope(Accusation accusation)
     {
-        return false;
-        // waiting for accusation and player implementations...
-        // return (accusation.getCharacter() == character && accusation.getRoom() == room && accusation.getWeapon() == weapon);
+        return ((accusation.getCharacter() == character) && (accusation.getRoom() == room) && (accusation.getWeapon() == weapon));
     }
 
-    public Card getCharacter() {
+    public Character getCharacter() {
         return character;
     }
 
-    public Card getRoom() {
+    public Room getRoom() {
         return room;
     }
 
-    public Card getWeapon() {
+    public Weapon getWeapon() {
         return weapon;
     }
     
