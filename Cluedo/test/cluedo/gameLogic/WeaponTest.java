@@ -5,7 +5,7 @@
  */
 package cluedo.gameLogic;
 
-import cluedo.gameLogic.Weapon.WeaponType;
+import cluedo.gameLogic.Weapon;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -21,20 +21,16 @@ public class WeaponTest
     {
     }
 
-    private WeaponType w1, w2, w3;
-    private Weapon weapon1, weapon2, weapon3;
+    private Weapon w1, w2, w3;
 
     @Before
     public void setUp()
     {
-        w1 = WeaponType.candlestick;
-        weapon1 = new Weapon(w1);
+        w1 = Weapon.candlestick;
 
-        w2 = WeaponType.dagger;
-        weapon2 = new Weapon(w2);
+        w2 = Weapon.dagger;
 
-        w3 = WeaponType.leadPiping;
-        weapon3 = new Weapon(w3);
+        w3 = Weapon.leadPiping;
     }
 
     @Test
@@ -44,22 +40,8 @@ public class WeaponTest
         String s2 = "dagger";
         String s3 = "lead piping";
 
-        assertEquals(s1, w1.getWeaponStringName());
-        assertEquals(s2, w2.getWeaponStringName());
-        assertEquals(s3, w3.getWeaponStringName());
+        assertEquals(s1, w1.getWeaponName());
+        assertEquals(s2, w2.getWeaponName());
+        assertEquals(s3, w3.getWeaponName());
     }
-
-    @Test
-    public void testGetWeaponName()
-    {
-        WeaponType e1 = WeaponType.candlestick;
-        WeaponType e2 = WeaponType.dagger;
-        WeaponType e3 = WeaponType.leadPiping;
-
-        assertEquals(e1, weapon1.getWeaponName());
-        assertEquals(e2, weapon2.getWeaponName());
-        assertEquals(e3, weapon3.getWeaponName());
-
-    }
-
 }

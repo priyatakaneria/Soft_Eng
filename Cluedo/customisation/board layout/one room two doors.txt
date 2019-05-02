@@ -1,0 +1,29 @@
+width=8
+height=8
+   1  2  3  4  5  6  7  8  
+1 [1][1][1][1][1][1][#][_]
+2 [1][1][1][1][1][1][_][_]
+3 [1][1][1][1][1][e][d][_]
+4 [1][1][1][1][1][1][_][_]
+5 [1][1][1][1][1][1][_][_]
+6 [#][1][1][1][e][1][_][_]
+7 [w][_][_][_][d][_][_][_]
+8 [#][_][_][_][_][_][_][_]
+
+
+Key:
+# Empty Space
+_ Hallway
+1-9 room squares
+/ death corner
+(n) secret passage to room number 'n'
+d doorway
+e entrance
+
+Start Squares:
+w: Mrs White
+g: Rev. Green
+p: Mrs Peacock
+l: Prof. Plum
+s: Miss Scarlett
+m: Col. Mustard

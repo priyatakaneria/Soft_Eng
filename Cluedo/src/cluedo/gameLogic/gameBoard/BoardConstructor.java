@@ -22,24 +22,18 @@ public class BoardConstructor
 
     public BoardConstructor() throws FileNotFoundException
     {
-        try
-        {
-            fileInput = new BufferedReader(new FileReader("customisation/board layout/default.txt"));
-        } catch (FileNotFoundException e)
-        {
-            throw e;
-        }
+        fileInput = new BufferedReader(new FileReader("customisation/board layout/default.txt"));
     }
 
+    /**
+     * subject to change depending on how the input is given from GUI
+     * 
+     * @param fileName
+     * @throws FileNotFoundException 
+     */
     public BoardConstructor(String fileName) throws FileNotFoundException
     {
-        try
-        {
-            fileInput = new BufferedReader(new FileReader("customisation/board layout/" + fileName));
-        } catch (FileNotFoundException e)
-        {
-            throw e;
-        }
+        fileInput = new BufferedReader(new FileReader("customisation/board layout/" + fileName));
     }
 
     public GameBoard createBoard() throws InvalidSetupFileException
@@ -67,6 +61,7 @@ public class BoardConstructor
             fileInput.close();
 
             gb.createRooms();
+            gb.createClueDeck();
             gb.setAdjacencies();
             return gb;
         } catch (IOException e)
@@ -115,27 +110,27 @@ public class BoardConstructor
             else if (symbol == 'w')
             {
                 newSquare = new BoardSquare(false);
-                gb.setStartSquare(Character.CharacterType.MrsWhite, (BoardSquare) newSquare);
+                gb.setStartSquare(Character.MrsWhite, (BoardSquare) newSquare);
             } else if (symbol == 'g')
             {
                 newSquare = new BoardSquare(false);
-                gb.setStartSquare(Character.CharacterType.RevGreen, (BoardSquare) newSquare);
+                gb.setStartSquare(Character.RevGreen, (BoardSquare) newSquare);
             } else if (symbol == 'p')
             {
                 newSquare = new BoardSquare(false);
-                gb.setStartSquare(Character.CharacterType.MrsPeacock, (BoardSquare) newSquare);
+                gb.setStartSquare(Character.MrsPeacock, (BoardSquare) newSquare);
             } else if (symbol == 'l')
             {
                 newSquare = new BoardSquare(false);
-                gb.setStartSquare(Character.CharacterType.ProfPlum, (BoardSquare) newSquare);
+                gb.setStartSquare(Character.ProfPlum, (BoardSquare) newSquare);
             } else if (symbol == 's')
             {
                 newSquare = new BoardSquare(false);
-                gb.setStartSquare(Character.CharacterType.MissScarlett, (BoardSquare) newSquare);
+                gb.setStartSquare(Character.MissScarlett, (BoardSquare) newSquare);
             } else if (symbol == 'm')
             {
                 newSquare = new BoardSquare(false);
-                gb.setStartSquare(Character.CharacterType.ColMustard, (BoardSquare) newSquare);
+                gb.setStartSquare(Character.ColMustard, (BoardSquare) newSquare);
             } // Room numbers:
             else
             {
@@ -171,5 +166,5 @@ public class BoardConstructor
         }
         return newSquare;
     }
-
+    
 }

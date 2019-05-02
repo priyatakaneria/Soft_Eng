@@ -9,10 +9,25 @@ package cluedo.gameLogic;
  *
  * @author Tymek
  */
-public class Character implements ClueType
+public enum Character implements ClueType
 {
 
-    public enum CharacterType
+    MissScarlett("Miss Scarlett"), ColMustard("Col Mustard"), MrsWhite("Mrs White"),
+    RevGreen("Rev Green"), ProfPlum("Prof Plum"), MrsPeacock("Mrs Peacock");
+    
+    private final String nameString;
+
+    Character(String name)
+    {
+        this.nameString = name;
+    }
+
+    public String getCharacterName()
+    {
+        return this.nameString;
+    }
+    
+    /*public enum CharacterType
     {
 
         ColMustard("Col Mustard"), ProfPlum("Prof Plum"), RevGreen("Rev Green"),
@@ -42,6 +57,6 @@ public class Character implements ClueType
     public CharacterType getCharacterName()
     {
         return this.characterName;
-    }
+    }*/
 
 }
