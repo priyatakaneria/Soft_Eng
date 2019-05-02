@@ -9,6 +9,7 @@ package cluedo.gameLogic.player;
 import cluedo.gameLogic.Character;
 import cluedo.gameLogic.ClueCard;
 import cluedo.gameLogic.ClueType;
+import cluedo.gameLogic.IntrigueCard;
 import cluedo.gameLogic.Suggestion;
 import cluedo.gameLogic.Weapon;
 import cluedo.gameLogic.gameBoard.Room;
@@ -25,20 +26,23 @@ import java.util.Map;
 public class Player
 {
     private ArrayList<ClueCard> clueHand;
+    private ArrayList<IntrigueCard> intrigueHand;
     private Character character;
     private DetectiveNotes detNotes;
     private GameBoard gb;
     private String playerName;
+    private BoardSpace currentPosition;
      
     //Add Gameboard as Parameter
    
-    public Player(Character character, String playerName, GameBoard gb)
+    public Player(Character character, String playerName, GameBoard gb, BoardSpace start)
     {
         clueHand = new ArrayList<>();
+        intrigueHand = new ArrayList<>();
         this.character = character;
         detNotes = new DetectiveNotes();
         this.gb = gb;
-        
+        currentPosition = start;
     }
     
     public DetectiveNotes getDetNotes() {
@@ -49,7 +53,7 @@ public class Player
         return clueHand;
     }
 
-    public void setClueHand(ClueCard card) {
+    public void addClueCard(ClueCard card) {
         clueHand.add(card);
     }
 
@@ -60,27 +64,33 @@ public class Player
     public void setCharacter(Character character) {
         this.character = character;
     }
-    
-    
+
+    public BoardSpace getCurrentPosition()
+    {
+        return currentPosition;
+    }
     
     public boolean Move(BoardSpace space)
     {
+        currentPosition.removeOccupant(this);
+        space.addOccupant(this);
+        
         //Main Method needs to instantiate BoardConstructor. Once this is done, the GameBoard's hashmap can be referenced from non-static context. Or BoardConstructor needs to be static. 
         //This is so player is removed from previous space. 
-        Iterator i = gb.getGrid().entrySet().iterator();
-        while (i.hasNext())
-        {
-            Map.Entry innerHm = (Map.Entry)i.next();
-            Iterator j = ((HashMap)innerHm.getValue()).entrySet().iterator();
-            while (j.hasNext())
-            {
-                Map.Entry boardspace = (Map.Entry)j.next();
-                if (((BoardSpace)boardspace.getValue()).getOccupants().contains(this))
-                {
-                    ((BoardSpace)boardspace.getValue()).removeOccupant(this);
-                }
-            }
-        }
+//        Iterator i = gb.getGrid().entrySet().iterator();
+//        while (i.hasNext())
+//        {
+//            Map.Entry innerHm = (Map.Entry)i.next();
+//            Iterator j = ((HashMap)innerHm.getValue()).entrySet().iterator();
+//            while (j.hasNext())
+//            {
+//                Map.Entry boardspace = (Map.Entry)j.next();
+//                if (((BoardSpace)boardspace.getValue()).getOccupants().contains(this))
+//                {
+//                    ((BoardSpace)boardspace.getValue()).removeOccupant(this);
+//                }
+//            }
+//        }
         return space.addOccupant(this);
         
         //If this doesn't work, change the grid field in BoardSpace to public, and reference directly (not through getGrid method). 
@@ -145,5 +155,9 @@ public class Player
          return player.respondToSuggestion(suggestion);
     }
     
+    public void addIntrigueCard(IntrigueCard ic)
+    {
+        intrigueHand.add(ic);
+    }
     
 }

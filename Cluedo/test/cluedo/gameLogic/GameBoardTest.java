@@ -31,7 +31,7 @@ public class GameBoardTest
     }
 
     @Before
-    public void setup()
+    public void setup() throws InvalidSetupFileException
     {
         gb = new GameBoard();
     }

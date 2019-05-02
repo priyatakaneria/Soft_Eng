@@ -6,6 +6,7 @@
 package cluedo.gameLogic.player;
 
 import cluedo.gameLogic.Character;
+import cluedo.gameLogic.gameBoard.BoardSpace;
 import cluedo.gameLogic.gameBoard.GameBoard;
 
 /**
@@ -15,8 +16,8 @@ import cluedo.gameLogic.gameBoard.GameBoard;
 public class HumanPlayer extends Player
 {
 
-    public HumanPlayer(Character character, String playerName, GameBoard gb) {
-        super(character, playerName, gb);
+    public HumanPlayer(Character character, String playerName, GameBoard gb, BoardSpace start) {
+        super(character, playerName, gb, start);
     }
     
     public void writeNotes(String notes)

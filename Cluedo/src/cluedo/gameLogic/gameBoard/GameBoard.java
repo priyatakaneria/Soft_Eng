@@ -17,7 +17,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.Stack;
 
 /**
@@ -32,17 +34,17 @@ public class GameBoard
     private HashMap<Character, BoardSquare> startingSquares;
     private HashMap<Integer, Room> rooms;
     private int width;
-    
-    private Stack<Card> intrigueDeck;
-    private Stack<Card> clueDeck;
-    
+
+    private LinkedList<Card> intrigueDeck;
+    private LinkedList<Card> clueDeck;
+
     private Envelope envelope;
     // private ArrayList<Room> rooms;
 
     /**
      * Constructs the board with the standard 24x25 setup.
      */
-    public GameBoard()
+    public GameBoard() throws InvalidSetupFileException
     {
         dice = new Dice(2);
         grid = emptyGrid(24);
@@ -50,12 +52,14 @@ public class GameBoard
         rooms = new HashMap<>();
         width = 24;
         intrigueDeck = createIntrigueDeck();
-        
+        clueDeck = createClueDeck();
+
     }
 
     /**
      * Constructs a board of a given width.
-     * @param width 
+     *
+     * @param width
      */
     public GameBoard(int width)
     {
@@ -67,83 +71,125 @@ public class GameBoard
         intrigueDeck = createIntrigueDeck();
     }
 
-    /**
-     * creates and shuffles the pack of intrigue cards
-     * @return a shuffled 
-     */
-    public Stack<Card> createIntrigueDeck()
+    public HashMap<Character, BoardSquare> getStartingSquares()
     {
-        Stack<Card> intrigueDeck = new Stack<>();
-        intrigueDeck.add(new IntrigueCard(IntrigueType.avoidSuggestion));
-        intrigueDeck.add(new IntrigueCard(IntrigueType.avoidSuggestion));
-        intrigueDeck.add(new IntrigueCard(IntrigueType.avoidSuggestion));
-        intrigueDeck.add(new IntrigueCard(IntrigueType.extraTurn));
-        intrigueDeck.add(new IntrigueCard(IntrigueType.extraTurn));
-        intrigueDeck.add(new IntrigueCard(IntrigueType.extraTurn));
-        intrigueDeck.add(new IntrigueCard(IntrigueType.teleport));
-        intrigueDeck.add(new IntrigueCard(IntrigueType.teleport));
-        intrigueDeck.add(new IntrigueCard(IntrigueType.teleport));
-        intrigueDeck.add(new IntrigueCard(IntrigueType.throwAgain));
-        intrigueDeck.add(new IntrigueCard(IntrigueType.throwAgain));
-        intrigueDeck.add(new IntrigueCard(IntrigueType.throwAgain));
-        
-        shuffleDeck(intrigueDeck);
-        
+        return startingSquares;
+    }
+
+    public HashMap<Integer, Room> getRooms()
+    {
+        return rooms;
+    }
+
+    public LinkedList<Card> getIntrigueDeck()
+    {
         return intrigueDeck;
     }
-    
-    public Stack<Card> createClueDeck() throws InvalidSetupFileException
-    {
-        Stack<Card> roomDeck = new Stack<>();
-        Stack<Card> weaponDeck = new Stack<>();
-        Stack<Card> characterDeck = new Stack<>();
 
-        characterDeck.push(new ClueCard(Character.ColMustard));
-        characterDeck.push(new ClueCard(Character.MissScarlett));
-        characterDeck.push(new ClueCard(Character.MrsPeacock));
-        characterDeck.push(new ClueCard(Character.MrsWhite));
-        characterDeck.push(new ClueCard(Character.ProfPlum));
-        characterDeck.push(new ClueCard(Character.RevGreen));
-        
+    public Envelope getEnvelope()
+    {
+        return envelope;
+    }
+
+    /**
+     * creates and shuffles the pack of intrigue cards
+     *
+     * @return a shuffled
+     */
+    public LinkedList<Card> createIntrigueDeck()
+    {
+        LinkedList<Card> intrigueDeck = new LinkedList<>();
+        intrigueDeck.add(new IntrigueCard(IntrigueType.avoidSuggestion));
+        intrigueDeck.add(new IntrigueCard(IntrigueType.avoidSuggestion));
+        intrigueDeck.add(new IntrigueCard(IntrigueType.avoidSuggestion));
+        intrigueDeck.add(new IntrigueCard(IntrigueType.extraTurn));
+        intrigueDeck.add(new IntrigueCard(IntrigueType.extraTurn));
+        intrigueDeck.add(new IntrigueCard(IntrigueType.extraTurn));
+        intrigueDeck.add(new IntrigueCard(IntrigueType.teleport));
+        intrigueDeck.add(new IntrigueCard(IntrigueType.teleport));
+        intrigueDeck.add(new IntrigueCard(IntrigueType.teleport));
+        intrigueDeck.add(new IntrigueCard(IntrigueType.throwAgain));
+        intrigueDeck.add(new IntrigueCard(IntrigueType.throwAgain));
+        intrigueDeck.add(new IntrigueCard(IntrigueType.throwAgain));
+
+        shuffleDeck(intrigueDeck);
+
+        return intrigueDeck;
+    }
+
+    public LinkedList<Card> createClueDeck() throws InvalidSetupFileException
+    {
+        LinkedList<Card> roomDeck = new LinkedList<>();
+        LinkedList<Card> weaponDeck = new LinkedList<>();
+        LinkedList<Card> characterDeck = new LinkedList<>();
+
+        characterDeck.add(new ClueCard(Character.ColMustard));
+        characterDeck.add(new ClueCard(Character.MissScarlett));
+        characterDeck.add(new ClueCard(Character.MrsPeacock));
+        characterDeck.add(new ClueCard(Character.MrsWhite));
+        characterDeck.add(new ClueCard(Character.ProfPlum));
+        characterDeck.add(new ClueCard(Character.RevGreen));
+
         try
         {
 
             for (Room r : rooms.values())
             {
-                roomDeck.push(new ClueCard(r));
+                roomDeck.add(new ClueCard(r));
             }
-        }
-        catch (NullPointerException npe)
+        } catch (NullPointerException npe)
         {
             throw new InvalidSetupFileException();
         }
 
-        weaponDeck.push(new ClueCard(Weapon.candlestick));
-        weaponDeck.push(new ClueCard(Weapon.dagger));
-        weaponDeck.push(new ClueCard(Weapon.leadPiping));
-        weaponDeck.push(new ClueCard(Weapon.revolver));
-        weaponDeck.push(new ClueCard(Weapon.rope));
-        weaponDeck.push(new ClueCard(Weapon.spanner));
+        weaponDeck.add(new ClueCard(Weapon.candlestick));
+        weaponDeck.add(new ClueCard(Weapon.dagger));
+        weaponDeck.add(new ClueCard(Weapon.leadPiping));
+        weaponDeck.add(new ClueCard(Weapon.revolver));
+        weaponDeck.add(new ClueCard(Weapon.rope));
+        weaponDeck.add(new ClueCard(Weapon.spanner));
 
-        
-        
-        
         shuffleDeck(characterDeck);
         shuffleDeck(roomDeck);
         shuffleDeck(weaponDeck);
-        
+
         envelope = new Envelope(characterDeck.pop(), roomDeck.pop(), weaponDeck.pop());
 
-        Stack<Card> masterDeck = new Stack<>();
+        LinkedList<Card> masterDeck = new LinkedList<>();
         masterDeck.addAll(characterDeck);
         masterDeck.addAll(roomDeck);
         masterDeck.addAll(weaponDeck);
-        
+
         shuffleDeck(masterDeck);
-        
+
         return masterDeck;
     }
-    
+
+    public LinkedList<Card> getClueDeck()
+    {
+        return clueDeck;
+    }
+
+    /**
+     * draws an intrigue card from the top of the deck
+     *
+     * @return the top intrigue card from the deck
+     */
+    public IntrigueCard drawIntrigue()
+    {
+        return (IntrigueCard) intrigueDeck.pop();
+    }
+
+    /**
+     * returns an intrigue card to the bottom of the deck
+     *
+     * @param ic the card t return
+     */
+    public void returnIntrigue(IntrigueCard ic)
+    {
+        //intrigueDeck;
+    }
+
     /**
      * Creates a new HashMap with multiple sub-HashMaps representing the rows
      * and columns of a game board. Used to initialise different board
@@ -162,8 +208,6 @@ public class GameBoard
         return eGrid;
     }
 
-     
-    
     /**
      * Inserts a BoardSpace into the grid, bypassing the ugly .get().put()
      * syntax.
@@ -176,7 +220,6 @@ public class GameBoard
      * @param south The space to the south
      * @param west The space to the west
      */
-    
     public void insertBoardSpace(int x, int y, BoardSpace bs, BoardSpace north, BoardSpace east, BoardSpace south, BoardSpace west)
     {
         grid.get(x).put(y, bs);
@@ -212,8 +255,7 @@ public class GameBoard
         if (x < 1 || x > width || y < 1)
         {
             return new EmptySquare();
-        }
-        else
+        } else
         {
             return grid.get(x).get(y);
         }
@@ -247,14 +289,14 @@ public class GameBoard
         }
         return coords;
     }
-    
+
     /**
-     * Gets & returns the game board's grid (ie. all of its board spaces, 
-     * respective board space positions and board space properties. 
-     * 
-     * @return The Hashmap representing the board's grid. 
+     * Gets & returns the game board's grid (ie. all of its board spaces,
+     * respective board space positions and board space properties.
+     *
+     * @return The Hashmap representing the board's grid.
      */
-    public HashMap<Integer, HashMap<Integer, BoardSpace>> getGrid() 
+    public HashMap<Integer, HashMap<Integer, BoardSpace>> getGrid()
     {
         return grid;
     }
@@ -277,29 +319,24 @@ public class GameBoard
                     BoardSpace south = getBoardSpace(x, y + 1);
                     BoardSpace west = getBoardSpace(x - 1, y);
 
-                    
                     // System.out.println("[" + x + "," + y +"]");
                     if (north instanceof RoomSquareDoor)
                     {
                         setDoorRoom((RoomSquareDoor) north);
                         currSquare.setAdjacent(0, rooms.get(((RoomSquareDoor) north).getRoomNo()));
-                    }
-                    else if (east instanceof RoomSquareDoor)
+                    } else if (east instanceof RoomSquareDoor)
                     {
                         setDoorRoom((RoomSquareDoor) east);
                         currSquare.setAdjacent(1, rooms.get(((RoomSquareDoor) east).getRoomNo()));
-                    }
-                    else if (south instanceof RoomSquareDoor)
+                    } else if (south instanceof RoomSquareDoor)
                     {
                         setDoorRoom((RoomSquareDoor) south);
                         currSquare.setAdjacent(2, rooms.get(((RoomSquareDoor) south).getRoomNo()));
-                    }
-                    else if (west instanceof RoomSquareDoor)
+                    } else if (west instanceof RoomSquareDoor)
                     {
                         setDoorRoom((RoomSquareDoor) west);
                         currSquare.setAdjacent(3, rooms.get(((RoomSquareDoor) west).getRoomNo()));
-                    }
-                    else
+                    } else
                     {
                         throw new InvalidSetupFileException();
                     }
@@ -322,39 +359,34 @@ public class GameBoard
                             currSquare.setAdjacent(1, east);
                         }
                     }
-                }
-                else if (currSquare instanceof SecretPassage)
+                } else if (currSquare instanceof SecretPassage)
                 {
                     ((SecretPassage) currSquare).setRoomA(rooms.get(((SecretPassage) currSquare).getRoomNoA()));
-                    
+
                     BoardSpace north = getBoardSpace(x, y - 1);
                     BoardSpace east = getBoardSpace(x + 1, y);
                     BoardSpace south = getBoardSpace(x, y + 1);
                     BoardSpace west = getBoardSpace(x - 1, y);
-                    
+
                     if (north instanceof RoomSquare)
                     {
                         ((SecretPassage) currSquare).setRoomB(rooms.get(((RoomSquare) north).getRoomNo()));
-                    }
-                    else if (east instanceof RoomSquare)
+                    } else if (east instanceof RoomSquare)
                     {
                         ((SecretPassage) currSquare).setRoomB(rooms.get(((RoomSquare) east).getRoomNo()));
-                    }
-                    else if (south instanceof RoomSquare)
+                    } else if (south instanceof RoomSquare)
                     {
                         ((SecretPassage) currSquare).setRoomB(rooms.get(((RoomSquare) south).getRoomNo()));
-                    }
-                    else if (west instanceof RoomSquare)
+                    } else if (west instanceof RoomSquare)
                     {
                         ((SecretPassage) currSquare).setRoomB(rooms.get(((RoomSquare) west).getRoomNo()));
                     }
-                    
+
                     currSquare.setAdjacent(0, ((SecretPassage) currSquare).getRoomB());
                     try
                     {
                         currSquare.setAdjacent(2, ((SecretPassage) currSquare).getRoomA());
-                    }
-                    catch(NullPointerException npe)
+                    } catch (NullPointerException npe)
                     {
                         throw new InvalidSetupFileException();
                     }
@@ -366,34 +398,30 @@ public class GameBoard
     private void setDoorRoom(RoomSquareDoor current) throws InvalidSetupFileException
     {
         int[] coords = getSpaceCoords(current);
-        
+
         BoardSpace north = getBoardSpace(coords[0], coords[1] - 1);
         BoardSpace east = getBoardSpace(coords[0] + 1, coords[1]);
         BoardSpace south = getBoardSpace(coords[0], coords[1] + 1);
         BoardSpace west = getBoardSpace(coords[0] - 1, coords[1]);
-        
+
         if (north instanceof RoomSquare && !(north instanceof RoomSquareDoor))
         {
             current.setRoomNo(((RoomSquare) north).getRoomNo());
-        }
-        else if (east instanceof RoomSquare && !(east instanceof RoomSquareDoor))
+        } else if (east instanceof RoomSquare && !(east instanceof RoomSquareDoor))
         {
             current.setRoomNo(((RoomSquare) east).getRoomNo());
-        }
-        else if (south instanceof RoomSquare && !(south instanceof RoomSquareDoor))
+        } else if (south instanceof RoomSquare && !(south instanceof RoomSquareDoor))
         {
             current.setRoomNo(((RoomSquare) south).getRoomNo());
-        }
-        else if (west instanceof RoomSquare && !(west instanceof RoomSquareDoor))
+        } else if (west instanceof RoomSquare && !(west instanceof RoomSquareDoor))
         {
             current.setRoomNo(((RoomSquare) west).getRoomNo());
-        }
-        else
+        } else
         {
             throw new InvalidSetupFileException();
         }
     }
-    
+
     public void createRooms()
     {
         for (int y = 1; y < grid.get(1).size(); y++)
@@ -444,7 +472,7 @@ public class GameBoard
             }
         }
     }
-    
+
     /**
      * Returns a set of all the available spaces that are accessible from a
      * particular BoardSpace given a particular dice roll.
@@ -460,9 +488,9 @@ public class GameBoard
         HashSet<BoardSpace> possibleMoves = new HashSet<>();
         Stack<BoardSpace> toDo = new Stack<>();
         HashMap<BoardSpace, Integer> distanceMappings = new HashMap<>();
-        
+
         distanceMappings.put(start, 0);
-        
+
         toDo.push(start);
         if (start instanceof Room)
         {
@@ -476,15 +504,14 @@ public class GameBoard
                 }
             }
         }
-        
+
         while (!toDo.empty())
         {
             BoardSpace next = toDo.pop();
             if (distanceMappings.get(next) == diceRoll)
             {
                 possibleMoves.add(next);
-            }
-            else if (distanceMappings.get(next) < diceRoll)
+            } else if (distanceMappings.get(next) < diceRoll)
             {
                 seen.add(next);
                 if (!(next instanceof Room))
@@ -511,8 +538,7 @@ public class GameBoard
                         }
                         // ToDo: sort out boardSquareDoors not working!!
                     }
-                }
-                else
+                } else
                 {
                     possibleMoves.add(next);
                 }
@@ -532,7 +558,6 @@ public class GameBoard
         startingSquares.put(character, bs);
     }
 
-    
     /**
      * Returns the corresponding room to a supplied roomNo
      *
@@ -543,15 +568,15 @@ public class GameBoard
     {
         return rooms.get(roomNo);
     }
-    
+
     /**
-     * Shuffles a given deck of cards.
-     * Actually just a wrapper for Collections.shuffle()
-     * 
+     * Shuffles a given deck of cards. Actually just a wrapper for
+     * Collections.shuffle()
+     *
      * @param deck The deck of cards to shuffle.
      */
-    public void shuffleDeck(Stack<Card> deck)
-    {   
+    public void shuffleDeck(LinkedList<Card> deck)
+    {
         Collections.shuffle(deck);
     }
 
