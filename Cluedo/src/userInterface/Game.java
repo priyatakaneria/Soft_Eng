@@ -5,8 +5,14 @@
  */
 package userInterface;
 
+import cluedo.gameLogic.Accusation;
+import cluedo.gameLogic.ClueCard;
+import cluedo.gameLogic.Suggestion;
+import cluedo.gameLogic.gameBoard.BoardSpace;
+import cluedo.gameLogic.player.Player;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Optional;
 import javafx.animation.AnimationTimer;
@@ -157,6 +163,71 @@ public class Game extends Application {
      */
     public static void main(String[] args) {
         launch(args);
+    }
+
+    public void displayTurn(Player player)
+    {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public int rollDice()
+    {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public BoardSpace chooseSpace(HashSet<BoardSpace> availableMoves)
+    {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public BoardSpace teleport()
+    {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public boolean endTurn()
+    {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public Suggestion makeSuggestion(Player player)
+    {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void noPlayerClues()
+    {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public ClueCard chooseResponse(Player nextEnquiry, ArrayList<ClueCard> possibleClues)
+    {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void showClue(ClueCard response, Player player)
+    {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public boolean accusationQuery()
+    {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public Accusation makeAccusation(Player player)
+    {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void displayExtraTurn(Player player)
+    {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void winningsPage(Player currPlayer)
+    {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     private class Tile extends StackPane {
