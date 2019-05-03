@@ -5,6 +5,7 @@
  */
 package userInterface.boardTiles;
 
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
@@ -12,13 +13,13 @@ import javafx.scene.shape.Rectangle;
  *
  * @author sb816
  */
-public class EmptySquarePane {
+public class EmptySquarePane extends StackPane{
     public EmptySquarePane()
     {
-        //May Produce an error on Null
+        //Could Be Transparent
         Rectangle tileShape = new Rectangle(25, 25);
-        tileShape.setFill(null);
-        tileShape.setStroke(null);
+        tileShape.setFill(Color.BLACK);
+        tileShape.setStroke(Color.TRANSPARENT);
         
     }
 }

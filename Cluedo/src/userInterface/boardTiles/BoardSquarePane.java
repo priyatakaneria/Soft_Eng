@@ -5,6 +5,7 @@
  */
 package userInterface.boardTiles;
 
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
@@ -12,7 +13,7 @@ import javafx.scene.shape.Rectangle;
  *
  * @author sb816
  */
-public class BoardSquarePane {
+public class BoardSquarePane extends StackPane {
     
     public BoardSquarePane()
     {

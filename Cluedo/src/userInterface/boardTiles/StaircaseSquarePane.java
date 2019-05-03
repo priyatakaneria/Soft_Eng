@@ -5,6 +5,7 @@
  */
 package userInterface.boardTiles;
 
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
@@ -12,8 +13,8 @@ import javafx.scene.shape.Rectangle;
  *
  * @author sb816
  */
-public class StaircaseSquarePane {
-     public StaircaseSquarePane()
+public class StaircaseSquarePane extends StackPane
+{     public StaircaseSquarePane()
     {
         Rectangle tileShape = new Rectangle(25, 25);
         tileShape.setFill(Color.BLUE);

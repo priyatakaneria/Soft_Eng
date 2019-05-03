@@ -5,6 +5,8 @@
  */
 package userInterface.boardTiles;
 
+import cluedo.gameLogic.gameBoard.RoomSquare;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
@@ -12,10 +14,10 @@ import javafx.scene.shape.Rectangle;
  *
  * @author sb816
  */
-public class RoomSquareDoorPane {
-    public RoomSquareDoorPane()
+public class RoomSquareDoorPane extends RoomSquarePane{
+    public RoomSquareDoorPane(RoomSquare rs)
     {
-        Rectangle tileShape = new Rectangle(25, 25);
+        super(rs);
         tileShape.setFill(Color.WHITE);
         tileShape.setStroke(Color.BLACK);
         

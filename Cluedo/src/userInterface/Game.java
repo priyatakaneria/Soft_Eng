@@ -62,15 +62,30 @@ import userInterface.boardTiles.RoomPane;
 
 import cluedo.gameLogic.Character;
 import cluedo.gameLogic.TurnManager;
+import cluedo.gameLogic.gameBoard.BoardSquare;
+import cluedo.gameLogic.gameBoard.EmptySquare;
 import cluedo.gameLogic.gameBoard.GameBoard;
 import cluedo.gameLogic.gameBoard.InvalidSetupFileException;
+import cluedo.gameLogic.gameBoard.Room;
+import cluedo.gameLogic.gameBoard.RoomSquare;
+import cluedo.gameLogic.gameBoard.RoomSquareDoor;
+import cluedo.gameLogic.gameBoard.SecretPassage;
+import cluedo.gameLogic.gameBoard.StaircaseSquare;
+import java.util.HashMap;
 import javafx.scene.control.Alert.AlertType;
+import userInterface.boardTiles.BoardSquarePane;
+import userInterface.boardTiles.EmptySquarePane;
+import userInterface.boardTiles.RoomSquareDoorPane;
+import userInterface.boardTiles.RoomSquarePane;
+import userInterface.boardTiles.SecretPassagePane;
+import userInterface.boardTiles.StaircaseSquarePane;
 
 /**
  *
  * @author sb816
  */
-public class Game extends Application {
+public class Game extends Application
+{
 
     private Pane root = new Pane();
     private Pane root2 = new Pane();
@@ -89,8 +104,11 @@ public class Game extends Application {
     private int seconds, multiplayer = 0;
     private MediaPlayer mediaPlayer;
 
+    private ArrayList<ArrayList<StackPane>> gameBoardPanes;
+
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage)
+    {
         //Media media = new Media("file://CLUE.mp3"); //replace /Movies/test.mp3 with your file
         //MediaPlayer player = new MediaPlayer(media); 
         //player.setAutoPlay(true);
@@ -109,7 +127,10 @@ public class Game extends Application {
         Stage window = primaryStage;
 
         Label label1 = new Label("Number of Players:");
-        final String[] players = new String[]{"1", "2", "3", "4", "5", "6"};
+        final String[] players = new String[]
+        {
+            "1", "2", "3", "4", "5", "6"
+        };
         ChoiceBox cb = new ChoiceBox(FXCollections.observableArrayList("1", "2", "3", "4", "5", "6"));
         //TextField sizeInput = new TextField();
         //Label label2 = new Label("Difficulty:");
@@ -146,8 +167,10 @@ public class Game extends Application {
         cb.setLayoutX(297);
         cb.setLayoutY(478);
 
-        cb.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
-            public void changed(ObservableValue ov, Number value, Number new_value) {
+        cb.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>()
+        {
+            public void changed(ObservableValue ov, Number value, Number new_value)
+            {
                 multiplayer = Integer.parseInt(players[new_value.intValue()]);
                 System.out.println(multiplayer);
             }
@@ -170,74 +193,99 @@ public class Game extends Application {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
         launch(args);
     }
 
-    public void displayTurn(Player player) {
+    public void displayTurn(Player player)
+    {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public int rollDice() {
+    public int rollDice()
+    {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public BoardSpace chooseSpace(HashSet<BoardSpace> availableMoves) {
+    public BoardSpace chooseSpace(HashSet<BoardSpace> availableMoves)
+    {
+        // find all BoardSpace's corresponding GUI pane and 
+//        for (BoardSpace bs : availableMoves)
+//        {
+//            bs.setOnMouseClicked(e ->
+//            {
+//                return bs;
+//            });
+//        }
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public BoardSpace teleport() {
+    public BoardSpace teleport()
+    {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public boolean endTurn() {
+    public boolean endTurn()
+    {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public Suggestion makeSuggestion(Player player) {
+    public Suggestion makeSuggestion(Player player)
+    {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void noPlayerClues() {
+    public void noPlayerClues()
+    {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public ClueCard chooseResponse(Player nextEnquiry, ArrayList<ClueCard> possibleClues) {
+    public ClueCard chooseResponse(Player nextEnquiry, ArrayList<ClueCard> possibleClues)
+    {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void showClue(ClueCard response, Player player, Player clueGiver) {
+    public void showClue(ClueCard response, Player player, Player clueGiver)
+    {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public boolean accusationQuery() {
+    public boolean accusationQuery()
+    {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public Accusation makeAccusation(Player player) {
+    public Accusation makeAccusation(Player player)
+    {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void displayExtraTurn(Player player) {
+    public void displayExtraTurn(Player player)
+    {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void winningsPage(Player currPlayer) {
+    public void winningsPage(Player currPlayer)
+    {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    private class Tile extends StackPane {
+    private class Tile extends StackPane
+    {
 
         private Text text = new Text();
 
-        public Tile(String colour, int startOrDoor) {
+        public Tile(String colour, int startOrDoor)
+        {
             Rectangle border = new Rectangle(25, 25);
             border.setFill(null);
             border.setStroke(Color.BLACK);
             setAlignment(Pos.CENTER);
             getChildren().addAll(border);
 
-            switch (colour) {
+            switch (colour)
+            {
                 case "yellow":
                     border.setFill(Color.YELLOW);
                     break;
@@ -246,43 +294,58 @@ public class Game extends Application {
                     break;
             }
 
-            if (startOrDoor == 1) {
+            if (startOrDoor == 1)
+            {
                 text.setText("START");
                 text.setFont(Font.font("Calibri", 8));
             }
-            if (startOrDoor == 2) {
+            if (startOrDoor == 2)
+            {
                 text.setText("DOOR");
                 text.setFont(Font.font("Calibri", 8));
             }
 
             getChildren().add(text);
 
-            setOnMouseClicked(event -> {
+            setOnMouseClicked(event ->
+            {
 
             });
         }
     }
 
-    public void setGameboard(Stage window, int multiplayer) {
+    public void setGameboard(Stage window, int multiplayer)
+    {
 
-        if (multiplayer == 0) {
+        if (multiplayer == 0)
+        {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error!");
             alert.setHeaderText("No players selected");
             alert.setContentText("You must select the number of players in this game.");
 
             alert.showAndWait();
-        } else {
-            for (int x = 1; x <= multiplayer; x++) {
+        } else
+        {
+            for (int x = 1; x <= multiplayer; x++)
+            {
                 setPlayerNames(x);
             }
             System.out.println(playerNames);
 
             TurnManager turnManager;
-            try {
+            try
+            {
                 turnManager = new TurnManager(characterPlayerMap, noAiPlayers, customBoardFileName, this);
+                createGameboard(window, turnManager.getGameBoard());
+                window.setTitle("Cluedo");
+                window.setScene(scene2);
+                Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
+                window.setX((primScreenBounds.getWidth() - window.getWidth()) / 2);
+                window.setY((primScreenBounds.getHeight() - window.getHeight()) / 2);
             } //
-            catch (InvalidSetupFileException e) {
+            catch (InvalidSetupFileException e)
+            {
                 //Alert(Alert.AlertType AlertType, String("Invalid Setup File!"));
                 //jOptionPane.showMessageDialog(null, "Invalid Setup File!");
                 Alert alert = new Alert(AlertType.WARNING);
@@ -292,17 +355,11 @@ public class Game extends Application {
 
             }
 
-            turnManager = new TurnManager(characterPlayerMap, noAiPlayers, customBoardFileName, this);
-            createGameboard(window, turnManager.getGameBoard());
-            window.setTitle("Cluedo");
-            window.setScene(scene2);
-            Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
-            window.setX((primScreenBounds.getWidth() - window.getWidth()) / 2);
-            window.setY((primScreenBounds.getHeight() - window.getHeight()) / 2);
         }
     }
 
-    public void setWinningsPage(Stage window) {
+    public void setWinningsPage(Stage window)
+    {
         createWinningsPage(window);
         window.setTitle("Winner!!");
         window.setScene(scene3);
@@ -311,26 +368,58 @@ public class Game extends Application {
         window.setY((primScreenBounds.getHeight() - window.getHeight()) / 2);
     }
 
-    public void createGameboard(Stage primaryStage, GameBoard gb) {
+    public void createGameboard(Stage primaryStage, GameBoard gb)
+    {
         int numFill = 0;
         Stage window = primaryStage;
         Button exitButton = new Button("Exit Game");
-        exitButton.setOnAction(e -> {
+        exitButton.setOnAction(e ->
+        {
             mediaPlayer.pause();
             window.setScene(scene1);
             window.close();
             Platform.runLater(() -> new Game().start(new Stage()));
         });
 
-        //x coord
-        for (int x = 1; x < gb.getWidth(); x++) {
-            for (int y = 1; y < gb.getHeight(); y++) {
-                //Make GUI Tiles in Here
-                
+        gameBoardPanes = new ArrayList<>();
 
+        //x coord
+        for (int x = 1; x < gb.getWidth(); x++)
+        {
+            gameBoardPanes.add(new ArrayList<>());
+            for (int y = 1; y < gb.getHeight(); y++)
+            {
+                //Make GUI Tiles in Here
+                StackPane newPane = null;
+                BoardSpace nextBoardSpace = gb.getBoardSpace(x, y);
+                if (nextBoardSpace instanceof BoardSquare)
+                {
+                    newPane = new BoardSquarePane();
+                } //
+                else if (nextBoardSpace instanceof EmptySquare)
+                {
+                    newPane = new EmptySquarePane();
+                } //
+                else if (nextBoardSpace instanceof StaircaseSquare)
+                {
+                    newPane = new StaircaseSquarePane();
+                } //
+                else if (nextBoardSpace instanceof SecretPassage)
+                {
+                    newPane = new SecretPassagePane();
+                } //
+                else if (nextBoardSpace instanceof RoomSquare)
+                {
+                    newPane = new RoomSquarePane((RoomSquare) nextBoardSpace);
+                } //
+                else if (nextBoardSpace instanceof RoomSquareDoor)
+                {
+                    newPane = new RoomSquareDoorPane((RoomSquare) nextBoardSpace);
+                }
+                gameBoardPanes.get(x - 1).add(newPane);
             }
         }
-        
+
         exitButton.setLayoutX(525);
         exitButton.setLayoutY(600);
         root.getChildren().addAll(exitButton);
@@ -729,12 +818,14 @@ public class Game extends Application {
          */
     }
 
-    public void createWinningsPage(Stage primaryStage) {
+    public void createWinningsPage(Stage primaryStage)
+    {
 
         int numFill = 0;
         Stage window = primaryStage;
         Button button2 = new Button("Exit Game");
-        button2.setOnAction(e -> {
+        button2.setOnAction(e ->
+        {
             mediaPlayer.pause();
             window.setScene(scene1);
             window.close();
@@ -767,7 +858,8 @@ public class Game extends Application {
         scene3 = new Scene(root2, screenSizeX, screenSizeY);
     }
 
-    public void setPlayerNames(int playerNumber) {
+    public void setPlayerNames(int playerNumber)
+    {
         TextInputDialog dialog = new TextInputDialog("");
         dialog.setTitle("Player " + playerNumber + " name");
         dialog.setHeaderText("Please enter the name of Player " + playerNumber);
@@ -775,7 +867,8 @@ public class Game extends Application {
 
         // Traditional way to get the response value.
         Optional<String> result = dialog.showAndWait();
-        if (result.isPresent()) {
+        if (result.isPresent())
+        {
             String playerName = result.get();
             playerNames.add(playerName);
         }
