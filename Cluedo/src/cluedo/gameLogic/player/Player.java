@@ -24,7 +24,7 @@ import java.util.Map;
  *
  * @author Jamie
  */
-public class Player
+public abstract class Player
 {
 
     private ArrayList<ClueCard> clueHand;
