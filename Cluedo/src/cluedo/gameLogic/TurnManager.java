@@ -22,6 +22,7 @@ import java.util.LinkedList;
 import java.util.ArrayList;
 import java.util.Queue;
 import javafx.application.Application;
+import userInterface.Game;
 
 /**
  *
@@ -34,7 +35,7 @@ public class TurnManager
     private Queue<Player> playerQueue;
     private ArrayList<Player> allPlayers;
     private Player currPlayer;
-    private Application GUI;
+    private Game GUI;
 
     /**
      * Sets up the turn manager with a list of players and their relative chosen
@@ -50,7 +51,7 @@ public class TurnManager
      * @param noAiPlayers The number of players to be controlled by the AI.
      * @param customBoardFilename The filename to load as a custom board file
      */
-    public TurnManager(HashMap<Character, String> characterPlayerMap, int noAiPlayers, String customBoardFilename, Application GUI) throws InvalidSetupFileException
+    public TurnManager(HashMap<Character, String> characterPlayerMap, int noAiPlayers, String customBoardFilename, Game GUI) throws InvalidSetupFileException
     {
         this.GUI = GUI;
         // create BoardConstructor and subsequently GameBoard
@@ -76,7 +77,7 @@ public class TurnManager
      * @param characterPlayerMap The mappings from the player's name (as a
      * String) to their respective chosen Character.
      */
-    public TurnManager(HashMap<Character, String> characterPlayerMap, int noAiPlayers, Application GUI) throws InvalidSetupFileException
+    public TurnManager(HashMap<Character, String> characterPlayerMap, int noAiPlayers, Game GUI) throws InvalidSetupFileException
     {
         this.GUI = GUI;
         // create BoardConstructor and subsequently GameBoard
@@ -314,7 +315,7 @@ public class TurnManager
                     }
                 }
                 /**
-                 * find the set of possibe clues from a player's hand
+                 * find the set of possible clues from a player's hand
                  */
                 ArrayList<ClueCard> possibleClues = new ArrayList<>();
                 Player nextEnquiry = null;
