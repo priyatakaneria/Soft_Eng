@@ -34,6 +34,7 @@ public class GameBoard
     private HashMap<Character, BoardSquare> startingSquares;
     private HashMap<Integer, Room> rooms;
     private int width;
+    private int height;
 
     private LinkedList<Card> intrigueDeck;
     private LinkedList<Card> clueDeck;
@@ -51,9 +52,20 @@ public class GameBoard
         startingSquares = new HashMap<>();
         rooms = new HashMap<>();
         width = 24;
+        height = 25;
         intrigueDeck = createIntrigueDeck();
         clueDeck = createClueDeck();
 
+    }
+
+    public int getWidth()
+    {
+        return width;
+    }
+
+    public int getHeight()
+    {
+        return height;
     }
 
     /**
@@ -61,10 +73,11 @@ public class GameBoard
      *
      * @param width
      */
-    public GameBoard(int width)
+    public GameBoard(int width, int height)
     {
         dice = new Dice(2);
         this.width = width;
+        this.height = height;
         grid = emptyGrid(width);
         startingSquares = new HashMap<>();
         rooms = new HashMap<>();
@@ -81,21 +94,33 @@ public class GameBoard
         return dice.roll();
     }
 
+    /**
+     * @return the starting squares of each character
+     */
     public HashMap<Character, BoardSquare> getStartingSquares()
     {
         return startingSquares;
     }
 
+    /**
+     * @return the rooms with their mappings from roomNumbers
+     */
     public HashMap<Integer, Room> getRooms()
     {
         return rooms;
     }
 
+    /**
+     * @return List of intrigue cards
+     */
     public LinkedList<Card> getIntrigueDeck()
     {
         return intrigueDeck;
     }
 
+    /**
+     * @return the envelope
+     */
     public Envelope getEnvelope()
     {
         return envelope;
@@ -127,6 +152,14 @@ public class GameBoard
         return intrigueDeck;
     }
 
+    /**
+     * Creates and shuffles the pack of clue cards, as well as placing one each
+     * of weapon, room and character in the envelope
+     *
+     * @return the list of shuffled clue cards
+     * @throws InvalidSetupFileException if the board file does not have any
+     * rooms
+     */
     public LinkedList<Card> createClueDeck() throws InvalidSetupFileException
     {
         LinkedList<Card> roomDeck = new LinkedList<>();
@@ -175,6 +208,9 @@ public class GameBoard
         return masterDeck;
     }
 
+    /**
+     * @return the deck of clue cards
+     */
     public LinkedList<Card> getClueDeck()
     {
         return clueDeck;
@@ -405,6 +441,13 @@ public class GameBoard
         }
     }
 
+    /**
+     * links a room with it's doors
+     *
+     * @param current the BoardSpace currently being processed
+     * @throws InvalidSetupFileException if there is no RoomSquare adjacent to
+     * the RoomSquareDoor
+     */
     private void setDoorRoom(RoomSquareDoor current) throws InvalidSetupFileException
     {
         int[] coords = getSpaceCoords(current);
@@ -432,6 +475,9 @@ public class GameBoard
         }
     }
 
+    /**
+     * creates the room Objects from the unconnected grid.
+     */
     public void createRooms()
     {
         for (int y = 1; y < grid.get(1).size(); y++)
@@ -486,6 +532,8 @@ public class GameBoard
     /**
      * Returns a set of all the available spaces that are accessible from a
      * particular BoardSpace given a particular dice roll.
+     * 
+     * uses a breadth first search.
      *
      * @param start The BoardSpace to start the search at
      * @param diceRoll The number of spaces available to move according to a

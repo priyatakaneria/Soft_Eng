@@ -42,7 +42,7 @@ public class BoardConstructor
         {
             int width = Integer.parseInt(fileInput.readLine().substring(6));
             int height = Integer.parseInt(fileInput.readLine().substring(7));
-            gb = new GameBoard(width);
+            gb = new GameBoard(width, height);
             // ignores the x coord line in the setupfile
             fileInput.readLine();
 

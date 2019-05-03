@@ -206,7 +206,7 @@ public class Game extends Application {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void showClue(ClueCard response, Player player) {
+    public void showClue(ClueCard response, Player player, Player clueGiver) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
