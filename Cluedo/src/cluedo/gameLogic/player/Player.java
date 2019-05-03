@@ -31,10 +31,11 @@ public class Player
     private ArrayList<IntrigueCard> intrigueHand;
     private Character character;
     private DetectiveNotes detNotes;
-    private GameBoard gb;
+    protected GameBoard gb;
     private String playerName;
     private BoardSpace currentPosition;
     private boolean playerLost;
+    protected Suggestion lastSuggestion;
 
     //Add Gameboard as Parameter
     public Player(Character character, String playerName, GameBoard gb, BoardSpace start)
@@ -97,7 +98,8 @@ public class Player
 
     public Suggestion makeSuggestion(Character character, Room room, Weapon weapon)
     {
-        return new Suggestion(room, weapon, character, this);
+        lastSuggestion = new Suggestion(room, weapon, character, this);
+        return lastSuggestion;
     }
 
     /**
@@ -150,7 +152,7 @@ public class Player
         }
     }
 
-    public void markDetectiveTable(ClueType cluetype, Player clueGiver, DetNoteType dnt)
+    public void markDetectiveTable(Player clueGiver, ClueType cluetype, DetNoteType dnt)
     {
         detNotes.markTable(clueGiver, cluetype, dnt);
     }
