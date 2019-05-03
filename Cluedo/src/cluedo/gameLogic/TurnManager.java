@@ -355,7 +355,7 @@ public class TurnManager
                          * AIPlayer.noPlayerClues should make the appropriate
                          * detective notes according to the suggestion made
                          */
-                        aiPlayer.noPlayerClues(newSuggestion);
+                        aiPlayer.noPlayerClues(nextEnquiry, newSuggestion);
                     } //
                     else
                     {
