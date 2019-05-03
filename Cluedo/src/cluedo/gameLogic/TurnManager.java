@@ -70,6 +70,16 @@ public class TurnManager
     }
 
     /**
+     * returns the gameBoard assigned to this TurnManager.
+     *
+     * @return a GameBoard
+     */
+    public GameBoard getGameBoard()
+    {
+        return gameBoard;
+    }
+
+    /**
      * creates a new turn manager with the default GameBoard setup file
      * (../customisation/board layout/default.txt), called if default board
      * button pressed in the GUI
@@ -250,7 +260,7 @@ public class TurnManager
                              *
                              * returns the chosen BoardSpace.
                              */
-                            aiPlayer.chooseTeleport();
+                            newSpace = aiPlayer.chooseTeleport();
                         } //
                         else
                         {
@@ -305,7 +315,8 @@ public class TurnManager
                     newSuggestion = GUI.makeSuggestion(player);
                 }
                 /**
-                 * move players into the room they are called into for a suggestion
+                 * move players into the room they are called into for a
+                 * suggestion
                  */
                 for (Player p : allPlayers)
                 {
@@ -392,16 +403,17 @@ public class TurnManager
                          *
                          * returns void.
                          */
-                        aiPlayer.receivedClue(response);
+                        aiPlayer.receivedClue(response, nextEnquiry);
                     } //
                     else
                     {
                         /**
-                         * GUI.showClue takes a ClueCard and displays it to the
-                         * player who made the suggestion, then waits for the
-                         * user to make some notes and press a continue button
+                         * GUI.showClue takes a ClueCard and the enquired player
+                         * and displays it to the player who made the
+                         * suggestion, then waits for the user to make some
+                         * notes and press a continue button.
                          */
-                        GUI.showClue(response, player);
+                        GUI.showClue(response, player, nextEnquiry);
                     }
                 }
 
