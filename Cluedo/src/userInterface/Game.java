@@ -51,6 +51,8 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import userInterface.boardTiles.RoomPane;
+
 
 /**
  *
@@ -189,59 +191,6 @@ public class Game extends Application {
             setOnMouseClicked(event -> {               
                 
                         });
-        }
-    }
-    
-    private class Room extends StackPane {
-        private Text text = new Text();
-        
-        public Room(int x, int y, String roomName, String colour, String textColour, int fontSize) {
-            int width = (x*25);
-            int height = (y*25);
-            Rectangle border = new Rectangle(width,height);
-            border.setFill(null);            
-            border.setStroke(Color.BLACK);        
-                   
-            text.setFont(Font.font("Calibri",fontSize));
-            
-            switch(textColour){                
-                case "black": text.setFill(Color.BLACK);
-                              break;
-                case "white": text.setFill(Color.WHITE);
-                              break;
-            }
-            
-            setAlignment(Pos.CENTER);
-            getChildren().addAll(border, text);
-             
-            switch(colour){
-                case "red": border.setFill(Color.RED);
-                            break;
-                case "crimson": border.setFill(Color.CRIMSON);
-                               break;
-                case "blue": border.setFill(Color.CADETBLUE);
-                             break;
-                case "green": border.setFill(Color.YELLOWGREEN);
-                              break;
-                case "orange": border.setFill(Color.ORANGE);
-                               break;
-                case "purple": border.setFill(Color.MAGENTA);
-                               break;
-                case "pink": border.setFill(Color.PINK);
-                             break;
-                case "grey": border.setFill(Color.GREY);
-                             break;
-                case "brown": border.setFill(Color.BROWN);
-                              break;
-                case "black": border.setFill(Color.BLACK);
-                              break;
-            }
-            //border.setFill(Color.BLACK);
-            text.setText(roomName);
-            
-            setOnMouseClicked(event -> {  
-                        
-                        });             
         }
     }
     
