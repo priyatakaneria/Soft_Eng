@@ -27,7 +27,7 @@ public class RoomPane extends StackPane {
         border.setFill(null);
         border.setStroke(Color.BLACK);
 
-        text.setFont(Font.font("Calibri", fontSize));
+        text.setFont(Font.font("Jokerman", fontSize));
 
         switch (textColour) {
             case "black":
@@ -76,8 +76,7 @@ public class RoomPane extends StackPane {
         //border.setFill(Color.BLACK);
         text.setText(roomName);
 
-        setOnMouseClicked(event -> {
-
-        });
+        setOnMouseClicked(event -> {});
     }
+    
 }

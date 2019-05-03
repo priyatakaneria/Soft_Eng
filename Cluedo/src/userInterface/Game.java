@@ -12,6 +12,7 @@ import cluedo.gameLogic.gameBoard.BoardSpace;
 import cluedo.gameLogic.player.Player;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Optional;
@@ -59,6 +60,12 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import userInterface.boardTiles.RoomPane;
 
+import cluedo.gameLogic.Character;
+import cluedo.gameLogic.TurnManager;
+import cluedo.gameLogic.gameBoard.GameBoard;
+import cluedo.gameLogic.gameBoard.InvalidSetupFileException;
+import javafx.scene.control.Alert.AlertType;
+
 /**
  *
  * @author sb816
@@ -69,8 +76,14 @@ public class Game extends Application {
     private Pane root2 = new Pane();
     private Scene scene1, scene2, scene3;
     private String time, winner;
-    ;
+
     private ArrayList<String> playerNames = new ArrayList<String>();
+    // this need to be a map between instances of character and player names ~ Sriram and Jamie
+    private HashMap<Character, String> characterPlayerMap;
+    //this needs to be the number of ai players ~ Sriram and Jamie
+    private int noAiPlayers;
+    //This might not be a string but whichever way you are doing the file selection.
+    private String customBoardFileName;
     private AnimationTimer timer;
     private Label lblTime = new Label("0 .s");
     private int seconds, multiplayer = 0;
@@ -264,7 +277,23 @@ public class Game extends Application {
                 setPlayerNames(x);
             }
             System.out.println(playerNames);
-            createGameboard(window);
+
+            TurnManager turnManager;
+            try {
+                turnManager = new TurnManager(characterPlayerMap, noAiPlayers, customBoardFileName, this);
+            } //
+            catch (InvalidSetupFileException e) {
+                //Alert(Alert.AlertType AlertType, String("Invalid Setup File!"));
+                //jOptionPane.showMessageDialog(null, "Invalid Setup File!");
+                Alert alert = new Alert(AlertType.WARNING);
+                alert.setContentText("Invalid Setup File");
+                alert.setTitle("Error");
+                alert.showAndWait();
+
+            }
+
+            turnManager = new TurnManager(characterPlayerMap, noAiPlayers, customBoardFileName, this);
+            createGameboard(window, turnManager.getGameBoard());
             window.setTitle("Cluedo");
             window.setScene(scene2);
             Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
@@ -282,7 +311,30 @@ public class Game extends Application {
         window.setY((primScreenBounds.getHeight() - window.getHeight()) / 2);
     }
 
-    public void createGameboard(Stage primaryStage) {
+    public void createGameboard(Stage primaryStage, GameBoard gb) {
+        int numFill = 0;
+        Stage window = primaryStage;
+        Button exitButton = new Button("Exit Game");
+        exitButton.setOnAction(e -> {
+            mediaPlayer.pause();
+            window.setScene(scene1);
+            window.close();
+            Platform.runLater(() -> new Game().start(new Stage()));
+        });
+
+        //x coord
+        for (int x = 1; x < gb.getWidth(); x++) {
+            for (int y = 1; y < gb.getHeight(); y++) {
+                //Make GUI Tiles in Here
+                
+
+            }
+        }
+        
+        exitButton.setLayoutX(525);
+        exitButton.setLayoutY(600);
+        root.getChildren().addAll(exitButton);
+
         /*   timer = new AnimationTimer() {
             private long lastTime = 0;
 
