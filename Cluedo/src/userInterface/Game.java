@@ -59,43 +59,42 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import userInterface.boardTiles.RoomPane;
 
-
 /**
  *
  * @author sb816
  */
 public class Game extends Application {
-    
+
     private Pane root = new Pane();
     private Pane root2 = new Pane();
     private Scene scene1, scene2, scene3;
-    private String time, winner;;
+    private String time, winner;
+    ;
     private ArrayList<String> playerNames = new ArrayList<String>();
     private AnimationTimer timer;
     private Label lblTime = new Label("0 .s");
     private int seconds, multiplayer = 0;
     private MediaPlayer mediaPlayer;
-    
+
     @Override
-    public void start(Stage primaryStage){        
+    public void start(Stage primaryStage) {
         //Media media = new Media("file://CLUE.mp3"); //replace /Movies/test.mp3 with your file
         //MediaPlayer player = new MediaPlayer(media); 
         //player.setAutoPlay(true);
         //player.play();
-        
+
         //String path = Test.class.getResource("/Kalimba.mp3").toString();
         //Media media = new Media(pa);
         //MediaPlayer mp = new MediaPlayer(media);
         //mp.play();
-        
         final URL resource = getClass().getResource("CLUE.mp3");
         final Media media = new Media(resource.toString());
         mediaPlayer = new MediaPlayer(media);
         mediaPlayer.play();
-                
+
         Button button1, button3, button4;
-        Stage window = primaryStage;        
-     
+        Stage window = primaryStage;
+
         Label label1 = new Label("Number of Players:");
         final String[] players = new String[]{"1", "2", "3", "4", "5", "6"};
         ChoiceBox cb = new ChoiceBox(FXCollections.observableArrayList("1", "2", "3", "4", "5", "6"));
@@ -109,7 +108,7 @@ public class Game extends Application {
         //r.setSelected(true);
         //a.setToggleGroup(tg);
         //d.setToggleGroup(tg);        
-        
+
         //tg.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
         //@Override
         //    public void changed(ObservableValue<? extends Toggle> ov, Toggle t, Toggle t1) {
@@ -117,45 +116,42 @@ public class Game extends Application {
         //        difficulty = chk.getText();
         //    }
         //});
-              
         button1 = new Button("Start game");
         button4 = new Button("Exit menu");
         button1.setOnAction(e -> setGameboard(window, multiplayer));
         button4.setOnAction(e -> window.close());
-        
+
         //label1, sizeInput, label2, r, a, d, 
-        
         Pane layout1 = new Pane();
         button1.setLayoutX(218);
         button1.setLayoutY(551);
         button4.setLayoutX(432);
         label1.setLayoutX(167);
-        label1.setLayoutY(480);             
+        label1.setLayoutY(480);
         label1.setTextFill(Color.web("FFFFFF"));
         label1.setFont(new Font("Calibri", 15));
         cb.setLayoutX(297);
         cb.setLayoutY(478);
-        
-        cb.getSelectionModel().selectedIndexProperty().addListener(new 
-            ChangeListener<Number>(){
-                public void changed(ObservableValue ov, Number value, Number new_value){
-                    multiplayer = Integer.parseInt(players[new_value.intValue()]);
-                    System.out.println(multiplayer);
-                }
-            });
-        
+
+        cb.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+            public void changed(ObservableValue ov, Number value, Number new_value) {
+                multiplayer = Integer.parseInt(players[new_value.intValue()]);
+                System.out.println(multiplayer);
+            }
+        });
+
         //layout1.setAlignment(button1, Pos.CENTER);
         //layout1.setAlignment(button4, Pos.BOTTOM_CENTER);
         layout1.getChildren().addAll(label1, cb, button1, button4);
-        Image image = new Image(getClass().getResourceAsStream("Cluedo-HomepageTest.png"),500,650,false,true);
-        BackgroundImage myBI= new BackgroundImage(image,BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, 
-        BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
+        Image image = new Image(getClass().getResourceAsStream("Cluedo-HomepageTest.png"), 500, 650, false, true);
+        BackgroundImage myBI = new BackgroundImage(image, BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
         //then you set to your node
-        layout1.setBackground(new Background(myBI));           
-        scene1 = new Scene(layout1, 500, 650);       
+        layout1.setBackground(new Background(myBI));
+        scene1 = new Scene(layout1, 500, 650);
         window.setScene(scene1);
-        window.setTitle("Cluedo");        
-        window.show();            
+        window.setTitle("Cluedo");
+        window.show();
     }
 
     /**
@@ -165,142 +161,129 @@ public class Game extends Application {
         launch(args);
     }
 
-    public void displayTurn(Player player)
-    {
+    public void displayTurn(Player player) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public int rollDice()
-    {
+    public int rollDice() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public BoardSpace chooseSpace(HashSet<BoardSpace> availableMoves)
-    {
+    public BoardSpace chooseSpace(HashSet<BoardSpace> availableMoves) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public BoardSpace teleport()
-    {
+    public BoardSpace teleport() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public boolean endTurn()
-    {
+    public boolean endTurn() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public Suggestion makeSuggestion(Player player)
-    {
+    public Suggestion makeSuggestion(Player player) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void noPlayerClues()
-    {
+    public void noPlayerClues() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public ClueCard chooseResponse(Player nextEnquiry, ArrayList<ClueCard> possibleClues)
-    {
+    public ClueCard chooseResponse(Player nextEnquiry, ArrayList<ClueCard> possibleClues) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void showClue(ClueCard response, Player player)
-    {
+    public void showClue(ClueCard response, Player player) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public boolean accusationQuery()
-    {
+    public boolean accusationQuery() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public Accusation makeAccusation(Player player)
-    {
+    public Accusation makeAccusation(Player player) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void displayExtraTurn(Player player)
-    {
+    public void displayExtraTurn(Player player) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void winningsPage(Player currPlayer)
-    {
+    public void winningsPage(Player currPlayer) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
     private class Tile extends StackPane {
-        
+
         private Text text = new Text();
-        
+
         public Tile(String colour, int startOrDoor) {
-            Rectangle border = new Rectangle(25,25);
+            Rectangle border = new Rectangle(25, 25);
             border.setFill(null);
             border.setStroke(Color.BLACK);
             setAlignment(Pos.CENTER);
             getChildren().addAll(border);
-            
-            switch(colour){
-                case "yellow": border.setFill(Color.YELLOW);
-                               break;
-                case "beige": border.setFill(Color.BEIGE);
-                              break;            
+
+            switch (colour) {
+                case "yellow":
+                    border.setFill(Color.YELLOW);
+                    break;
+                case "beige":
+                    border.setFill(Color.BEIGE);
+                    break;
             }
-            
-            if (startOrDoor == 1){
+
+            if (startOrDoor == 1) {
                 text.setText("START");
-                text.setFont(Font.font("Calibri",8));
+                text.setFont(Font.font("Calibri", 8));
             }
-            if (startOrDoor == 2){
+            if (startOrDoor == 2) {
                 text.setText("DOOR");
-                text.setFont(Font.font("Calibri",8));
+                text.setFont(Font.font("Calibri", 8));
             }
-            
+
             getChildren().add(text);
-            
-            setOnMouseClicked(event -> {               
-                
-                        });
+
+            setOnMouseClicked(event -> {
+
+            });
         }
     }
-    
-    public void setGameboard(Stage window, int multiplayer){
-        
-        if (multiplayer == 0){
+
+    public void setGameboard(Stage window, int multiplayer) {
+
+        if (multiplayer == 0) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error!");
             alert.setHeaderText("No players selected");
             alert.setContentText("You must select the number of players in this game.");
 
             alert.showAndWait();
-        }
-        
-        else {
-            for(int x=1; x<=multiplayer; x++){
+        } else {
+            for (int x = 1; x <= multiplayer; x++) {
                 setPlayerNames(x);
-            }        
+            }
             System.out.println(playerNames);
-            createGameboard(window);        
+            createGameboard(window);
             window.setTitle("Cluedo");
-            window.setScene(scene2);  
+            window.setScene(scene2);
             Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
             window.setX((primScreenBounds.getWidth() - window.getWidth()) / 2);
             window.setY((primScreenBounds.getHeight() - window.getHeight()) / 2);
         }
     }
-    
-    public void setWinningsPage(Stage window){        
-        createWinningsPage(window);        
+
+    public void setWinningsPage(Stage window) {
+        createWinningsPage(window);
         window.setTitle("Winner!!");
-        window.setScene(scene3);  
+        window.setScene(scene3);
         Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
         window.setX((primScreenBounds.getWidth() - window.getWidth()) / 2);
         window.setY((primScreenBounds.getHeight() - window.getHeight()) / 2);
     }
-    
+
     public void createGameboard(Stage primaryStage) {
-         timer = new AnimationTimer() {
+        /*   timer = new AnimationTimer() {
             private long lastTime = 0;
 
             @Override
@@ -691,43 +674,48 @@ public class Game extends Application {
         root.getChildren().addAll(button2, button3);
         
         scene2 = new Scene(root, screenSizeX, screenSizeY);
+         */
     }
-    
-    public void createWinningsPage(Stage primaryStage){
-    
+
+    public void createWinningsPage(Stage primaryStage) {
+
         int numFill = 0;
-        Stage window = primaryStage;        
+        Stage window = primaryStage;
         Button button2 = new Button("Exit Game");
-        button2.setOnAction(e -> {mediaPlayer.pause(); window.setScene(scene1); window.close(); Platform.runLater(() -> new Game().start(new Stage()));});
-            
+        button2.setOnAction(e -> {
+            mediaPlayer.pause();
+            window.setScene(scene1);
+            window.close();
+            Platform.runLater(() -> new Game().start(new Stage()));
+        });
+
         Text t = new Text();
         t.setText("WINNER IS");
-        t.setFont(Font.font(Font.getFamilies().get(1),FontWeight.EXTRA_BOLD, 90));
+        t.setFont(Font.font(Font.getFamilies().get(1), FontWeight.EXTRA_BOLD, 90));
         t.setFill(Color.WHITE);
         t.setTextAlignment(TextAlignment.RIGHT);
         t.setX(250);
         t.setY(300);
-       // t.setFont(100);
-                
-        
-       // setting background image 
-       Image image = new Image(getClass().getResourceAsStream("SQ_NSwitchDS_Cluedo.jpg"),600,600,false,true);
-       BackgroundImage backgroundImage = new BackgroundImage(image, 
-               BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT,
-               BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+        // t.setFont(100);
+
+        // setting background image 
+        Image image = new Image(getClass().getResourceAsStream("SQ_NSwitchDS_Cluedo.jpg"), 600, 600, false, true);
+        BackgroundImage backgroundImage = new BackgroundImage(image,
+                BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
         root2.setBackground(new Background(backgroundImage));
-        
+
         int screenSizeX = (600);
-        int screenSizeY = (600);      
-        
+        int screenSizeY = (600);
+
         button2.setLayoutX(500);
         button2.setLayoutY(550);
-        root2.getChildren().addAll(t,button2);
-        
+        root2.getChildren().addAll(t, button2);
+
         scene3 = new Scene(root2, screenSizeX, screenSizeY);
     }
-    
-    public void setPlayerNames(int playerNumber){
+
+    public void setPlayerNames(int playerNumber) {
         TextInputDialog dialog = new TextInputDialog("");
         dialog.setTitle("Player " + playerNumber + " name");
         dialog.setHeaderText("Please enter the name of Player " + playerNumber);
@@ -735,10 +723,9 @@ public class Game extends Application {
 
         // Traditional way to get the response value.
         Optional<String> result = dialog.showAndWait();
-        if (result.isPresent()){
+        if (result.isPresent()) {
             String playerName = result.get();
             playerNames.add(playerName);
         }
     }
 }
-
