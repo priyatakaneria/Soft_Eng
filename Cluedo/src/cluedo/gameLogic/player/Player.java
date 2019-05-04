@@ -16,8 +16,10 @@ import cluedo.gameLogic.gameBoard.Room;
 import cluedo.gameLogic.gameBoard.GameBoard;
 import cluedo.gameLogic.gameBoard.BoardSpace;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 /**
@@ -31,24 +33,47 @@ public class Player
     private ArrayList<IntrigueCard> intrigueHand;
     private Character character;
     private DetectiveNotes detNotes;
-    protected GameBoard gb;
+    private GameBoard gb;
     private String playerName;
     private BoardSpace currentPosition;
     private boolean playerLost;
-    protected Suggestion lastSuggestion;
+    private Suggestion lastSuggestion;
+    private Collection<Player> otherPlayers;
 
     //Add Gameboard as Parameter
-    public Player(Character character, String playerName, GameBoard gb, BoardSpace start)
+    public Player(Character character, String playerName, GameBoard gb, BoardSpace start, Collection<Player> otherPlayers)
     {
         clueHand = new ArrayList<>();
         intrigueHand = new ArrayList<>();
         this.character = character;
-        detNotes = new DetectiveNotes();
+        detNotes = new DetectiveNotes(otherPlayers, gb.getRooms().values());
         this.gb = gb;
         currentPosition = start;
         playerLost = false;
+        lastSuggestion = null;
+        this.otherPlayers = otherPlayers;
     }
 
+    public GameBoard getGameBoard()
+    {
+        return gb;
+    }
+
+    public String getPlayerName()
+    {
+        return playerName;
+    }
+
+    public Suggestion getLastSuggestion()
+    {
+        return lastSuggestion;
+    }
+
+    public Collection<Player> getOtherPlayers()
+    {
+        return otherPlayers;
+    }
+    
     public boolean hasPlayerLost()
     {
         return playerLost;

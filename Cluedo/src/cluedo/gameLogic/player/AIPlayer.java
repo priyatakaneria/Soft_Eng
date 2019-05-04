@@ -15,6 +15,7 @@ import cluedo.gameLogic.Weapon;
 import cluedo.gameLogic.gameBoard.BoardSpace;
 import cluedo.gameLogic.gameBoard.Room;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Random;
@@ -30,13 +31,16 @@ public class AIPlayer extends Player
     private Random randDecision;
     private HashMap<ClueType, Integer> clueFrequency;
 
-    public AIPlayer(double confidence, Character character, String aiName, GameBoard gb, BoardSpace start)
+    public AIPlayer(double confidence, Character character, String aiName, GameBoard gb, BoardSpace start, Collection<Player> otherPlayers)
     {
-        super(character, aiName, gb, start);
+        super(character, aiName, gb, start, otherPlayers);
         this.confidence = confidence;
         randDecision = new Random();
         clueFrequency = createClueFreqTable();
-
+        for (ClueCard cc : getClueHand())
+        {
+            markDetectiveTable(this, cc.getClueType(), DetNoteType.hasClue);
+        }
     }
 
     /**
@@ -57,7 +61,7 @@ public class AIPlayer extends Player
         {
             clueFreq.put(w, 0);
         }
-        for (Room r : gb.getRooms().values())
+        for (Room r : getGameBoard().getRooms().values())
         {
             clueFreq.put(r, 0);
         }
@@ -95,23 +99,39 @@ public class AIPlayer extends Player
                 }
                 i++;
             }
-
         } //
         else
         {
-            int randSpace = randDecision.nextInt(availableMoves.size());
-            int i = 0;
-            for (BoardSpace r : availableMoves)
-            {
-                if (i == randSpace)
-                {
-                    newSpace = r;
-                }
-                i++;
-            }
+            newSpace = randChoice(availableMoves);
+//            int randSpace = randDecision.nextInt(availableMoves.size());
+//            int i = 0;
+//            for (BoardSpace r : availableMoves)
+//            {
+//                if (i == randSpace)
+//                {
+//                    newSpace = r;
+//                }
+//                i++;
+//            }
         }
 
         return newSpace;
+    }
+
+    public <T> T randChoice(Collection<T> c)
+    {
+        T randChoice = null;
+        int choiceNum = randDecision.nextInt(c.size());
+        int i = 0;
+        for (T t : c)
+        {
+            if (i == choiceNum)
+            {
+                randChoice = t;
+            }
+            i++;
+        }
+        return randChoice;
     }
 
     /**
@@ -122,25 +142,26 @@ public class AIPlayer extends Player
      */
     public BoardSpace chooseTeleport()
     {
-        HashMap<Integer, Room> availableMoves = super.gb.getRooms();
+        HashMap<Integer, Room> availableMoves = getGameBoard().getRooms();
         int randRoom = randDecision.nextInt(availableMoves.size());
         return availableMoves.get(randRoom + 1);
     }
-
-    
 
     /**
      * should make the appropriate detective notes for not receiving a new clue
      * after a suggestion according to the suggestion made.
      */
-    public void noPlayerClues(Player enquired, Suggestion newSuggestion)
+    public void noPlayerClues(Player enquired, ArrayList<Player> withoutClues)
     {
-        markDetectiveTable(enquired, lastSuggestion.getCharacter(), DetNoteType.mightHaveClue);
-        markDetectiveTable(enquired, lastSuggestion.getRoom(), DetNoteType.mightHaveClue);
-        markDetectiveTable(enquired, lastSuggestion.getWeapon(), DetNoteType.mightHaveClue);
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Suggestion lastSuggestion = getLastSuggestion();
+        for (Player p : withoutClues)
+        {
+            markDetectiveTable(enquired, lastSuggestion.getCharacter(), DetNoteType.doesntHaveClue);
+            markDetectiveTable(enquired, lastSuggestion.getRoom(), DetNoteType.doesntHaveClue);
+            markDetectiveTable(enquired, lastSuggestion.getWeapon(), DetNoteType.doesntHaveClue);
+        }
     }
-    
+
     /**
      * should make the relevant detective notes for having received the clue
      * 'response'.
@@ -149,12 +170,20 @@ public class AIPlayer extends Player
      * @param enquired the player showing the clue
      * @param playerQueue the queue of players
      */
-    public void receivedClue(ClueCard response, Player enquired)
+    public void receivedClue(ClueCard response, Player enquired, ArrayList<Player> withoutClues)
     {
+        Suggestion lastSuggestion = getLastSuggestion();
         markDetectiveTable(enquired, lastSuggestion.getCharacter(), DetNoteType.mightHaveClue);
         markDetectiveTable(enquired, lastSuggestion.getRoom(), DetNoteType.mightHaveClue);
         markDetectiveTable(enquired, lastSuggestion.getWeapon(), DetNoteType.mightHaveClue);
         markDetectiveTable(enquired, response.getClueType(), DetNoteType.hasClue);
+
+        for (Player p : withoutClues)
+        {
+            markDetectiveTable(enquired, lastSuggestion.getCharacter(), DetNoteType.doesntHaveClue);
+            markDetectiveTable(enquired, lastSuggestion.getRoom(), DetNoteType.doesntHaveClue);
+            markDetectiveTable(enquired, lastSuggestion.getWeapon(), DetNoteType.doesntHaveClue);
+        }
     }
 
     /**
@@ -186,9 +215,63 @@ public class AIPlayer extends Player
      */
     public Suggestion decideSuggestion()
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Weapon bestWeapon = (Weapon) randChoice(mostLikely(Weapon.values()));
+        Character bestCharacter = (Character) randChoice(mostLikely(Character.values()));
+        return new Suggestion((Room) getCurrentPosition(), bestWeapon, bestCharacter, this);
+    }
+
+    private HashSet<ClueType> mostLikely(ClueType[] allClues)
+    {
+        DetectiveNotes detNotes = getDetNotes();
+
+        ClueType bestChoice = null;
+        
+        HashSet<ClueType> possible = possibleClues(allClues);
+
+        HashMap<ClueType, Integer> likely = new HashMap<ClueType, Integer>();
+        //find clue that is most likely for plaers to not have
+        for (ClueType ct : possible)
+        {
+            for (Player p : getOtherPlayers())
+            {
+                if (p != this && getDetNotes().checkClue(p, ct) == DetNoteType.mightHaveClue)
+                {
+                    likely.put(ct, likely.getOrDefault(ct, 0) + 1);
+                }
+            }
+        }
+
+        HashSet<ClueType> bestChoices = new HashSet<>();
+        int min = Integer.MAX_VALUE;
+        for (ClueType ct : likely.keySet())
+        {
+            int nextFreq = likely.get(ct);
+            if (nextFreq < min)
+            {
+                min = nextFreq;
+                bestChoices.add(ct);
+            }
+        }
+        return bestChoices;
     }
     
+    private HashSet<ClueType> possibleClues(ClueType[] allClues)
+    {
+        // determine possible clues which we don't know a player has / doesn't have
+        HashSet<ClueType> possible = new HashSet<>();
+        for (ClueType ct : allClues)
+        {
+            for (Player p : getOtherPlayers())
+            {
+                if (getDetNotes().checkClue(p, ct) != DetNoteType.hasClue)
+                {
+                    possible.add(ct);
+                }
+            }
+        }
+        return possible;
+    }
+
     /**
      * AIPlayer.accusationQuery should make a decision on whether to make a
      * final accusation or not.
@@ -200,7 +283,24 @@ public class AIPlayer extends Player
      */
     public boolean accusationQuery()
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        HashSet<ClueType> possibleWeapons = possibleClues(Weapon.values());
+        HashSet<ClueType> possibleCharacters = possibleClues(Character.values());
+        Collection<Room> roomCollection = getGameBoard().getRooms().values();
+        ClueType[] roomArray = new Room[roomCollection.size()];
+        int i = 0;
+        for (Room r : roomCollection)
+        {
+            roomArray[i] = r;
+            i++;
+        }
+        HashSet<ClueType> possibleRooms = possibleClues(roomArray);
+        
+        boolean accusationQuery = false;
+        if (possibleWeapons.size() + possibleRooms.size() + possibleCharacters.size() <= 6)
+        {
+            accusationQuery = true;
+        }
+        return accusationQuery;
     }
 
     /**
@@ -211,6 +311,17 @@ public class AIPlayer extends Player
      */
     public Accusation decideAccusation()
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Weapon bestWeapon = (Weapon) randChoice(mostLikely(Weapon.values()));
+        Character bestCharacter = (Character) randChoice(mostLikely(Character.values()));
+        Collection<Room> roomCollection = getGameBoard().getRooms().values();
+        ClueType[] roomArray = new Room[roomCollection.size()];
+        int i = 0;
+        for (Room r : roomCollection)
+        {
+            roomArray[i] = r;
+            i++;
+        }
+        Room bestRoom = (Room) randChoice(mostLikely(roomArray));
+        return new Accusation(bestRoom, bestWeapon, bestCharacter, this);
     }
 }
