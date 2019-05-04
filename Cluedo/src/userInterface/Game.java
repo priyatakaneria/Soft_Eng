@@ -89,7 +89,8 @@ public class Game extends Application
 
     private Pane root = new Pane();
     private Pane root2 = new Pane();
-    private Scene scene1, scene2, scene3;
+    private Pane root3 = new Pane();
+    private Scene scene1, scene2, scene3, scene4;
     private String time, winner;
 
     private ArrayList<String> playerNames = new ArrayList<String>();
@@ -152,7 +153,7 @@ public class Game extends Application
         //});
         button1 = new Button("Start game");
         button4 = new Button("Exit menu");
-        button1.setOnAction(e -> setGameboard(window, multiplayer));
+        button1.setOnAction(e -> setCharactersPage(window));
         button4.setOnAction(e -> window.close());
 
         //label1, sizeInput, label2, r, a, d, 
@@ -314,48 +315,38 @@ public class Game extends Application
         }
     }
 
-    public void setGameboard(Stage window, int multiplayer)
-    {
-
-        if (multiplayer == 0)
+    public void setGameboard(Stage window)
+    {     
+        /*
+        TurnManager turnManager;
+        try
         {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error!");
-            alert.setHeaderText("No players selected");
-            alert.setContentText("You must select the number of players in this game.");
-
+            turnManager = new TurnManager(characterPlayerMap, noAiPlayers, customBoardFileName, this);
+            createGameboard(window, turnManager.getGameBoard());
+            window.setTitle("Cluedo");
+            window.setScene(scene2);
+            Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
+            window.setX((primScreenBounds.getWidth() - window.getWidth()) / 2);
+            window.setY((primScreenBounds.getHeight() - window.getHeight()) / 2);
+        } //
+        catch (InvalidSetupFileException e)
+        {
+            //Alert(Alert.AlertType AlertType, String("Invalid Setup File!"));
+            //jOptionPane.showMessageDialog(null, "Invalid Setup File!");
+            Alert alert = new Alert(AlertType.WARNING);
+            alert.setContentText("Invalid Setup File");
+            alert.setTitle("Error");
             alert.showAndWait();
-        } else
-        {
-            for (int x = 1; x <= multiplayer; x++)
-            {
-                setPlayerNames(x);
-            }
-            System.out.println(playerNames);
-
-            TurnManager turnManager;
-            try
-            {
-                turnManager = new TurnManager(characterPlayerMap, noAiPlayers, customBoardFileName, this);
-                createGameboard(window, turnManager.getGameBoard());
-                window.setTitle("Cluedo");
-                window.setScene(scene2);
-                Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
-                window.setX((primScreenBounds.getWidth() - window.getWidth()) / 2);
-                window.setY((primScreenBounds.getHeight() - window.getHeight()) / 2);
-            } //
-            catch (InvalidSetupFileException e)
-            {
-                //Alert(Alert.AlertType AlertType, String("Invalid Setup File!"));
-                //jOptionPane.showMessageDialog(null, "Invalid Setup File!");
-                Alert alert = new Alert(AlertType.WARNING);
-                alert.setContentText("Invalid Setup File");
-                alert.setTitle("Error");
-                alert.showAndWait();
-
-            }
 
         }
+        */
+        
+        createGameboard(window);
+        window.setTitle("Cluedo");
+        window.setScene(scene2);
+        Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
+        window.setX((primScreenBounds.getWidth() - window.getWidth()) / 2);
+        window.setY((primScreenBounds.getHeight() - window.getHeight()) / 2);
     }
 
     public void setWinningsPage(Stage window)
@@ -367,10 +358,71 @@ public class Game extends Application
         window.setX((primScreenBounds.getWidth() - window.getWidth()) / 2);
         window.setY((primScreenBounds.getHeight() - window.getHeight()) / 2);
     }
+    
+    public void setCharactersPage(Stage window){
+        
+        for (int x = 1; x <= multiplayer; x++)
+        {
+            setPlayerNames(x);
+        }
+        System.out.println(playerNames);
+        
+        if (multiplayer == 0)
+        {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error!");
+            alert.setHeaderText("No players selected");
+            alert.setContentText("You must select the number of players in this game.");
 
-    public void createGameboard(Stage primaryStage, GameBoard gb)
+            alert.showAndWait();
+        } 
+        
+        else
+        { 
+            createCharacterPage(window);
+            window.setTitle("Please choose a character");
+            window.setScene(scene4);
+            Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
+            window.setX((primScreenBounds.getWidth() - window.getWidth()) / 2);
+            window.setY((primScreenBounds.getHeight() - window.getHeight()) / 2);
+        }
+    }
+
+    public void createCharacterPage(Stage primaryStage){
+        
+        Stage window = primaryStage;
+        Button save = new Button("Save");
+        save.setOnAction(e ->
+        {
+            setGameboard(primaryStage);  
+        });
+        
+        Rectangle selectCharacter = new Rectangle(50, 50);
+        selectCharacter.setFill(null);
+        selectCharacter.setTranslateX(50);
+        selectCharacter.setTranslateY(50);
+        // t.setFont(100);
+
+        // setting background image 
+        Image image = new Image(getClass().getResourceAsStream("characters.jpg"), 600, 600, false, true);
+        BackgroundImage backgroundImage = new BackgroundImage(image,
+                BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+        root3.setBackground(new Background(backgroundImage));
+
+        int screenSizeX = (600);
+        int screenSizeY = (600);
+
+        save.setLayoutX(500);
+        save.setLayoutY(550);
+        root3.getChildren().addAll(selectCharacter, save);
+
+        scene4 = new Scene(root3, screenSizeX, screenSizeY);
+        
+    }
+    
+    public void createGameboard(Stage primaryStage)
     {
-        int numFill = 0;
         Stage window = primaryStage;
         Button exitButton = new Button("Exit Game");
         exitButton.setOnAction(e ->
@@ -380,7 +432,8 @@ public class Game extends Application
             window.close();
             Platform.runLater(() -> new Game().start(new Stage()));
         });
-
+        
+        /* 
         gameBoardPanes = new ArrayList<>();
 
         //x coord
@@ -419,10 +472,16 @@ public class Game extends Application
                 gameBoardPanes.get(x - 1).add(newPane);
             }
         }
-
+        */
+        
+        Button winningsPage = new Button("Winnings Page");
+        winningsPage.setOnAction(e -> setWinningsPage(primaryStage));
+        winningsPage.setLayoutX(425);
+        winningsPage.setLayoutY(600);
+        
         exitButton.setLayoutX(525);
         exitButton.setLayoutY(600);
-        root.getChildren().addAll(exitButton);
+        root.getChildren().addAll(exitButton, winningsPage );
 
         /*   timer = new AnimationTimer() {
             private long lastTime = 0;
@@ -803,25 +862,16 @@ public class Game extends Application
         tile23.setTranslateY(450);
         
         root.getChildren().addAll(tile, tile1, tile2, tile3, tile4, tile5, tile6, tile7, tile8, tile9, tile10, tile11, tile12, tile13, tile14, tile15, tile16, tile17, tile18, tile19, tile20, tile21, tile22, tile23, tile24); 
-               
+        */       
         
         int screenSizeX = (600);
-        int screenSizeY = (625);
+        int screenSizeY = (625);        
         
-        button2.setLayoutX(525);
-        button2.setLayoutY(600);
-        button3.setLayoutX(425);
-        button3.setLayoutY(600);
-        root.getChildren().addAll(button2, button3);
-        
-        scene2 = new Scene(root, screenSizeX, screenSizeY);
-         */
+        scene2 = new Scene(root, screenSizeX, screenSizeY);         
     }
 
     public void createWinningsPage(Stage primaryStage)
     {
-
-        int numFill = 0;
         Stage window = primaryStage;
         Button button2 = new Button("Exit Game");
         button2.setOnAction(e ->
@@ -871,6 +921,17 @@ public class Game extends Application
         {
             String playerName = result.get();
             playerNames.add(playerName);
+        }        
+        else
+        {
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("No name entered");
+            alert.setContentText("You must enter a player name.");
+
+            alert.showAndWait();
+            setPlayerNames(playerNumber);
         }
+            
     }
 }
