@@ -74,6 +74,11 @@ import cluedo.gameLogic.gameBoard.StaircaseSquare;
 import java.util.HashMap;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.CornerRadii;
 import userInterface.boardTiles.BoardSquarePane;
 import userInterface.boardTiles.EmptySquarePane;
 import userInterface.boardTiles.RoomSquareDoorPane;
@@ -107,6 +112,8 @@ public class Game extends Application
     private MediaPlayer mediaPlayer;
 
     private ArrayList<ArrayList<StackPane>> gameBoardPanes;
+    
+    public static final Border SOLID_BLACK_BORDER = new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT));
 
     @Override
     public void start(Stage primaryStage)

@@ -47,6 +47,11 @@ public class DetectiveNotes
             }
         }
     }
+    
+    public String getNotes()
+    {
+        return detectiveNotes;
+    }
 
     public void markTable(Player p1, ClueType ct1, DetNoteType dnt1)
     {
