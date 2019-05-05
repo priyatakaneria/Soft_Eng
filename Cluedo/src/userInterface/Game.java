@@ -74,6 +74,7 @@ import cluedo.gameLogic.gameBoard.StaircaseSquare;
 import java.util.HashMap;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ChoiceDialog;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
@@ -90,18 +91,17 @@ import userInterface.boardTiles.StaircaseSquarePane;
  *
  * @author sb816
  */
-public class Game extends Application
-{
+public class Game extends Application {
 
     private Pane root = new Pane();
     private Pane root2 = new Pane();
     private Pane root3 = new Pane();
     private Scene scene1, scene2, scene3, scene4;
-    private String time, winner, player = "Mrs Peacock";
+    private String time, winner, player;
 
     private ArrayList<String> playerNames = new ArrayList<String>();
     // this need to be a map between instances of character and player names ~ Sriram and Jamie
-    private HashMap<Character, String> characterPlayerMap = new HashMap<Character,String>();
+    private HashMap<Character, String> characterPlayerMap = new HashMap<Character, String>();
     //this needs to be the number of ai players ~ Sriram and Jamie
     private int noAiPlayers;
     //This might not be a string but whichever way you are doing the file selection.
@@ -112,21 +112,12 @@ public class Game extends Application
     private MediaPlayer mediaPlayer;
 
     private ArrayList<ArrayList<StackPane>> gameBoardPanes;
-    
+
     public static final Border SOLID_BLACK_BORDER = new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT));
 
     @Override
-    public void start(Stage primaryStage)
-    {
-        //Media media = new Media("file://CLUE.mp3"); //replace /Movies/test.mp3 with your file
-        //MediaPlayer player = new MediaPlayer(media); 
-        //player.setAutoPlay(true);
-        //player.play();
-
-        //String path = Test.class.getResource("/Kalimba.mp3").toString();
-        //Media media = new Media(pa);
-        //MediaPlayer mp = new MediaPlayer(media);
-        //mp.play();
+    public void start(Stage primaryStage) {
+        
         final URL resource = getClass().getResource("CLUE.mp3");
         final Media media = new Media(resource.toString());
         mediaPlayer = new MediaPlayer(media);
@@ -136,29 +127,12 @@ public class Game extends Application
         Stage window = primaryStage;
 
         Label label1 = new Label("Number of Players:");
-        final String[] players = new String[]
-        {
+        final String[] players = new String[]{
             "1", "2", "3", "4", "5", "6"
         };
+        
         ChoiceBox cb = new ChoiceBox(FXCollections.observableArrayList("1", "2", "3", "4", "5", "6"));
-        //TextField sizeInput = new TextField();
-        //Label label2 = new Label("Difficulty:");
-        //ToggleButton r = new RadioButton("Easy");
-        //ToggleButton a = new RadioButton("Medium");
-        //ToggleButton d = new RadioButton("Hard");
-        //final ToggleGroup tg = new ToggleGroup();
-        //r.setToggleGroup(tg);
-        //r.setSelected(true);
-        //a.setToggleGroup(tg);
-        //d.setToggleGroup(tg);        
-
-        //tg.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-        //@Override
-        //    public void changed(ObservableValue<? extends Toggle> ov, Toggle t, Toggle t1) {
-        //        RadioButton chk = (RadioButton)t1.getToggleGroup().getSelectedToggle(); // Cast object to radio button
-        //        difficulty = chk.getText();
-        //    }
-        //});
+        
         button1 = new Button("Start game");
         button4 = new Button("Exit menu");
         button1.setOnAction(e -> setCharactersPage(window));
@@ -176,10 +150,8 @@ public class Game extends Application
         cb.setLayoutX(297);
         cb.setLayoutY(478);
 
-        cb.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>()
-        {
-            public void changed(ObservableValue ov, Number value, Number new_value)
-            {
+        cb.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+            public void changed(ObservableValue ov, Number value, Number new_value) {
                 multiplayer = Integer.parseInt(players[new_value.intValue()]);
                 System.out.println(multiplayer);
             }
@@ -202,23 +174,19 @@ public class Game extends Application
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         launch(args);
     }
 
-    public void displayTurn(Player player)
-    {
+    public void displayTurn(Player player) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public int rollDice()
-    {
+    public int rollDice() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public BoardSpace chooseSpace(HashSet<BoardSpace> availableMoves)
-    {
+    public BoardSpace chooseSpace(HashSet<BoardSpace> availableMoves) {
         // find all BoardSpace's corresponding GUI pane and 
 //        for (BoardSpace bs : availableMoves)
 //        {
@@ -230,71 +198,58 @@ public class Game extends Application
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public BoardSpace teleport()
-    {
+    public BoardSpace teleport() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public boolean endTurn()
-    {
+    public boolean endTurn() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public Suggestion makeSuggestion(Player player)
-    {
+    public Suggestion makeSuggestion(Player player) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void noPlayerClues()
-    {
+    public void noPlayerClues() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public ClueCard chooseResponse(Player nextEnquiry, ArrayList<ClueCard> possibleClues)
-    {
+    public ClueCard chooseResponse(Player nextEnquiry, ArrayList<ClueCard> possibleClues) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void showClue(ClueCard response, Player player, Player clueGiver)
-    {
+    public void showClue(ClueCard response, Player player, Player clueGiver) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public boolean accusationQuery()
-    {
+    public boolean accusationQuery() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public Accusation makeAccusation(Player player)
-    {
+    public Accusation makeAccusation(Player player) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void displayExtraTurn(Player player)
-    {
+    public void displayExtraTurn(Player player) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void winningsPage(Player currPlayer)
-    {
+    public void winningsPage(Player currPlayer) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    private class Tile extends StackPane
-    {
+    private class Tile extends StackPane {
 
         private Text text = new Text();
 
-        public Tile(String colour, int startOrDoor)
-        {
+        public Tile(String colour, int startOrDoor) {
             Rectangle border = new Rectangle(25, 25);
             border.setFill(null);
             border.setStroke(Color.BLACK);
             setAlignment(Pos.CENTER);
             getChildren().addAll(border);
 
-            switch (colour)
-            {
+            switch (colour) {
                 case "yellow":
                     border.setFill(Color.YELLOW);
                     break;
@@ -303,28 +258,25 @@ public class Game extends Application
                     break;
             }
 
-            if (startOrDoor == 1)
-            {
+            if (startOrDoor == 1) {
                 text.setText("START");
                 text.setFont(Font.font("Calibri", 8));
             }
-            if (startOrDoor == 2)
-            {
+            if (startOrDoor == 2) {
                 text.setText("DOOR");
                 text.setFont(Font.font("Calibri", 8));
             }
 
             getChildren().add(text);
 
-            setOnMouseClicked(event ->
-            {
+            setOnMouseClicked(event
+                    -> {
 
             });
         }
     }
 
-    public void setGameboard(Stage window)
-    {     
+    public void setGameboard(Stage window) {
         /*
         TurnManager turnManager;
         try
@@ -347,8 +299,8 @@ public class Game extends Application
             alert.showAndWait();
 
         }
-        */
-        
+         */
+
         createGameboard(window);
         window.setTitle("Cluedo");
         window.setScene(scene2);
@@ -357,197 +309,208 @@ public class Game extends Application
         window.setY((primScreenBounds.getHeight() - window.getHeight()) / 2);
     }
 
-    public void setWinningsPage(Stage window)
-    {
+    public void setWinningsPage(Stage window) {
         createWinningsPage(window);
-        window.setTitle("Winner!!");        
-        window.setScene(scene3);   
+        window.setTitle("Winner!!");
+        window.setScene(scene3);
         Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
         window.setX((primScreenBounds.getWidth() - window.getWidth()) / 2);
         window.setY((primScreenBounds.getHeight() - window.getHeight()) / 2);
     }
-    
-    public void setCharactersPage(Stage window){
+
+    public void setCharactersPage(Stage window) {
+
+        ArrayList<String> AIchoices = new ArrayList<>();
         
-        for (int x = 1; x <= multiplayer; x++)
-        {
-            setPlayerNames(x);      
+        if (multiplayer<6){        
+            for (int i = 0; i < (6-multiplayer+1); i++){
+                String n = Integer.toString(i);
+                AIchoices.add(n);
+            }
+
+            ChoiceDialog<String> dialog = new ChoiceDialog<>("0", AIchoices);
+            dialog.setTitle("AI players");
+            dialog.setHeaderText("Please select the number of AI players in the game.");
+            dialog.setContentText("AI players:");
+            dialog.getDialogPane().lookupButton(ButtonType.CANCEL).setDisable(true);
+            dialog.getDialogPane().getScene().getWindow().setOnCloseRequest(event -> event.consume());
+
+            // Traditional way to get the response value.
+            Optional<String> result = dialog.showAndWait();
+            if (result.isPresent()){
+                int a = Integer.parseInt(result.get());
+                noAiPlayers = a;
+            }
+            
+            System.out.println(noAiPlayers);
         }
         
-        System.out.println(playerNames);     
-        
-        if (multiplayer == 0)
-        {
+        for (int x = 1; x <= multiplayer; x++) {
+            setPlayerNames(x);
+        }
+
+        System.out.println(playerNames);
+
+        if (multiplayer == 0) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error!");
             alert.setHeaderText("No players selected");
             alert.setContentText("You must select the number of players in this game.");
 
             alert.showAndWait();
-        } 
-        
-        else
-        { 
+        } else {
             createCharacterPage(window);
-            window.setTitle("Please choose a character");
-            window.setScene(scene4);    
+            window.setTitle("Please choose a character:");
+            window.setScene(scene4);
             Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
             window.setX((primScreenBounds.getWidth() - window.getWidth()) / 2);
             window.setY((primScreenBounds.getHeight() - window.getHeight()) / 2);
-               
+
             player = playerNames.get(0);
             Alert alert = new Alert(AlertType.INFORMATION);
             alert.setTitle(playerNames.get(0) + "'s Character");
             alert.setHeaderText("Please choose a character for " + playerNames.get(0));
             alert.setContentText("Select the character by clicking the corresponding picture.");
-            alert.showAndWait();            
-       
+            alert.showAndWait();
         }
     }
-    
-    public void createCharacterPage(Stage primaryStage){
-        
-        Stage window = primaryStage;        
-                
+
+    public void createCharacterPage(Stage primaryStage) {
+
+        Stage window = primaryStage;
+
         Rectangle mrsPeacock = new Rectangle(145, 215);
         mrsPeacock.setFill(Color.TRANSPARENT);
         mrsPeacock.setTranslateX(5);
-        mrsPeacock.setTranslateY(5);          
-        mrsPeacock.setOnMouseClicked(e ->
-                                    {           
-                                        Character mrsPeacockChar = Character.MrsPeacock;                                   
-                                        characterPlayerMap.put(mrsPeacockChar, player);
-                                        System.out.println(characterPlayerMap);      
-                                        if (countPlayers<playerNames.size()){
-                                            player = playerNames.get(countPlayers);
-                                            Alert alert = new Alert(AlertType.INFORMATION);
-                                            alert.setTitle(playerNames.get(countPlayers) + "'s Character");
-                                            alert.setHeaderText("Please choose a character for " + playerNames.get(countPlayers));
-                                            alert.setContentText("Select the character by clicking the corresponding picture.");
-                                            alert.showAndWait(); 
-                                            countPlayers++;
-                                        }
-                                        else {
-                                            setGameboard(primaryStage);  
-                                        }
-                                    }); 
-        
+        mrsPeacock.setTranslateY(5);
+        mrsPeacock.setOnMouseClicked(e
+                -> {
+            Character mrsPeacockChar = Character.MrsPeacock;
+            characterPlayerMap.put(mrsPeacockChar, player);
+            System.out.println(characterPlayerMap);
+            if (countPlayers < playerNames.size()) {
+                player = playerNames.get(countPlayers);
+                Alert alert = new Alert(AlertType.INFORMATION);
+                alert.setTitle(playerNames.get(countPlayers) + "'s Character");
+                alert.setHeaderText("Please choose a character for " + playerNames.get(countPlayers));
+                alert.setContentText("Select the character by clicking the corresponding picture.");
+                alert.showAndWait();
+                countPlayers++;
+            } else {
+                setGameboard(primaryStage);
+            }
+        });
+
         Rectangle colonelMustard = new Rectangle(145, 215);
         colonelMustard.setFill(Color.TRANSPARENT);
         colonelMustard.setTranslateX(150);
-        colonelMustard.setTranslateY(5);          
-        colonelMustard.setOnMouseClicked(e ->
-                                    {           
-                                        Character colonelMustardChar = Character.ColMustard;
-                                        characterPlayerMap.put(colonelMustardChar, player);
-                                        System.out.println(characterPlayerMap);      
-                                        if (countPlayers<playerNames.size()){
-                                            player = playerNames.get(countPlayers);
-                                            Alert alert = new Alert(AlertType.INFORMATION);
-                                            alert.setTitle(playerNames.get(countPlayers) + "'s Character");
-                                            alert.setHeaderText("Please choose a character for " + playerNames.get(countPlayers));
-                                            alert.setContentText("Select the character by clicking the corresponding picture.");
-                                            alert.showAndWait(); 
-                                            countPlayers++;
-                                        }
-                                        else {
-                                            setGameboard(primaryStage);  
-                                        }
-                                    }); 
-        
+        colonelMustard.setTranslateY(5);
+        colonelMustard.setOnMouseClicked(e
+                -> {
+            Character colonelMustardChar = Character.ColMustard;
+            characterPlayerMap.put(colonelMustardChar, player);
+            System.out.println(characterPlayerMap);
+            if (countPlayers < playerNames.size()) {
+                player = playerNames.get(countPlayers);
+                Alert alert = new Alert(AlertType.INFORMATION);
+                alert.setTitle(playerNames.get(countPlayers) + "'s Character");
+                alert.setHeaderText("Please choose a character for " + playerNames.get(countPlayers));
+                alert.setContentText("Select the character by clicking the corresponding picture.");
+                alert.showAndWait();
+                countPlayers++;
+            } else {
+                setGameboard(primaryStage);
+            }
+        });
+
         Rectangle missScarlet = new Rectangle(145, 215);
         missScarlet.setFill(Color.TRANSPARENT);
         missScarlet.setTranslateX(300);
-        missScarlet.setTranslateY(5);          
-        missScarlet.setOnMouseClicked(e ->
-                                    {           
-                                        Character missScarletChar = Character.MissScarlett;
-                                        characterPlayerMap.put(missScarletChar, player);
-                                        System.out.println(characterPlayerMap);      
-                                        if (countPlayers<playerNames.size()){
-                                            player = playerNames.get(countPlayers);
-                                            Alert alert = new Alert(AlertType.INFORMATION);
-                                            alert.setTitle(playerNames.get(countPlayers) + "'s Character");
-                                            alert.setHeaderText("Please choose a character for " + playerNames.get(countPlayers));
-                                            alert.setContentText("Select the character by clicking the corresponding picture.");
-                                            alert.showAndWait(); 
-                                            countPlayers++;
-                                        }
-                                        else {
-                                            setGameboard(primaryStage);  
-                                        }
-                                    }); 
-        
+        missScarlet.setTranslateY(5);
+        missScarlet.setOnMouseClicked(e
+                -> {
+            Character missScarletChar = Character.MissScarlett;
+            characterPlayerMap.put(missScarletChar, player);
+            System.out.println(characterPlayerMap);
+            if (countPlayers < playerNames.size()) {
+                player = playerNames.get(countPlayers);
+                Alert alert = new Alert(AlertType.INFORMATION);
+                alert.setTitle(playerNames.get(countPlayers) + "'s Character");
+                alert.setHeaderText("Please choose a character for " + playerNames.get(countPlayers));
+                alert.setContentText("Select the character by clicking the corresponding picture.");
+                alert.showAndWait();
+                countPlayers++;
+            } else {
+                setGameboard(primaryStage);
+            }
+        });
+
         Rectangle profPlum = new Rectangle(145, 215);
         profPlum.setFill(Color.TRANSPARENT);
         profPlum.setTranslateX(5);
-        profPlum.setTranslateY(230);          
-        profPlum.setOnMouseClicked(e ->
-                                    {           
-                                        Character professorPlumChar = Character.ProfPlum;
-                                        characterPlayerMap.put(professorPlumChar, player);
-                                        System.out.println(characterPlayerMap);      
-                                        if (countPlayers<playerNames.size()){
-                                            player = playerNames.get(countPlayers);
-                                            Alert alert = new Alert(AlertType.INFORMATION);
-                                            alert.setTitle(playerNames.get(countPlayers) + "'s Character");
-                                            alert.setHeaderText("Please choose a character for " + playerNames.get(countPlayers));
-                                            alert.setContentText("Select the character by clicking the corresponding picture.");
-                                            alert.showAndWait(); 
-                                            countPlayers++;
-                                        }
-                                        else {
-                                            setGameboard(primaryStage);  
-                                        }
-                                    }); 
-        
+        profPlum.setTranslateY(230);
+        profPlum.setOnMouseClicked(e
+                -> {
+            Character professorPlumChar = Character.ProfPlum;
+            characterPlayerMap.put(professorPlumChar, player);
+            System.out.println(characterPlayerMap);
+            if (countPlayers < playerNames.size()) {
+                player = playerNames.get(countPlayers);
+                Alert alert = new Alert(AlertType.INFORMATION);
+                alert.setTitle(playerNames.get(countPlayers) + "'s Character");
+                alert.setHeaderText("Please choose a character for " + playerNames.get(countPlayers));
+                alert.setContentText("Select the character by clicking the corresponding picture.");
+                alert.showAndWait();
+                countPlayers++;
+            } else {
+                setGameboard(primaryStage);
+            }
+        });
+
         Rectangle mrsWhite = new Rectangle(145, 215);
         mrsWhite.setFill(Color.TRANSPARENT);
         mrsWhite.setTranslateX(150);
-        mrsWhite.setTranslateY(230);          
-        mrsWhite.setOnMouseClicked(e ->
-                                    {           
-                                        Character mrsWhiteChar = Character.MrsWhite;
-                                        characterPlayerMap.put(mrsWhiteChar, player);                                         
-                                        System.out.println(characterPlayerMap);      
-                                        if (countPlayers<playerNames.size()){
-                                            player = playerNames.get(countPlayers);
-                                            Alert alert = new Alert(AlertType.INFORMATION);
-                                            alert.setTitle(playerNames.get(countPlayers) + "'s Character");
-                                            alert.setHeaderText("Please choose a character for " + playerNames.get(countPlayers));
-                                            alert.setContentText("Select the character by clicking the corresponding picture.");
-                                            alert.showAndWait(); 
-                                            countPlayers++;
-                                        }
-                                        else {
-                                            setGameboard(primaryStage);  
-                                        }
-                                    }); 
-        
+        mrsWhite.setTranslateY(230);
+        mrsWhite.setOnMouseClicked(e
+                -> {
+            Character mrsWhiteChar = Character.MrsWhite;
+            characterPlayerMap.put(mrsWhiteChar, player);
+            System.out.println(characterPlayerMap);
+            if (countPlayers < playerNames.size()) {
+                player = playerNames.get(countPlayers);
+                Alert alert = new Alert(AlertType.INFORMATION);
+                alert.setTitle(playerNames.get(countPlayers) + "'s Character");
+                alert.setHeaderText("Please choose a character for " + playerNames.get(countPlayers));
+                alert.setContentText("Select the character by clicking the corresponding picture.");
+                alert.showAndWait();
+                countPlayers++;
+            } else {
+                setGameboard(primaryStage);
+            }
+        });
+
         Rectangle revGreen = new Rectangle(145, 215);
         revGreen.setFill(Color.TRANSPARENT);
         revGreen.setTranslateX(300);
-        revGreen.setTranslateY(230);          
-        revGreen.setOnMouseClicked(e ->
-                                    {           
-                                        Character revGreenChar = Character.RevGreen;
-                                        characterPlayerMap.put(revGreenChar, player);                                                                                    
-                                        System.out.println(characterPlayerMap);     
-                                        if (countPlayers<playerNames.size()){
-                                            player = playerNames.get(countPlayers);
-                                            Alert alert = new Alert(AlertType.INFORMATION);
-                                            alert.setTitle(playerNames.get(countPlayers) + "'s Character");
-                                            alert.setHeaderText("Please choose a character for " + playerNames.get(countPlayers));
-                                            alert.setContentText("Select the character by clicking the corresponding picture.");
-                                            alert.showAndWait(); 
-                                            countPlayers++;
-                                        }
-                                        else {
-                                            setGameboard(primaryStage);  
-                                        }
-                                    }); 
-        
-        
+        revGreen.setTranslateY(230);
+        revGreen.setOnMouseClicked(e
+                -> {
+            Character revGreenChar = Character.RevGreen;
+            characterPlayerMap.put(revGreenChar, player);
+            System.out.println(characterPlayerMap);
+            if (countPlayers < playerNames.size()) {
+                player = playerNames.get(countPlayers);
+                Alert alert = new Alert(AlertType.INFORMATION);
+                alert.setTitle(playerNames.get(countPlayers) + "'s Character");
+                alert.setHeaderText("Please choose a character for " + playerNames.get(countPlayers));
+                alert.setContentText("Select the character by clicking the corresponding picture.");
+                alert.showAndWait();
+                countPlayers++;
+            } else {
+                setGameboard(primaryStage);
+            }
+        });
+
         // setting background image 
         Image image = new Image(getClass().getResourceAsStream("characters.jpg"), 450, 450, false, true);
         BackgroundImage backgroundImage = new BackgroundImage(image,
@@ -560,19 +523,18 @@ public class Game extends Application
         root3.getChildren().addAll(mrsPeacock, colonelMustard, missScarlet, profPlum, mrsWhite, revGreen);
         scene4 = new Scene(root3, screenSizeX, screenSizeY);
     }
-    
-    public void createGameboard(Stage primaryStage)
-    {
+
+    public void createGameboard(Stage primaryStage) {
         Stage window = primaryStage;
         Button exitButton = new Button("Exit Game");
-        exitButton.setOnAction(e ->
-        {
+        exitButton.setOnAction(e
+                -> {
             mediaPlayer.pause();
             window.setScene(scene1);
             window.close();
             Platform.runLater(() -> new Game().start(new Stage()));
         });
-        
+
         /* 
         gameBoardPanes = new ArrayList<>();
 
@@ -612,16 +574,15 @@ public class Game extends Application
                 gameBoardPanes.get(x - 1).add(newPane);
             }
         }
-        */
-        
+         */
         Button winningsPage = new Button("Winnings Page");
         winningsPage.setOnAction(e -> setWinningsPage(primaryStage));
         winningsPage.setLayoutX(425);
         winningsPage.setLayoutY(600);
-        
+
         exitButton.setLayoutX(525);
         exitButton.setLayoutY(600);
-        root.getChildren().addAll(exitButton, winningsPage );
+        root.getChildren().addAll(exitButton, winningsPage);
 
         /*   timer = new AnimationTimer() {
             private long lastTime = 0;
@@ -1002,20 +963,18 @@ public class Game extends Application
         tile23.setTranslateY(450);
         
         root.getChildren().addAll(tile, tile1, tile2, tile3, tile4, tile5, tile6, tile7, tile8, tile9, tile10, tile11, tile12, tile13, tile14, tile15, tile16, tile17, tile18, tile19, tile20, tile21, tile22, tile23, tile24); 
-        */       
-        
+         */
         int screenSizeX = (600);
-        int screenSizeY = (625);        
-        
-        scene2 = new Scene(root, screenSizeX, screenSizeY);         
+        int screenSizeY = (625);
+
+        scene2 = new Scene(root, screenSizeX, screenSizeY);
     }
 
-    public void createWinningsPage(Stage primaryStage)
-    {
+    public void createWinningsPage(Stage primaryStage) {
         Stage window = primaryStage;
         Button button2 = new Button("Exit Game");
-        button2.setOnAction(e ->
-        {
+        button2.setOnAction(e
+                -> {
             mediaPlayer.pause();
             window.setScene(scene1);
             window.close();
@@ -1048,23 +1007,22 @@ public class Game extends Application
         scene3 = new Scene(root2, screenSizeX, screenSizeY);
     }
 
-    public void setPlayerNames(int playerNumber)
-    {
+    public void setPlayerNames(int playerNumber) {
         TextInputDialog dialog = new TextInputDialog("");
         dialog.setTitle("Player " + playerNumber + " name");
         dialog.setHeaderText("Please enter the name of Player " + playerNumber);
         dialog.setContentText("Player " + playerNumber + ":");
         dialog.getDialogPane().lookupButton(ButtonType.CANCEL).setDisable(true);
-                
+        dialog.getDialogPane().getScene().getWindow().setOnCloseRequest(event -> event.consume());
+
         String playerName = null;
-       
+
         // Traditional way to get the response value.
         Optional<String> result = dialog.showAndWait();
-        if (result.isPresent())
-        {
-            playerName = result.get();            
-            
-            if (playerName.length() == 0){            
+        if (result.isPresent()) {
+            playerName = result.get();
+
+            if (playerName.length() == 0) {
                 Alert alert = new Alert(AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText("No name entered");
@@ -1072,13 +1030,9 @@ public class Game extends Application
 
                 alert.showAndWait();
                 setPlayerNames(playerNumber);
-            }
-            
-            else
-            {
+            } else {
                 playerNames.add(playerName);
             }
-        }           
+        }
     }
 }
-
