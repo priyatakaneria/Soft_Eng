@@ -186,6 +186,7 @@ public class AIPlayer extends Player
      */
     public Suggestion decideSuggestion()
     {
+        //Select a random combination from clueTable. 
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
