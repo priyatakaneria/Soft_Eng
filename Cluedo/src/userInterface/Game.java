@@ -10,12 +10,16 @@ import cluedo.gameLogic.ClueCard;
 import cluedo.gameLogic.Suggestion;
 import cluedo.gameLogic.gameBoard.BoardSpace;
 import cluedo.gameLogic.player.Player;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -58,6 +62,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.stage.FileChooser;
 import userInterface.boardTiles.RoomPane;
 
 import cluedo.gameLogic.Character;
@@ -80,6 +85,7 @@ import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
+import javafx.stage.FileChooser;
 import userInterface.boardTiles.BoardSquarePane;
 import userInterface.boardTiles.EmptySquarePane;
 import userInterface.boardTiles.RoomSquareDoorPane;
@@ -96,7 +102,8 @@ public class Game extends Application {
     private Pane root = new Pane();
     private Pane root2 = new Pane();
     private Pane root3 = new Pane();
-    private Scene scene1, scene2, scene3, scene4;
+    private Pane root4 = new Pane();
+    private Scene scene1, scene2, scene3, scene4, scene5;
     private String time, winner, player;
 
     private ArrayList<String> playerNames = new ArrayList<String>();
@@ -275,19 +282,86 @@ public class Game extends Application {
             });
         }
     }
+    
+    private static void configureFileChooser(
+        final FileChooser fileChooser) {      
+            fileChooser.setTitle("View Files");
+            fileChooser.setInitialDirectory(
+                new File(System.getProperty("user.home"))
+            );                 
+            fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("All Files", "*.*"),
+                new FileChooser.ExtensionFilter("txt", "*.txt"),
+                new FileChooser.ExtensionFilter("board", "*.board")
+            );
+    }
+    
+    private void setFileChooser(Stage window){
+    
+        final FileChooser fileChooser = new FileChooser();
+        final Button openButton = new Button("Custom board");
+        final Button defaultButton = new Button("Default board");     
+      
+        openButton.setOnAction(
+            new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(final ActionEvent e) {
+                    configureFileChooser(fileChooser);
+                    File file = fileChooser.showOpenDialog(window);
+                    if (file != null) {
+                        customBoardFileName = file.getPath();
+                        setGameboard(window, false);
+                    }
+                }
+            });             
+        
+        defaultButton.setOnAction(
+            new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(final ActionEvent e) {
+                   setGameboard(window, true);
+                }
+            });            
+         
+        openButton.setTranslateX(5);
+        openButton.setTranslateY(5);        
+        defaultButton.setTranslateX(100);
+        defaultButton.setTranslateY(5);
+        root4.getChildren().addAll(openButton,defaultButton);
+        
+        scene5 = new Scene(root4, 300, 40);
+        window.setTitle("Choose a board layout:");
+        window.setScene(scene5);
+        Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
+        window.setX((primScreenBounds.getWidth() - window.getWidth()) / 2);
+        window.setY((primScreenBounds.getHeight() - window.getHeight()) / 2);   
+    }
 
-    public void setGameboard(Stage window) {
-        /*
-        TurnManager turnManager;
+    public void setGameboard(Stage window, Boolean defaultBoard) {
+        
+        TurnManager turnManager;        
+        
         try
         {
-            turnManager = new TurnManager(characterPlayerMap, noAiPlayers, customBoardFileName, this);
-            createGameboard(window, turnManager.getGameBoard());
-            window.setTitle("Cluedo");
-            window.setScene(scene2);
-            Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
-            window.setX((primScreenBounds.getWidth() - window.getWidth()) / 2);
-            window.setY((primScreenBounds.getHeight() - window.getHeight()) / 2);
+            if (defaultBoard){
+                turnManager = new TurnManager(characterPlayerMap, noAiPlayers, this);
+                createGameboard(window, turnManager.getGameBoard());
+                window.setTitle("Cluedo");
+                window.setScene(scene2);
+                Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
+                window.setX((primScreenBounds.getWidth() - window.getWidth()) / 2);
+                window.setY((primScreenBounds.getHeight() - window.getHeight()) / 2);
+            }
+            
+            else {
+                turnManager = new TurnManager(characterPlayerMap, noAiPlayers, customBoardFileName, this);
+                createGameboard(window, turnManager.getGameBoard());
+                window.setTitle("Cluedo");
+                window.setScene(scene2);
+                Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
+                window.setX((primScreenBounds.getWidth() - window.getWidth()) / 2);
+                window.setY((primScreenBounds.getHeight() - window.getHeight()) / 2);
+            }
         } //
         catch (InvalidSetupFileException e)
         {
@@ -298,15 +372,7 @@ public class Game extends Application {
             alert.setTitle("Error");
             alert.showAndWait();
 
-        }
-         */
-
-        createGameboard(window);
-        window.setTitle("Cluedo");
-        window.setScene(scene2);
-        Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
-        window.setX((primScreenBounds.getWidth() - window.getWidth()) / 2);
-        window.setY((primScreenBounds.getHeight() - window.getHeight()) / 2);
+        }        
     }
 
     public void setWinningsPage(Stage window) {
@@ -397,7 +463,7 @@ public class Game extends Application {
                 alert.showAndWait();
                 countPlayers++;
             } else {
-                setGameboard(primaryStage);
+                setFileChooser(primaryStage);
             }
         });
 
@@ -419,7 +485,7 @@ public class Game extends Application {
                 alert.showAndWait();
                 countPlayers++;
             } else {
-                setGameboard(primaryStage);
+                setFileChooser(primaryStage);
             }
         });
 
@@ -441,7 +507,7 @@ public class Game extends Application {
                 alert.showAndWait();
                 countPlayers++;
             } else {
-                setGameboard(primaryStage);
+                setFileChooser(primaryStage);
             }
         });
 
@@ -463,7 +529,7 @@ public class Game extends Application {
                 alert.showAndWait();
                 countPlayers++;
             } else {
-                setGameboard(primaryStage);
+                setFileChooser(primaryStage);
             }
         });
 
@@ -485,7 +551,7 @@ public class Game extends Application {
                 alert.showAndWait();
                 countPlayers++;
             } else {
-                setGameboard(primaryStage);
+                setFileChooser(primaryStage);
             }
         });
 
@@ -507,7 +573,7 @@ public class Game extends Application {
                 alert.showAndWait();
                 countPlayers++;
             } else {
-                setGameboard(primaryStage);
+                setFileChooser(primaryStage);
             }
         });
 
@@ -524,7 +590,7 @@ public class Game extends Application {
         scene4 = new Scene(root3, screenSizeX, screenSizeY);
     }
 
-    public void createGameboard(Stage primaryStage) {
+    public void createGameboard(Stage primaryStage, GameBoard gb) {
         Stage window = primaryStage;
         Button exitButton = new Button("Exit Game");
         exitButton.setOnAction(e
