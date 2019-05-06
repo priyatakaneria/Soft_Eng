@@ -38,13 +38,14 @@ public class PlayerWindow extends Stage
         int height = 750;
         setResizable(false);
         setWidth(width);
-        setHeight(height);
+        //setHeight(height);
         
         //Main Scene
         root = new VBox();
         root.setMaxWidth(width);
-        root.setMaxHeight(height);
+        //root.setMaxHeight(height);
         
+        setTitle(player.getPlayerName()+"'s Detective Notes");
         Label title = new Label(player.getCharacter().getCharacterName());
         title.setTextAlignment(TextAlignment.LEFT);
         
@@ -58,7 +59,7 @@ public class PlayerWindow extends Stage
         
         root.getChildren().addAll(cardHand, new DetectiveNotesPane(player));
         
-        mainScene = new Scene(root, width, height);
+        mainScene = new Scene(root);
         setScene(mainScene);
         // Response Scene
         HBox responseRoot = new HBox();

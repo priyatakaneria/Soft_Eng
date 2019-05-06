@@ -80,6 +80,7 @@ import cluedo.gameLogic.gameBoard.StaircaseSquare;
 import cluedo.gameLogic.player.HumanPlayer;
 import java.util.HashMap;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.BackgroundFill;
@@ -104,7 +105,8 @@ import userInterface.boardTiles.StaircaseSquarePane;
  *
  * @author sb816
  */
-public class Game extends Application {
+public class Game extends Application
+{
 
     private Pane root = new Pane();
     private Pane root2 = new Pane();
@@ -154,9 +156,12 @@ public class Game extends Application {
     private boolean waitingForMove;
     private HashSet<BoardSpace> availableMoves;
     private BoardSpace movementChoice;
+    private boolean waitingForEndTurn;
+    private boolean waitingForSuggestion;
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage)
+    {
 
         final URL resource = getClass().getResource("CLUE.mp3");
         final Media media = new Media(resource.toString());
@@ -167,7 +172,8 @@ public class Game extends Application {
         window = primaryStage;
 
         Label label1 = new Label("Number of Players:");
-        final String[] players = new String[]{
+        final String[] players = new String[]
+        {
             "1", "2", "3", "4", "5", "6"
         };
 
@@ -190,8 +196,10 @@ public class Game extends Application {
         cb.setLayoutX(297);
         cb.setLayoutY(478);
 
-        cb.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
-            public void changed(ObservableValue ov, Number value, Number new_value) {
+        cb.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>()
+        {
+            public void changed(ObservableValue ov, Number value, Number new_value)
+            {
                 multiplayer = Integer.parseInt(players[new_value.intValue()]);
                 System.out.println(multiplayer);
             }
@@ -215,7 +223,8 @@ public class Game extends Application {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
         launch(args);
     }
 
@@ -312,9 +321,14 @@ public class Game extends Application {
      *
      * returns true.
      */
-    public boolean endTurn()
+    public void setWaitingForEndTurn(boolean b)
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        waitingForEndTurn = b;
+    }
+    
+    public boolean getEndTurn()
+    {
+        return waitingForEndTurn;
     }
 
     /**
@@ -325,7 +339,8 @@ public class Game extends Application {
      */
     public Suggestion makeSuggestion(Player player)
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        waitingForSuggestion = true;
+        return newSuggestion;
     }
 
     /**
@@ -393,12 +408,14 @@ public class Game extends Application {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void winningsPage(Player currPlayer) {
+    public void winningsPage(Player currPlayer)
+    {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     private static void configureFileChooser(
-            final FileChooser fileChooser) {
+            final FileChooser fileChooser)
+    {
         fileChooser.setTitle("View Files");
         fileChooser.setInitialDirectory(
                 new File(System.getProperty("user.home"))
@@ -410,19 +427,23 @@ public class Game extends Application {
         );
     }
 
-    private void setFileChooser(Stage window) {
+    private void setFileChooser(Stage window)
+    {
 
         final FileChooser fileChooser = new FileChooser();
         final Button openButton = new Button("Custom board");
         final Button defaultButton = new Button("Default board");
 
         openButton.setOnAction(
-                new EventHandler<ActionEvent>() {
+                new EventHandler<ActionEvent>()
+        {
             @Override
-            public void handle(final ActionEvent e) {
+            public void handle(final ActionEvent e)
+            {
                 configureFileChooser(fileChooser);
                 File file = fileChooser.showOpenDialog(window);
-                if (file != null) {
+                if (file != null)
+                {
                     customBoardFileName = file.getPath();
                     setGameboard(window, false);
                 }
@@ -430,9 +451,11 @@ public class Game extends Application {
         });
 
         defaultButton.setOnAction(
-                new EventHandler<ActionEvent>() {
+                new EventHandler<ActionEvent>()
+        {
             @Override
-            public void handle(final ActionEvent e) {
+            public void handle(final ActionEvent e)
+            {
                 setGameboard(window, true);
             }
         });
@@ -451,12 +474,15 @@ public class Game extends Application {
         window.setY((primScreenBounds.getHeight() - window.getHeight()) / 2);
     }
 
-    public void setGameboard(Stage window, Boolean defaultBoard) {
+    public void setGameboard(Stage window, Boolean defaultBoard)
+    {
 
         TurnManager turnManager;
 
-        try {
-            if (defaultBoard) {
+        try
+        {
+            if (defaultBoard)
+            {
                 turnManager = new TurnManager(characterPlayerMap, noAiPlayers, this);
                 createGameboard(window, turnManager);
                 window.setTitle("Cluedo");
@@ -464,7 +490,8 @@ public class Game extends Application {
                 Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
                 window.setX((primScreenBounds.getWidth() - window.getWidth()) / 2);
                 window.setY((primScreenBounds.getHeight() - window.getHeight()) / 2);
-            } else {
+            } else
+            {
                 turnManager = new TurnManager(characterPlayerMap, noAiPlayers, customBoardFileName, this);
                 createGameboard(window, turnManager);
                 window.setTitle("Cluedo");
@@ -473,18 +500,21 @@ public class Game extends Application {
                 window.setX((primScreenBounds.getWidth() - window.getWidth()) / 2);
                 window.setY((primScreenBounds.getHeight() - window.getHeight()) / 2);
             }
-			
-			playerWindows = new HashMap<>();
+
+            playerWindows = new HashMap<>();
             for (Player p : turnManager.getRealPlayers())
             {
                 if (p instanceof HumanPlayer)
                 {
-                    playerWindows.put(p, new PlayerWindow(p));
+                    PlayerWindow nextPlayerWindow = new PlayerWindow(p);
+                    playerWindows.put(p, nextPlayerWindow);
+                    nextPlayerWindow.show();
                 }
             }
             turnManager.gameLoop();
         } //
-        catch (InvalidSetupFileException e) {
+        catch (InvalidSetupFileException e)
+        {
             //Alert(Alert.AlertType AlertType, String("Invalid Setup File!"));
             //jOptionPane.showMessageDialog(null, "Invalid Setup File!");
             Alert alert = new Alert(AlertType.WARNING);
@@ -495,7 +525,8 @@ public class Game extends Application {
         }
     }
 
-    public void setWinningsPage(Stage window) {
+    public void setWinningsPage(Stage window)
+    {
         createWinningsPage(window);
         window.setTitle("Winner!!");
         window.setScene(scene3);
@@ -504,12 +535,15 @@ public class Game extends Application {
         window.setY((primScreenBounds.getHeight() - window.getHeight()) / 2);
     }
 
-    public void setCharactersPage(Stage window) {
+    public void setCharactersPage(Stage window)
+    {
 
         ArrayList<String> AIchoices = new ArrayList<>();
 
-        if (multiplayer < 6) {
-            for (int i = 0; i < (6 - multiplayer + 1); i++) {
+        if (multiplayer < 6)
+        {
+            for (int i = 0; i < (6 - multiplayer + 1); i++)
+            {
                 String n = Integer.toString(i);
                 AIchoices.add(n);
             }
@@ -523,7 +557,8 @@ public class Game extends Application {
 
             // Traditional way to get the response value.
             Optional<String> result = dialog.showAndWait();
-            if (result.isPresent()) {
+            if (result.isPresent())
+            {
                 int a = Integer.parseInt(result.get());
                 noAiPlayers = a;
             }
@@ -531,20 +566,23 @@ public class Game extends Application {
             System.out.println(noAiPlayers);
         }
 
-        for (int x = 1; x <= multiplayer; x++) {
+        for (int x = 1; x <= multiplayer; x++)
+        {
             setPlayerNames(x);
         }
 
         System.out.println(playerNames);
 
-        if (multiplayer == 0) {
+        if (multiplayer == 0)
+        {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error!");
             alert.setHeaderText("No players selected");
             alert.setContentText("You must select the number of players in this game.");
 
             alert.showAndWait();
-        } else {
+        } else
+        {
             createCharacterPage(window);
             window.setTitle("Please choose a character:");
             window.setScene(scene4);
@@ -562,7 +600,8 @@ public class Game extends Application {
         }
     }
 
-    public void createCharacterPage(Stage primaryStage) {
+    public void createCharacterPage(Stage primaryStage)
+    {
 
         Stage window = primaryStage;
 
@@ -571,7 +610,8 @@ public class Game extends Application {
         mrsPeacock.setTranslateX(5);
         mrsPeacock.setTranslateY(5);
         mrsPeacock.setOnMouseClicked(e
-                -> {
+                ->
+        {
             Character mrsPeacockChar = Character.MrsPeacock;
             chooseCharacterButtonClicked(mrsPeacockChar, primaryStage);
 
@@ -582,7 +622,8 @@ public class Game extends Application {
         colonelMustard.setTranslateX(150);
         colonelMustard.setTranslateY(5);
         colonelMustard.setOnMouseClicked(e
-                -> {
+                ->
+        {
             Character colonelMustardChar = Character.ColMustard;
             chooseCharacterButtonClicked(colonelMustardChar, primaryStage);
         });
@@ -592,7 +633,8 @@ public class Game extends Application {
         missScarlet.setTranslateX(300);
         missScarlet.setTranslateY(5);
         missScarlet.setOnMouseClicked(e
-                -> {
+                ->
+        {
             Character missScarletChar = Character.MissScarlett;
             chooseCharacterButtonClicked(missScarletChar, primaryStage);
 
@@ -603,7 +645,8 @@ public class Game extends Application {
         profPlum.setTranslateX(5);
         profPlum.setTranslateY(230);
         profPlum.setOnMouseClicked(e
-                -> {
+                ->
+        {
             Character professorPlumChar = Character.ProfPlum;
             chooseCharacterButtonClicked(professorPlumChar, primaryStage);
         });
@@ -613,7 +656,8 @@ public class Game extends Application {
         mrsWhite.setTranslateX(150);
         mrsWhite.setTranslateY(230);
         mrsWhite.setOnMouseClicked(e
-                -> {
+                ->
+        {
             Character mrsWhiteChar = Character.MrsWhite;
             chooseCharacterButtonClicked(mrsWhiteChar, primaryStage);
         });
@@ -623,7 +667,8 @@ public class Game extends Application {
         revGreen.setTranslateX(300);
         revGreen.setTranslateY(230);
         revGreen.setOnMouseClicked(e
-                -> {
+                ->
+        {
             Character revGreenChar = Character.RevGreen;
             chooseCharacterButtonClicked(revGreenChar, primaryStage);
         });
@@ -641,10 +686,12 @@ public class Game extends Application {
         scene4 = new Scene(root3, screenSizeX, screenSizeY);
     }
 
-    public void chooseCharacterButtonClicked(Character character, Stage primaryStage) {
+    public void chooseCharacterButtonClicked(Character character, Stage primaryStage)
+    {
         characterPlayerMap.put(character, player);
         System.out.println(characterPlayerMap);
-        if (countPlayers < playerNames.size()) {
+        if (countPlayers < playerNames.size())
+        {
             player = playerNames.get(countPlayers);
             Alert alert = new Alert(AlertType.INFORMATION);
             alert.setTitle(playerNames.get(countPlayers) + "'s Character");
@@ -652,27 +699,29 @@ public class Game extends Application {
             alert.setContentText("Select the character by clicking the corresponding picture.");
             alert.showAndWait();
             countPlayers++;
-        } else {
+        } else
+        {
             setFileChooser(primaryStage);
         }
     }
 
-    public void createGameboard(Stage primaryStage, TurnManager tm) {
-		gb = tm.getGameBoard();
+    public void createGameboard(Stage primaryStage, TurnManager tm)
+    {
+        gb = tm.getGameBoard();
         Stage window = primaryStage;
         Button exitButton = new Button("Exit Game");
         exitButton.setOnAction(e
-                -> {
+                ->
+        {
             mediaPlayer.pause();
             window.setScene(scene1);
             window.close();
             Platform.runLater(() -> new Game().start(new Stage()));
         });
-		
+
         exitButton.setAlignment(Pos.CENTER);
 
         gameBoardGridPane = new GridPane();
-
 
         //x coord
         for (int x = 1; x <= tm.getGameBoard().getWidth(); x++)
@@ -691,6 +740,7 @@ public class Game extends Application {
                     {
                         if (availableMoves.contains(newPane.getLogicalBoardSpace()))
                         {
+                            
                             System.out.println("Space clicked");
                             movementChoice = newPane.getLogicalBoardSpace();
                             if (newPane instanceof RoomSquarePane)
@@ -748,7 +798,7 @@ public class Game extends Application {
         // Suggestion panel
         suggestionBox = new VBox();
         suggestionBox.setAlignment(Pos.CENTER);
-        Text makeSuggestionText = new Text("Choose your selection below, then click 'Make Suggestion'");
+        Text makeSuggestionText = new Text("Choose your selection below,\nthen click 'Make Suggestion'");
         Label chooseCharacterLabel = new Label("Character:");
         ChoiceBox characterChoice = new ChoiceBox();
         for (Character c : Character.values())
@@ -756,11 +806,7 @@ public class Game extends Application {
             characterChoice.getItems().add(c.getCharacterName());
         }
         Label chooseRoomLabel = new Label("Room:");
-        ChoiceBox roomChoice = new ChoiceBox();
-        for (Room r : tm.getGameBoard().getRooms().values())
-        {
-            roomChoice.getItems().add(r.getRoomName());
-        }
+        Label currentRoom = new Label("");
         Label chooseWeaponLabel = new Label("Weapon:");
         ChoiceBox weaponChoice = new ChoiceBox();
         for (Weapon w : Weapon.values())
@@ -770,30 +816,57 @@ public class Game extends Application {
         Button makeSuggestionBtn = new Button("Make Suggestion");
         makeSuggestionBtn.setOnAction(btnPress ->
         {
-            newSuggestion = readSuggestion((String) characterChoice.getValue(), (String) roomChoice.getValue(), (String) weaponChoice.getValue(), tm.getCurrPlayer());
+            newSuggestion = readSuggestion((String) characterChoice.getValue(), (String) currentRoom.getText(), (String) weaponChoice.getValue(), tm.getCurrPlayer());
             if (newSuggestion == null)
             {
                 Alert alert = new Alert(AlertType.WARNING);
                 alert.setContentText("You must select one Character, Room and Weapon");
                 alert.setTitle("Invalid Suggestion");
                 alert.showAndWait();
-            } else
+            } //
+            else
             {
                 suggestionEscape = true;
             }
         });
 
-        suggestionBox.getChildren().addAll(makeSuggestionText, chooseCharacterLabel, characterChoice, chooseRoomLabel, roomChoice, chooseWeaponLabel, weaponChoice, makeSuggestionBtn);
-
+        
+        suggestionBox.getChildren().addAll(makeSuggestionText, chooseCharacterLabel, characterChoice, chooseRoomLabel, currentRoom, chooseWeaponLabel, weaponChoice, makeSuggestionBtn);
+        for (Node n : suggestionBox.getChildrenUnmodifiable())
+        {
+            VBox.setMargin(n, new Insets(10, 10, 10, 10));
+        }
+        
         // Accusation panel
         accusationBox = new VBox();
         accusationBox.setAlignment(Pos.CENTER);
         Text makeAccusationText = new Text("Decide on your final accusation below and click 'Make Accusation");
 
-        Button makeAccusationBtn = new Button("Make Accusation");
-        makeSuggestionBtn.setOnAction(btnPress ->
+        Label chooseCharacterLabelAcc = new Label("Character:");
+        ChoiceBox characterChoiceAcc = new ChoiceBox();
+        for (Character c : Character.values())
         {
-            newAccusation = readAccusation((String) characterChoice.getValue(), (String) roomChoice.getValue(), (String) weaponChoice.getValue(), tm.getCurrPlayer());
+            characterChoiceAcc.getItems().add(c.getCharacterName());
+        }
+        Label chooseRoomLabelAcc = new Label("Room:");
+        ChoiceBox roomChoiceAcc = new ChoiceBox();
+        for (Room r : tm.getGameBoard().getRooms().values())
+        {
+            roomChoiceAcc.getItems().add(r.getRoomName().getRoomStringName());
+        }
+        Label chooseWeaponLabelAcc = new Label("Weapon:");
+        ChoiceBox weaponChoiceAcc = new ChoiceBox();
+        for (Weapon w : Weapon.values())
+        {
+            weaponChoiceAcc.getItems().add(w.getWeaponName());
+        }
+        
+        
+        
+        Button makeAccusationBtn = new Button("Make Accusation");
+        makeAccusationBtn.setOnAction(btnPress ->
+        {
+            newAccusation = readAccusation((String) characterChoiceAcc.getValue(), (String) roomChoiceAcc.getValue(), (String) weaponChoiceAcc.getValue(), tm.getCurrPlayer());
             if (newAccusation == null)
             {
                 Alert alert = new Alert(AlertType.WARNING);
@@ -806,9 +879,20 @@ public class Game extends Application {
             }
         });
 
-        accusationBox.getChildren().addAll(makeAccusationText, chooseCharacterLabel, characterChoice, chooseRoomLabel, roomChoice, chooseWeaponLabel, weaponChoice, makeAccusationBtn);
+        accusationBox.getChildren().addAll(makeAccusationText, chooseCharacterLabelAcc, characterChoiceAcc, chooseRoomLabelAcc, roomChoiceAcc, chooseWeaponLabelAcc, weaponChoiceAcc, makeAccusationBtn);
 
-        sidePanel.getChildren().addAll(exitButton, dice);
+        Button endTurnBtn = new Button("End Turn");
+        endTurnBtn.setOnMouseClicked(click -> 
+        {
+            if (waitingForEndTurn)
+            {
+                System.out.println("end turn clicked");
+                waitingForEndTurn = false;
+            }
+            
+        });
+        
+        sidePanel.getChildren().addAll(exitButton, dice, suggestionBox, endTurnBtn);
 
         BorderPane centerSideContainer = new BorderPane();
         centerSideContainer.setCenter(gameBoardGridPane);
@@ -828,11 +912,13 @@ public class Game extends Application {
         System.out.println("GUI Thread: " + Thread.currentThread().getName());
     }
 
-    public void createWinningsPage(Stage primaryStage) {
+    public void createWinningsPage(Stage primaryStage)
+    {
         Stage window = primaryStage;
         Button button2 = new Button("Exit Game");
         button2.setOnAction(e
-                -> {
+                ->
+        {
             mediaPlayer.pause();
             window.setScene(scene1);
             window.close();
@@ -865,7 +951,8 @@ public class Game extends Application {
         scene3 = new Scene(root2, screenSizeX, screenSizeY);
     }
 
-    public void setPlayerNames(int playerNumber) {
+    public void setPlayerNames(int playerNumber)
+    {
         TextInputDialog dialog = new TextInputDialog("");
         dialog.setTitle("Player " + playerNumber + " name");
         dialog.setHeaderText("Please enter the name of Player " + playerNumber);
@@ -959,7 +1046,7 @@ public class Game extends Application {
     {
         for (BoardSpace bs : availableMoves)
         {
-            if(!(bs instanceof Room))
+            if (!(bs instanceof Room))
             {
                 bs.getGuiPane().setNormalColours();
             }

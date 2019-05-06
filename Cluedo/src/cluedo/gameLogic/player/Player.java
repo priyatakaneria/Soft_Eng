@@ -13,6 +13,7 @@ import cluedo.gameLogic.IntrigueType;
 import cluedo.gameLogic.Suggestion;
 import cluedo.gameLogic.Weapon;
 import cluedo.gameLogic.gameBoard.Room;
+import cluedo.gameLogic.gameBoard.RoomSquare;
 import cluedo.gameLogic.gameBoard.GameBoard;
 import cluedo.gameLogic.gameBoard.BoardSpace;
 import java.util.ArrayList;
@@ -21,7 +22,9 @@ import java.util.Iterator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Random;
 import userInterface.PlayerPiece;
+import userInterface.boardTiles.BoardSpacePane;
 
 /**
  *
@@ -42,6 +45,9 @@ public class Player
     private Collection<Player> otherPlayers;
     
     private PlayerPiece playerPiece;
+    
+    private Random randRoomSquare;
+    private BoardSpacePane guiRoomLocation;
 
     //Add Gameboard as Parameter
     public Player(Character character, String playerName, GameBoard gb, BoardSpace start, Collection<Player> otherPlayers)
@@ -58,7 +64,7 @@ public class Player
         this.otherPlayers = otherPlayers;
         this.playerName = playerName;
         playerPiece = new PlayerPiece(this);
-        System.out.println("player " + character.getCharacterName() + "'s playerPiece: " + playerPiece);
+        randRoomSquare = new Random();
     }
 
     public GameBoard getGameBoard()
@@ -123,10 +129,30 @@ public class Player
 
     public boolean Move(BoardSpace space)
     {
-        currentPosition.getGuiPane().removePlayer(getGuiPiece());
+        
+        if (!(currentPosition instanceof Room))
+        {
+            currentPosition.getGuiPane().removePlayer(playerPiece);
+        } //
+        else
+        {
+            guiRoomLocation.removePlayer(getGuiPiece());
+        }
         currentPosition.removeOccupant(this);
         currentPosition = space;
-        currentPosition.getGuiPane().addPlayer(getGuiPiece());
+        if (currentPosition instanceof Room)
+        {
+            HashSet<RoomSquare> possibleTiles = gb.getAllFromRoom(((Room) currentPosition));
+            int randChoice  = randRoomSquare.nextInt(possibleTiles.size());
+            guiRoomLocation = ((BoardSpace) possibleTiles.toArray()[randChoice]).getGuiPane();
+            guiRoomLocation.addPlayer(playerPiece);
+        } //
+        else
+        {
+            currentPosition.getGuiPane().addPlayer(getGuiPiece());
+        }
+        
+        
         return space.addOccupant(this);
     }
 

@@ -23,12 +23,19 @@ public class DetectiveNotes
     private HashMap<Player, HashMap<ClueType, DetNoteType>> detectiveTable;
     private String detectiveNotes;
     private Collection<Player> players;
+    private Collection<Room> rooms;
 
     public DetectiveNotes(Collection<Player> players, Collection<Room> rooms)
     {
         this.players = players;
         detectiveNotes = "";
         detectiveTable = new HashMap<>();
+        this.rooms = rooms;
+        
+    }
+    
+    public void initTable()
+    {
         // fill detectiveTable with all the players and clueTypes
         for (Player p : players)
         {

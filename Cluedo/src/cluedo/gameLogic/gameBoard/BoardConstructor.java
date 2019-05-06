@@ -33,7 +33,7 @@ public class BoardConstructor
      */
     public BoardConstructor(String fileName) throws FileNotFoundException
     {
-        fileInput = new BufferedReader(new FileReader("customisation/board layout/" + fileName));
+        fileInput = new BufferedReader(new FileReader(fileName));
     }
 
     public GameBoard createBoard() throws InvalidSetupFileException

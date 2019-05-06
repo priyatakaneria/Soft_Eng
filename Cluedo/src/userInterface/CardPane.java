@@ -35,7 +35,7 @@ public class CardPane extends BorderPane
         leftText.getTransforms().add(new Rotate(90));
         
         setLeft(leftText);
-        setRight(rightText);
+        //setRight(rightText);
         setCenter(null);
         
         setWidth(size.getWidth());

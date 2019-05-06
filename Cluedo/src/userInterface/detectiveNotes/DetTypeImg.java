@@ -42,9 +42,11 @@ public class DetTypeImg extends Pane
         this.notesTable = notesTable;
         this.noteType = DetNoteType.noKnowledge;
         
+        setBorder(Game.SOLID_BLACK_BORDER);
+        
         iv = new ImageView();
         mightHaveClue = new Image(getClass().getResourceAsStream("mightHaveClue.png"));
-        hasClue = new Image(getClass().getResourceAsStream("mightHaveClue.png"));
+        hasClue = new Image(getClass().getResourceAsStream("hasClue.png"));
         doesntHaveClue = new Image(getClass().getResourceAsStream("doesn'tHaveClue.png"));
         noKnowledge = new Image(getClass().getResourceAsStream("noKnowledge.png"));
         iv.setImage(noKnowledge);

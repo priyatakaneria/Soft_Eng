@@ -146,7 +146,6 @@ public abstract class BoardSpace
     public void setGuiPane(BoardSpacePane bsp)
     {
         guiPane = bsp;
-        System.out.println("GUI pane set to " + bsp);
     }
     
     public BoardSpacePane getGuiPane()

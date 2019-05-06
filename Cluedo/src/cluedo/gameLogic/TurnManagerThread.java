@@ -33,7 +33,6 @@ public class TurnManagerThread<T> extends Task
     private Player currPlayer;
     private final Game GUI;
     HashSet<BoardSpace> availableMoves;
-    private boolean waitingForDice;
 
     public TurnManagerThread(GameBoard gameBoard, Queue<Player> turnQueue, Queue<Player> realPlayers, Player currPlayer, Game GUI)
     {
@@ -147,7 +146,56 @@ public class TurnManagerThread<T> extends Task
             return bs;
         }
     }
+    
+    private class MovePlayer implements Runnable
+    {
+        private BoardSpace newSpace;
+        private Player player;
 
+        public MovePlayer(BoardSpace newSpace, Player player)
+        {
+            this.newSpace = newSpace;
+            this.player = player;
+        }
+        @Override
+        public void run()
+        {
+            player.Move(newSpace);
+            
+        }
+    }
+    
+    private class EndTurn implements Runnable
+    {
+        private boolean endTurn = false;
+        @Override
+        public void run()
+        {
+            GUI.setWaitingForEndTurn(true);
+            endTurn = GUI.getEndTurn();
+        }
+        
+        public boolean getEndTurn()
+        {
+            return endTurn;
+        }
+    }
+
+    private class MakeSuggestion implements Runnable
+    {
+        private Suggestion suggestion = null;
+        @Override
+        public void run()
+        {
+            suggestion = GUI.makeSuggestion(currPlayer);
+        }
+        
+        public Suggestion getSuggestion()
+        {
+            return suggestion;
+        }
+    }
+    
     public static void waitForRunLater()
     {
         try
@@ -224,7 +272,7 @@ public class TurnManagerThread<T> extends Task
             Platform.runLater(gam);
             waitForRunLater();
             availableMoves = gam.getValue();
-            System.out.println("available moves received");
+            
             BoardSpace newSpace = null;
             if (ai)
             {
@@ -241,8 +289,9 @@ public class TurnManagerThread<T> extends Task
                     newSpace = cm.getValue();
                 }
             }
-            player.Move(newSpace);
-
+            Platform.runLater(new MovePlayer(newSpace, player));
+            waitForRunLater();
+            
             System.out.println("player moved");
             
             // intrigue cards
@@ -286,13 +335,19 @@ public class TurnManagerThread<T> extends Task
                         pickedUpExtraTurn = true;
                     }
                 }
-
                 if (ai)
                 {
                     endTurn = true;
-                } else
+                } //
+                else
                 {
-                    endTurn = GUI.endTurn();
+                    while (!endTurn)
+                    {
+                        EndTurn et = new EndTurn();
+                        Platform.runLater(et);
+                        waitForRunLater();
+                        endTurn = et.getEndTurn();
+                    }
                 }
             } //
             else if (playerPosition instanceof Room)
@@ -304,8 +359,15 @@ public class TurnManagerThread<T> extends Task
                 } //
                 else
                 {
-                    newSuggestion = GUI.makeSuggestion(player);
+                    while (newSuggestion == null)
+                    {
+                        MakeSuggestion ns = new MakeSuggestion();
+                        Platform.runLater(ns);
+                        waitForRunLater();
+                        newSuggestion = ns.getSuggestion();
+                    }
                 }
+//////////////////////////////////////////////////////////////////////////////////////
                 /**
                  * move players into the room they are called into for a
                  * suggestion

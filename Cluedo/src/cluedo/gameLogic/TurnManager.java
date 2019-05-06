@@ -109,7 +109,7 @@ public class TurnManager
         BoardConstructor bc;
         try
         {
-            bc = new BoardConstructor("default.txt");
+            bc = new BoardConstructor("../Cluedo/customisation/board layout/default.txt");
             gameBoard = bc.createBoard();
         } //
         catch (FileNotFoundException e)
@@ -160,6 +160,14 @@ public class TurnManager
                 // newPlayer.Move());
             }
             allPlayers.add(newPlayer);
+        }
+        
+        for (Player p : allPlayers)
+        {
+            if (p instanceof HumanPlayer)
+            {
+                p.getDetNotes().initTable();
+            }
         }
 
         // deal cards
