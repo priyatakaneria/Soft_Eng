@@ -124,7 +124,7 @@ public class Game extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        
+
         final URL resource = getClass().getResource("CLUE.mp3");
         final Media media = new Media(resource.toString());
         mediaPlayer = new MediaPlayer(media);
@@ -137,9 +137,9 @@ public class Game extends Application {
         final String[] players = new String[]{
             "1", "2", "3", "4", "5", "6"
         };
-        
+
         ChoiceBox cb = new ChoiceBox(FXCollections.observableArrayList("1", "2", "3", "4", "5", "6"));
-        
+
         button1 = new Button("Start game");
         button4 = new Button("Exit menu");
         button1.setOnAction(e -> setCharactersPage(window));
@@ -282,68 +282,67 @@ public class Game extends Application {
             });
         }
     }
-    
+
     private static void configureFileChooser(
-        final FileChooser fileChooser) {      
-            fileChooser.setTitle("View Files");
-            fileChooser.setInitialDirectory(
+            final FileChooser fileChooser) {
+        fileChooser.setTitle("View Files");
+        fileChooser.setInitialDirectory(
                 new File(System.getProperty("user.home"))
-            );                 
-            fileChooser.getExtensionFilters().addAll(
+        );
+        fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("All Files", "*.*"),
                 new FileChooser.ExtensionFilter("txt", "*.txt"),
                 new FileChooser.ExtensionFilter("board", "*.board")
-            );
+        );
     }
-    
-    private void setFileChooser(Stage window){
-    
+
+    private void setFileChooser(Stage window) {
+
         final FileChooser fileChooser = new FileChooser();
         final Button openButton = new Button("Custom board");
-        final Button defaultButton = new Button("Default board");     
-      
+        final Button defaultButton = new Button("Default board");
+
         openButton.setOnAction(
-            new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(final ActionEvent e) {
-                    configureFileChooser(fileChooser);
-                    File file = fileChooser.showOpenDialog(window);
-                    if (file != null) {
-                        customBoardFileName = file.getPath();
-                        setGameboard(window, false);
-                    }
+                new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(final ActionEvent e) {
+                configureFileChooser(fileChooser);
+                File file = fileChooser.showOpenDialog(window);
+                if (file != null) {
+                    customBoardFileName = file.getPath();
+                    setGameboard(window, false);
                 }
-            });             
-        
+            }
+        });
+
         defaultButton.setOnAction(
-            new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(final ActionEvent e) {
-                   setGameboard(window, true);
-                }
-            });            
-         
+                new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(final ActionEvent e) {
+                setGameboard(window, true);
+            }
+        });
+
         openButton.setTranslateX(5);
-        openButton.setTranslateY(5);        
+        openButton.setTranslateY(5);
         defaultButton.setTranslateX(100);
         defaultButton.setTranslateY(5);
-        root4.getChildren().addAll(openButton,defaultButton);
-        
+        root4.getChildren().addAll(openButton, defaultButton);
+
         scene5 = new Scene(root4, 300, 40);
         window.setTitle("Choose a board layout:");
         window.setScene(scene5);
         Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
         window.setX((primScreenBounds.getWidth() - window.getWidth()) / 2);
-        window.setY((primScreenBounds.getHeight() - window.getHeight()) / 2);   
+        window.setY((primScreenBounds.getHeight() - window.getHeight()) / 2);
     }
 
     public void setGameboard(Stage window, Boolean defaultBoard) {
-        
-        TurnManager turnManager;        
-        
-        try
-        {
-            if (defaultBoard){
+
+        TurnManager turnManager;
+
+        try {
+            if (defaultBoard) {
                 turnManager = new TurnManager(characterPlayerMap, noAiPlayers, this);
                 createGameboard(window, turnManager.getGameBoard());
                 window.setTitle("Cluedo");
@@ -351,9 +350,7 @@ public class Game extends Application {
                 Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
                 window.setX((primScreenBounds.getWidth() - window.getWidth()) / 2);
                 window.setY((primScreenBounds.getHeight() - window.getHeight()) / 2);
-            }
-            
-            else {
+            } else {
                 turnManager = new TurnManager(characterPlayerMap, noAiPlayers, customBoardFileName, this);
                 createGameboard(window, turnManager.getGameBoard());
                 window.setTitle("Cluedo");
@@ -363,8 +360,7 @@ public class Game extends Application {
                 window.setY((primScreenBounds.getHeight() - window.getHeight()) / 2);
             }
         } //
-        catch (InvalidSetupFileException e)
-        {
+        catch (InvalidSetupFileException e) {
             //Alert(Alert.AlertType AlertType, String("Invalid Setup File!"));
             //jOptionPane.showMessageDialog(null, "Invalid Setup File!");
             Alert alert = new Alert(AlertType.WARNING);
@@ -372,7 +368,7 @@ public class Game extends Application {
             alert.setTitle("Error");
             alert.showAndWait();
 
-        }        
+        }
     }
 
     public void setWinningsPage(Stage window) {
@@ -387,9 +383,9 @@ public class Game extends Application {
     public void setCharactersPage(Stage window) {
 
         ArrayList<String> AIchoices = new ArrayList<>();
-        
-        if (multiplayer<6){        
-            for (int i = 0; i < (6-multiplayer+1); i++){
+
+        if (multiplayer < 6) {
+            for (int i = 0; i < (6 - multiplayer + 1); i++) {
                 String n = Integer.toString(i);
                 AIchoices.add(n);
             }
@@ -403,14 +399,14 @@ public class Game extends Application {
 
             // Traditional way to get the response value.
             Optional<String> result = dialog.showAndWait();
-            if (result.isPresent()){
+            if (result.isPresent()) {
                 int a = Integer.parseInt(result.get());
                 noAiPlayers = a;
             }
-            
+
             System.out.println(noAiPlayers);
         }
-        
+
         for (int x = 1; x <= multiplayer; x++) {
             setPlayerNames(x);
         }
@@ -452,19 +448,8 @@ public class Game extends Application {
         mrsPeacock.setOnMouseClicked(e
                 -> {
             Character mrsPeacockChar = Character.MrsPeacock;
-            characterPlayerMap.put(mrsPeacockChar, player);
-            System.out.println(characterPlayerMap);
-            if (countPlayers < playerNames.size()) {
-                player = playerNames.get(countPlayers);
-                Alert alert = new Alert(AlertType.INFORMATION);
-                alert.setTitle(playerNames.get(countPlayers) + "'s Character");
-                alert.setHeaderText("Please choose a character for " + playerNames.get(countPlayers));
-                alert.setContentText("Select the character by clicking the corresponding picture.");
-                alert.showAndWait();
-                countPlayers++;
-            } else {
-                setFileChooser(primaryStage);
-            }
+            chooseCharacterButtonClicked(mrsPeacockChar, primaryStage);
+
         });
 
         Rectangle colonelMustard = new Rectangle(145, 215);
@@ -474,19 +459,7 @@ public class Game extends Application {
         colonelMustard.setOnMouseClicked(e
                 -> {
             Character colonelMustardChar = Character.ColMustard;
-            characterPlayerMap.put(colonelMustardChar, player);
-            System.out.println(characterPlayerMap);
-            if (countPlayers < playerNames.size()) {
-                player = playerNames.get(countPlayers);
-                Alert alert = new Alert(AlertType.INFORMATION);
-                alert.setTitle(playerNames.get(countPlayers) + "'s Character");
-                alert.setHeaderText("Please choose a character for " + playerNames.get(countPlayers));
-                alert.setContentText("Select the character by clicking the corresponding picture.");
-                alert.showAndWait();
-                countPlayers++;
-            } else {
-                setFileChooser(primaryStage);
-            }
+            chooseCharacterButtonClicked(colonelMustardChar, primaryStage);
         });
 
         Rectangle missScarlet = new Rectangle(145, 215);
@@ -496,19 +469,7 @@ public class Game extends Application {
         missScarlet.setOnMouseClicked(e
                 -> {
             Character missScarletChar = Character.MissScarlett;
-            characterPlayerMap.put(missScarletChar, player);
-            System.out.println(characterPlayerMap);
-            if (countPlayers < playerNames.size()) {
-                player = playerNames.get(countPlayers);
-                Alert alert = new Alert(AlertType.INFORMATION);
-                alert.setTitle(playerNames.get(countPlayers) + "'s Character");
-                alert.setHeaderText("Please choose a character for " + playerNames.get(countPlayers));
-                alert.setContentText("Select the character by clicking the corresponding picture.");
-                alert.showAndWait();
-                countPlayers++;
-            } else {
-                setFileChooser(primaryStage);
-            }
+            chooseCharacterButtonClicked(missScarletChar, primaryStage);
         });
 
         Rectangle profPlum = new Rectangle(145, 215);
@@ -518,19 +479,7 @@ public class Game extends Application {
         profPlum.setOnMouseClicked(e
                 -> {
             Character professorPlumChar = Character.ProfPlum;
-            characterPlayerMap.put(professorPlumChar, player);
-            System.out.println(characterPlayerMap);
-            if (countPlayers < playerNames.size()) {
-                player = playerNames.get(countPlayers);
-                Alert alert = new Alert(AlertType.INFORMATION);
-                alert.setTitle(playerNames.get(countPlayers) + "'s Character");
-                alert.setHeaderText("Please choose a character for " + playerNames.get(countPlayers));
-                alert.setContentText("Select the character by clicking the corresponding picture.");
-                alert.showAndWait();
-                countPlayers++;
-            } else {
-                setFileChooser(primaryStage);
-            }
+            chooseCharacterButtonClicked(professorPlumChar, primaryStage);
         });
 
         Rectangle mrsWhite = new Rectangle(145, 215);
@@ -540,19 +489,7 @@ public class Game extends Application {
         mrsWhite.setOnMouseClicked(e
                 -> {
             Character mrsWhiteChar = Character.MrsWhite;
-            characterPlayerMap.put(mrsWhiteChar, player);
-            System.out.println(characterPlayerMap);
-            if (countPlayers < playerNames.size()) {
-                player = playerNames.get(countPlayers);
-                Alert alert = new Alert(AlertType.INFORMATION);
-                alert.setTitle(playerNames.get(countPlayers) + "'s Character");
-                alert.setHeaderText("Please choose a character for " + playerNames.get(countPlayers));
-                alert.setContentText("Select the character by clicking the corresponding picture.");
-                alert.showAndWait();
-                countPlayers++;
-            } else {
-                setFileChooser(primaryStage);
-            }
+            chooseCharacterButtonClicked(mrsWhiteChar, primaryStage);
         });
 
         Rectangle revGreen = new Rectangle(145, 215);
@@ -562,19 +499,7 @@ public class Game extends Application {
         revGreen.setOnMouseClicked(e
                 -> {
             Character revGreenChar = Character.RevGreen;
-            characterPlayerMap.put(revGreenChar, player);
-            System.out.println(characterPlayerMap);
-            if (countPlayers < playerNames.size()) {
-                player = playerNames.get(countPlayers);
-                Alert alert = new Alert(AlertType.INFORMATION);
-                alert.setTitle(playerNames.get(countPlayers) + "'s Character");
-                alert.setHeaderText("Please choose a character for " + playerNames.get(countPlayers));
-                alert.setContentText("Select the character by clicking the corresponding picture.");
-                alert.showAndWait();
-                countPlayers++;
-            } else {
-                setFileChooser(primaryStage);
-            }
+            chooseCharacterButtonClicked(revGreenChar, primaryStage);
         });
 
         // setting background image 
@@ -588,6 +513,22 @@ public class Game extends Application {
         int screenSizeY = (450);
         root3.getChildren().addAll(mrsPeacock, colonelMustard, missScarlet, profPlum, mrsWhite, revGreen);
         scene4 = new Scene(root3, screenSizeX, screenSizeY);
+    }
+
+    public void chooseCharacterButtonClicked(Character character, Stage primaryStage) {
+        characterPlayerMap.put(character, player);
+        System.out.println(characterPlayerMap);
+        if (countPlayers < playerNames.size()) {
+            player = playerNames.get(countPlayers);
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle(playerNames.get(countPlayers) + "'s Character");
+            alert.setHeaderText("Please choose a character for " + playerNames.get(countPlayers));
+            alert.setContentText("Select the character by clicking the corresponding picture.");
+            alert.showAndWait();
+            countPlayers++;
+        } else {
+            setFileChooser(primaryStage);
+        }
     }
 
     public void createGameboard(Stage primaryStage, GameBoard gb) {
