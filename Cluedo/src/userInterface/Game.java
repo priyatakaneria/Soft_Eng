@@ -213,7 +213,7 @@ public class Game extends Application
                 BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
         //then you set to your node
         layout1.setBackground(new Background(myBI));
-        scene1 = new Scene(layout1, 500, 650);
+        scene1 = new Scene(layout1, 490, 630);
         window.setScene(scene1);
         window.setTitle("Cluedo");
         window.show();
