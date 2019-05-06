@@ -458,7 +458,7 @@ public class Game extends Application {
         try {
             if (defaultBoard) {
                 turnManager = new TurnManager(characterPlayerMap, noAiPlayers, this);
-                createGameboard(window, turnManager.getGameBoard());
+                createGameboard(window, turnManager);
                 window.setTitle("Cluedo");
                 window.setScene(scene2);
                 Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
@@ -466,7 +466,7 @@ public class Game extends Application {
                 window.setY((primScreenBounds.getHeight() - window.getHeight()) / 2);
             } else {
                 turnManager = new TurnManager(characterPlayerMap, noAiPlayers, customBoardFileName, this);
-                createGameboard(window, turnManager.getGameBoard());
+                createGameboard(window, turnManager);
                 window.setTitle("Cluedo");
                 window.setScene(scene2);
                 Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
