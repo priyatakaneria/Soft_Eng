@@ -5,21 +5,34 @@
  */
 package userInterface.boardTiles;
 
+import cluedo.gameLogic.gameBoard.BoardSquare;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import userInterface.PlayerPiece;
 
 /**
  *
  * @author sb816
  */
-public class BoardSquarePane extends StackPane {
+public class BoardSquarePane extends BoardSpacePane {
     
-    public BoardSquarePane()
+    public BoardSquarePane(BoardSquare bsq)
     {
-        Rectangle tileShape = new Rectangle(25, 25);
-        tileShape.setFill(Color.YELLOW);
-        tileShape.setStroke(Color.BLACK);
-        
+        super(bsq);
+        setStdFill(Color.YELLOW);
+        setStdStroke(Color.BLACK);
+        setNormalColours();
+        getChildren().add(getTileShape());
+    }
+    
+    public void addPlayer(PlayerPiece pp)
+    {
+        getChildren().add(pp);
+    }
+    
+    public boolean removePlayer(PlayerPiece pp)
+    {
+        return getChildren().remove(pp);
     }
 }

@@ -5,6 +5,8 @@
  */
 package cluedo.gameLogic.gameBoard;
 
+import userInterface.boardTiles.BoardSquarePane;
+
 /**
  *
  * @author Jamie Thelin
@@ -24,6 +26,7 @@ public class BoardSquare extends BoardSpace
     {
         super(1);
         this.isIntrigue = isIntrigue;
+        setGuiPane(new BoardSquarePane(this));
     }
 
     /**

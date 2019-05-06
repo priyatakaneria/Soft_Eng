@@ -9,65 +9,66 @@ import cluedo.gameLogic.gameBoard.RoomSquare;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import userInterface.PlayerPiece;
 
 /**
  *
  * @author sb816
  */
-public class RoomSquarePane extends StackPane{
+public class RoomSquarePane extends BoardSpacePane
+{
+    
+    
 
-    private RoomSquare logicalRoomSquare;
-    protected Rectangle tileShape;
-
-    public RoomSquarePane(RoomSquare logicalRoomSquare) {
-        this.logicalRoomSquare = logicalRoomSquare;
-        tileShape = new Rectangle(25, 25);
+    public RoomSquarePane(RoomSquare logicalRoomSquare)
+    {
+        super(logicalRoomSquare);
         colorRoom();
-        
+        getChildren().add(getTileShape());
     }
 
-    public void colorRoom() {
-        int roomNum = logicalRoomSquare.getRoomNo();
-        switch (roomNum) {
+    public void colorRoom()
+    {
+        int roomNum = ((RoomSquare) getLogicalBoardSpace()).getRoomNo();
+        switch (roomNum)
+        {
             case (1):
-                tileShape.setFill(Color.GREEN);
-                tileShape.setStroke(Color.TRANSPARENT);
+                setStdFill(Color.GREEN);
+                setStdStroke(Color.GREEN);
                 break;
             case (2):
-                tileShape.setFill(Color.BEIGE);
-                tileShape.setStroke(Color.TRANSPARENT);
+                setStdFill(Color.BEIGE);
+                setStdStroke(Color.BEIGE);
                 break;
             case (3):
-                tileShape.setFill(Color.AQUAMARINE);
-                tileShape.setStroke(Color.TRANSPARENT);
+                setStdFill(Color.AQUAMARINE);
+                setStdStroke(Color.AQUAMARINE);
                 break;
             case (4):
-                tileShape.setFill(Color.HOTPINK);
-                tileShape.setStroke(Color.TRANSPARENT);
+                setStdFill(Color.HOTPINK);
+                setStdStroke(Color.HOTPINK);
                 break;
             case (5):
-                tileShape.setFill(Color.LIMEGREEN);
-                tileShape.setStroke(Color.TRANSPARENT);
+                setStdFill(Color.LIMEGREEN);
+                setStdStroke(Color.LIMEGREEN);
                 break;
             case (6):
-                tileShape.setFill(Color.HONEYDEW);
-                tileShape.setStroke(Color.TRANSPARENT);
+                setStdFill(Color.CRIMSON);
+                setStdStroke(Color.CRIMSON);
                 break;
             case (7):
-                tileShape.setFill(Color.INDIANRED);
-                tileShape.setStroke(Color.TRANSPARENT);
+                setStdFill(Color.INDIANRED);
+                setStdStroke(Color.INDIANRED);
                 break;
             case (8):
-                tileShape.setFill(Color.MEDIUMBLUE);
-                tileShape.setStroke(Color.TRANSPARENT);
+                setStdFill(Color.MEDIUMBLUE);
+                setStdStroke(Color.MEDIUMBLUE);
                 break;
             case (9):
-                tileShape.setFill(Color.BURLYWOOD);
-                tileShape.setStroke(Color.TRANSPARENT);
+                setStdFill(Color.BURLYWOOD);
+                setStdStroke(Color.BURLYWOOD);
                 break;
-
         }
-        
+        setNormalColours();
     }
-
 }

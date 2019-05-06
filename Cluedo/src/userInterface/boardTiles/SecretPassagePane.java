@@ -5,6 +5,7 @@
  */
 package userInterface.boardTiles;
 
+import cluedo.gameLogic.gameBoard.SecretPassage;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -13,13 +14,15 @@ import javafx.scene.shape.Rectangle;
  *
  * @author sb816
  */
-public class SecretPassagePane extends StackPane{
-     public SecretPassagePane()
-    {
-        Rectangle tileShape = new Rectangle(25, 25);
-        tileShape.setFill(Color.GREY);
-        tileShape.setStroke(Color.BLACK);
-        
+public class SecretPassagePane extends BoardSpacePane
+{
+    public SecretPassagePane(SecretPassage sp)
+    {   
+        super(sp);
+        setStdFill(Color.GREY);
+        setStdStroke(Color.BLACK);
+        setNormalColours();
+        getChildren().add(getTileShape());
     }
-    
+
 }

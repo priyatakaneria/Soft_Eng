@@ -8,6 +8,7 @@ package cluedo.gameLogic.gameBoard;
 import cluedo.gameLogic.player.Player;
 import java.util.ArrayList;
 import java.util.HashMap;
+import userInterface.boardTiles.BoardSpacePane;
 
 /**
  * An abstract implementation of an arbitrary space that players can enter on
@@ -21,6 +22,7 @@ public abstract class BoardSpace
     private ArrayList<Player> occupants;
     private HashMap<Integer, ArrayList<BoardSpace>> adjacency;
     private int occupantLimit;
+    private BoardSpacePane guiPane;
 
     /**
      * Creates a new board space and sets the max number of occupants
@@ -139,5 +141,16 @@ public abstract class BoardSpace
     public void setOccupantLimit(int occupantLimit)
     {
         this.occupantLimit = occupantLimit;
+    }
+
+    public void setGuiPane(BoardSpacePane bsp)
+    {
+        guiPane = bsp;
+        System.out.println("GUI pane set to " + bsp);
+    }
+    
+    public BoardSpacePane getGuiPane()
+    {
+        return guiPane;
     }
 }

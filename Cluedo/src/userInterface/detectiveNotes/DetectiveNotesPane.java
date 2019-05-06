@@ -47,9 +47,9 @@ public class DetectiveNotesPane extends StackPane
     private StackPane leftBox;
     private GridPane clueGrid;
 
-    public DetectiveNotesPane(DetectiveNotes logicalDetectiveNotes, Player player)
+    public DetectiveNotesPane(Player player)
     {
-        this.logicalDetectiveNotes = logicalDetectiveNotes;
+        this.logicalDetectiveNotes = player.getDetNotes();
         this.player = player;
 
         // main container
@@ -59,6 +59,7 @@ public class DetectiveNotesPane extends StackPane
         // title 
         title = new Label(player.getPlayerName() + "'s Detective Notes");
         title.setAlignment(Pos.CENTER);
+        title.setTextAlignment(TextAlignment.CENTER);
         mainContainer.getChildren().add(title);
         // horizontal divider
         horizontalDivider = new HBox();

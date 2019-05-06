@@ -6,21 +6,33 @@
 package userInterface.boardTiles;
 
 import cluedo.gameLogic.gameBoard.RoomSquare;
+import cluedo.gameLogic.gameBoard.RoomSquareDoor;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import userInterface.PlayerPiece;
 
 /**
  *
  * @author sb816
  */
 public class RoomSquareDoorPane extends RoomSquarePane{
-    public RoomSquareDoorPane(RoomSquare rs)
+    public RoomSquareDoorPane(RoomSquareDoor rsd)
     {
-        super(rs);
-        tileShape.setFill(Color.WHITE);
-        tileShape.setStroke(Color.BLACK);
-        
+        super(rsd);
+        setStdFill(Color.WHITE);
+        setStdStroke(Color.BLACK);
+        setNormalColours();
+    }
+    
+    public void addPlayer(PlayerPiece pp)
+    {
+        getChildren().add(pp);
+    }
+    
+    public boolean removePlayer(PlayerPiece pp)
+    {
+        return getChildren().remove(pp);
     }
     
 }

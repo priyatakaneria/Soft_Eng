@@ -62,6 +62,7 @@ import userInterface.boardTiles.RoomPane;
 
 import cluedo.gameLogic.Character;
 import cluedo.gameLogic.TurnManager;
+import cluedo.gameLogic.Weapon;
 import cluedo.gameLogic.gameBoard.BoardSquare;
 import cluedo.gameLogic.gameBoard.EmptySquare;
 import cluedo.gameLogic.gameBoard.GameBoard;
@@ -71,14 +72,20 @@ import cluedo.gameLogic.gameBoard.RoomSquare;
 import cluedo.gameLogic.gameBoard.RoomSquareDoor;
 import cluedo.gameLogic.gameBoard.SecretPassage;
 import cluedo.gameLogic.gameBoard.StaircaseSquare;
+import cluedo.gameLogic.player.HumanPlayer;
 import java.util.HashMap;
+import javafx.geometry.Insets;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import userInterface.boardTiles.BoardSpacePane;
 import userInterface.boardTiles.BoardSquarePane;
 import userInterface.boardTiles.EmptySquarePane;
 import userInterface.boardTiles.RoomSquareDoorPane;
@@ -101,7 +108,7 @@ public class Game extends Application
 
     private ArrayList<String> playerNames = new ArrayList<String>();
     // this need to be a map between instances of character and player names ~ Sriram and Jamie
-    private HashMap<Character, String> characterPlayerMap = new HashMap<Character,String>();
+    private HashMap<Character, String> characterPlayerMap = new HashMap<Character, String>();
     //this needs to be the number of ai players ~ Sriram and Jamie
     private int noAiPlayers;
     //This might not be a string but whichever way you are doing the file selection.
@@ -110,10 +117,36 @@ public class Game extends Application
     private Label lblTime = new Label("0 .s");
     private int seconds, multiplayer = 0, countPlayers = 1;
     private MediaPlayer mediaPlayer;
+    private Stage window;
 
-    private ArrayList<ArrayList<StackPane>> gameBoardPanes;
-    
-    public static final Border SOLID_BLACK_BORDER = new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT));
+    // GameBoard stuff
+    private GameBoard gb;
+    private GridPane gameBoardGridPane;
+    private HashMap<Player, PlayerWindow> playerWindows;
+
+    // Side Panel
+    private VBox sidePanel;
+    private HBox dice;
+    private DicePane dieOne;
+    private DicePane dieTwo;
+
+    private VBox suggestionBox;
+    private Suggestion newSuggestion;
+
+    private VBox accusationBox;
+    private Accusation newAccusation;
+
+    public static final Border SOLID_BLACK_BORDER = createSolidBorder(Color.BLACK);
+
+    //turn manager misc.:
+    private boolean waitingForDice;
+    private int lastRoll;
+    private boolean suggestionEscape;
+    private boolean accusationEscape;
+
+    private boolean waitingForMove;
+    private HashSet<BoardSpace> availableMoves;
+    private BoardSpace movementChoice;
 
     @Override
     public void start(Stage primaryStage)
@@ -133,7 +166,7 @@ public class Game extends Application
         mediaPlayer.play();
 
         Button button1, button3, button4;
-        Stage window = primaryStage;
+        window = primaryStage;
 
         Label label1 = new Label("Number of Players:");
         final String[] players = new String[]
@@ -197,6 +230,7 @@ public class Game extends Application
         window.setScene(scene1);
         window.setTitle("Cluedo");
         window.show();
+        window.setResizable(false);
     }
 
     /**
@@ -207,69 +241,175 @@ public class Game extends Application
         launch(args);
     }
 
+    /**
+     * DisplayTurn displays a message of which player's turn it is. It takes the
+     * current player as an argument. Waits a predetermined number of seconds
+     * before finishing.
+     */
     public void displayTurn(Player player)
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//        System.out.println("entering displayTurn");
+//        customAlert(player.getPlayerName() + "'s Turn");
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setContentText(player.getPlayerName() + "'s Turn");
+        alert.setTitle("New Turn");
+        alert.setWidth(150);
+        alert.setHeight(100);
+        alert.showAndWait();
     }
 
+    /**
+     * GUI.rollDice() should wait for the user to click on the dice, or some
+     * 'roll dice' button before returning the rolled value.
+     */
     public int rollDice()
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return lastRoll;
     }
 
-    public BoardSpace chooseSpace(HashSet<BoardSpace> availableMoves)
+    public void setWaitingForDice(boolean b)
     {
-        // find all BoardSpace's corresponding GUI pane and 
-//        for (BoardSpace bs : availableMoves)
-//        {
-//            bs.setOnMouseClicked(e ->
-//            {
-//                return bs;
-//            });
-//        }
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        waitingForDice = b;
     }
 
+    public boolean getWaitingForDice()
+    {
+        return waitingForDice;
+    }
+
+    /**
+     * GUI.chooseSpace should take a hashSet of boardSpaces and visible show
+     * them as available on the board (including rooms). The method then should
+     * wait for the user to select one of the lit up spaces and return the
+     * chosen space.
+     */
+    public void chooseSpace(HashSet<BoardSpace> availableMoves)
+    {
+        this.availableMoves = new HashSet<>();
+        this.availableMoves.addAll(availableMoves);
+        System.out.println("entering chooseSpace");
+        BoardSpace choice = null;
+        for (BoardSpace bs : availableMoves)
+        {
+            if (bs instanceof Room)
+            {
+                HashSet<RoomSquare> allSquares = gb.getAllFromRoom((Room) bs);
+                this.availableMoves.addAll(allSquares);
+                for (RoomSquare rs : allSquares)
+                {
+                    BoardSpacePane guiPane = rs.getGuiPane();
+                    guiPane.setTmpColours(Color.ORANGE, Color.ORANGERED);
+                }
+            } //
+            else
+            {
+                BoardSpacePane guiPane = bs.getGuiPane();
+                guiPane.setTmpColours(Color.ORANGE, Color.ORANGERED);
+            }
+        }
+    }
+
+    public BoardSpace getChosenSpace()
+    {
+        return movementChoice;
+    }
+
+    public void setWaitingForMove(boolean b)
+    {
+        waitingForMove = true;
+    }
+
+    /**
+     * GUI.teleport should do the same as choose space, but highlight every
+     * possible location
+     */
     public BoardSpace teleport()
     {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * GUI.endTurn should prompt the user to end their turn and wait for them to
+     * press the end-turn button.
+     *
+     * returns true.
+     */
     public boolean endTurn()
     {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * GUI.makeSuggestion should take as input the player who is making the
+     * suggestion i.e. the asker. The method should query the user and wait
+     * until they enter their suggestion details. The return value should be a
+     * new suggestion object representing the user's choice.
+     */
     public Suggestion makeSuggestion(Player player)
     {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * GUI.noPlayerClues should inform the user that their suggestion has
+     * provided no clues, and wait for them to maybe fill in some detective
+     * notes and click an accept button or something.
+     *
+     * Doesn't need to return anything.
+     */
     public void noPlayerClues()
     {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * GUI.ChooseResponse should take a player (nextEnquiry) and prompt that
+     * player to select from one of the possible cards to show to the asker.
+     */
     public ClueCard chooseResponse(Player nextEnquiry, ArrayList<ClueCard> possibleClues)
     {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * GUI.showClue takes a ClueCard and the enquired player and displays it to
+     * the player who made the suggestion, then waits for the user to make some
+     * notes and press a continue button.
+     */
     public void showClue(ClueCard response, Player player, Player clueGiver)
     {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * GUI.accusationQuery should display a message asking if the user wants to
+     * make an accusation and waits for their input to click a 'make accusation'
+     * button or an 'end turn' button.
+     *
+     * Returns true if they press make accusation, or false if the press end
+     * turn.
+     */
     public boolean accusationQuery()
     {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * GUI.MakeAccusation should take a parameter of the player making the
+     * accusation and prompt them to select the clues they think are the final
+     * solution. Waits until they press some 'submit' button then returns an
+     * Accusation object.
+     */
     public Accusation makeAccusation(Player player)
     {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * GUI.displayExtraTurn should display the fact the a player specified in
+     * the parameters is taking an extra turn because of their intrigue card
+     * from last turn.
+     */
     public void displayExtraTurn(Player player)
     {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -280,62 +420,30 @@ public class Game extends Application
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    private class Tile extends StackPane
+    public void setGameboard(Stage window)
     {
 
-        private Text text = new Text();
-
-        public Tile(String colour, int startOrDoor)
-        {
-            Rectangle border = new Rectangle(25, 25);
-            border.setFill(null);
-            border.setStroke(Color.BLACK);
-            setAlignment(Pos.CENTER);
-            getChildren().addAll(border);
-
-            switch (colour)
-            {
-                case "yellow":
-                    border.setFill(Color.YELLOW);
-                    break;
-                case "beige":
-                    border.setFill(Color.BEIGE);
-                    break;
-            }
-
-            if (startOrDoor == 1)
-            {
-                text.setText("START");
-                text.setFont(Font.font("Calibri", 8));
-            }
-            if (startOrDoor == 2)
-            {
-                text.setText("DOOR");
-                text.setFont(Font.font("Calibri", 8));
-            }
-
-            getChildren().add(text);
-
-            setOnMouseClicked(event ->
-            {
-
-            });
-        }
-    }
-
-    public void setGameboard(Stage window)
-    {     
-        /*
         TurnManager turnManager;
         try
         {
-            turnManager = new TurnManager(characterPlayerMap, noAiPlayers, customBoardFileName, this);
-            createGameboard(window, turnManager.getGameBoard());
+            //turnManager = new TurnManager(characterPlayerMap, noAiPlayers, customBoardFileName, this);
+            turnManager = new TurnManager(characterPlayerMap, 0, "default.txt", this);
+            createGameboard(window, turnManager);
             window.setTitle("Cluedo");
             window.setScene(scene2);
             Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
             window.setX((primScreenBounds.getWidth() - window.getWidth()) / 2);
             window.setY((primScreenBounds.getHeight() - window.getHeight()) / 2);
+
+            playerWindows = new HashMap<>();
+            for (Player p : turnManager.getRealPlayers())
+            {
+                if (p instanceof HumanPlayer)
+                {
+                    playerWindows.put(p, new PlayerWindow(p));
+                }
+            }
+            turnManager.gameLoop();
         } //
         catch (InvalidSetupFileException e)
         {
@@ -345,37 +453,30 @@ public class Game extends Application
             alert.setContentText("Invalid Setup File");
             alert.setTitle("Error");
             alert.showAndWait();
-
+            window.setScene(scene1);
         }
-        */
-        
-        createGameboard(window);
-        window.setTitle("Cluedo");
-        window.setScene(scene2);
-        Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
-        window.setX((primScreenBounds.getWidth() - window.getWidth()) / 2);
-        window.setY((primScreenBounds.getHeight() - window.getHeight()) / 2);
     }
 
     public void setWinningsPage(Stage window)
     {
         createWinningsPage(window);
-        window.setTitle("Winner!!");        
-        window.setScene(scene3);   
+        window.setTitle("Winner!!");
+        window.setScene(scene3);
         Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
         window.setX((primScreenBounds.getWidth() - window.getWidth()) / 2);
         window.setY((primScreenBounds.getHeight() - window.getHeight()) / 2);
     }
-    
-    public void setCharactersPage(Stage window){
-        
+
+    public void setCharactersPage(Stage window)
+    {
+
         for (int x = 1; x <= multiplayer; x++)
         {
-            setPlayerNames(x);      
+            setPlayerNames(x);
         }
-        
-        System.out.println(playerNames);     
-        
+
+        System.out.println(playerNames);
+
         if (multiplayer == 0)
         {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -384,170 +485,174 @@ public class Game extends Application
             alert.setContentText("You must select the number of players in this game.");
 
             alert.showAndWait();
-        } 
-        
-        else
-        { 
+        } else
+        {
             createCharacterPage(window);
             window.setTitle("Please choose a character");
-            window.setScene(scene4);    
+            window.setScene(scene4);
             Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
             window.setX((primScreenBounds.getWidth() - window.getWidth()) / 2);
             window.setY((primScreenBounds.getHeight() - window.getHeight()) / 2);
-               
+
             player = playerNames.get(0);
             Alert alert = new Alert(AlertType.INFORMATION);
             alert.setTitle(playerNames.get(0) + "'s Character");
             alert.setHeaderText("Please choose a character for " + playerNames.get(0));
             alert.setContentText("Select the character by clicking the corresponding picture.");
-            alert.showAndWait();            
-       
+            alert.showAndWait();
+
         }
     }
-    
-    public void createCharacterPage(Stage primaryStage){
-        
-        Stage window = primaryStage;        
-                
+
+    public void createCharacterPage(Stage primaryStage)
+    {
+
+        Stage window = primaryStage;
+
         Rectangle mrsPeacock = new Rectangle(145, 215);
         mrsPeacock.setFill(Color.TRANSPARENT);
         mrsPeacock.setTranslateX(5);
-        mrsPeacock.setTranslateY(5);          
+        mrsPeacock.setTranslateY(5);
         mrsPeacock.setOnMouseClicked(e ->
-                                    {           
-                                        Character mrsPeacockChar = Character.MrsPeacock;                                   
-                                        characterPlayerMap.put(mrsPeacockChar, player);
-                                        System.out.println(characterPlayerMap);      
-                                        if (countPlayers<playerNames.size()){
-                                            player = playerNames.get(countPlayers);
-                                            Alert alert = new Alert(AlertType.INFORMATION);
-                                            alert.setTitle(playerNames.get(countPlayers) + "'s Character");
-                                            alert.setHeaderText("Please choose a character for " + playerNames.get(countPlayers));
-                                            alert.setContentText("Select the character by clicking the corresponding picture.");
-                                            alert.showAndWait(); 
-                                            countPlayers++;
-                                        }
-                                        else {
-                                            setGameboard(primaryStage);  
-                                        }
-                                    }); 
-        
+        {
+            Character mrsPeacockChar = Character.MrsPeacock;
+            characterPlayerMap.put(mrsPeacockChar, player);
+            System.out.println(characterPlayerMap);
+            if (countPlayers < playerNames.size())
+            {
+                player = playerNames.get(countPlayers);
+                Alert alert = new Alert(AlertType.INFORMATION);
+                alert.setTitle(playerNames.get(countPlayers) + "'s Character");
+                alert.setHeaderText("Please choose a character for " + playerNames.get(countPlayers));
+                alert.setContentText("Select the character by clicking the corresponding picture.");
+                alert.showAndWait();
+                countPlayers++;
+            } else
+            {
+                setGameboard(primaryStage);
+            }
+        });
+
         Rectangle colonelMustard = new Rectangle(145, 215);
         colonelMustard.setFill(Color.TRANSPARENT);
         colonelMustard.setTranslateX(150);
-        colonelMustard.setTranslateY(5);          
+        colonelMustard.setTranslateY(5);
         colonelMustard.setOnMouseClicked(e ->
-                                    {           
-                                        Character colonelMustardChar = Character.ColMustard;
-                                        characterPlayerMap.put(colonelMustardChar, player);
-                                        System.out.println(characterPlayerMap);      
-                                        if (countPlayers<playerNames.size()){
-                                            player = playerNames.get(countPlayers);
-                                            Alert alert = new Alert(AlertType.INFORMATION);
-                                            alert.setTitle(playerNames.get(countPlayers) + "'s Character");
-                                            alert.setHeaderText("Please choose a character for " + playerNames.get(countPlayers));
-                                            alert.setContentText("Select the character by clicking the corresponding picture.");
-                                            alert.showAndWait(); 
-                                            countPlayers++;
-                                        }
-                                        else {
-                                            setGameboard(primaryStage);  
-                                        }
-                                    }); 
-        
+        {
+            Character colonelMustardChar = Character.ColMustard;
+            characterPlayerMap.put(colonelMustardChar, player);
+            System.out.println(characterPlayerMap);
+            if (countPlayers < playerNames.size())
+            {
+                player = playerNames.get(countPlayers);
+                Alert alert = new Alert(AlertType.INFORMATION);
+                alert.setTitle(playerNames.get(countPlayers) + "'s Character");
+                alert.setHeaderText("Please choose a character for " + playerNames.get(countPlayers));
+                alert.setContentText("Select the character by clicking the corresponding picture.");
+                alert.showAndWait();
+                countPlayers++;
+            } else
+            {
+                setGameboard(primaryStage);
+            }
+        });
+
         Rectangle missScarlet = new Rectangle(145, 215);
         missScarlet.setFill(Color.TRANSPARENT);
         missScarlet.setTranslateX(300);
-        missScarlet.setTranslateY(5);          
+        missScarlet.setTranslateY(5);
         missScarlet.setOnMouseClicked(e ->
-                                    {           
-                                        Character missScarletChar = Character.MissScarlett;
-                                        characterPlayerMap.put(missScarletChar, player);
-                                        System.out.println(characterPlayerMap);      
-                                        if (countPlayers<playerNames.size()){
-                                            player = playerNames.get(countPlayers);
-                                            Alert alert = new Alert(AlertType.INFORMATION);
-                                            alert.setTitle(playerNames.get(countPlayers) + "'s Character");
-                                            alert.setHeaderText("Please choose a character for " + playerNames.get(countPlayers));
-                                            alert.setContentText("Select the character by clicking the corresponding picture.");
-                                            alert.showAndWait(); 
-                                            countPlayers++;
-                                        }
-                                        else {
-                                            setGameboard(primaryStage);  
-                                        }
-                                    }); 
-        
+        {
+            Character missScarletChar = Character.MissScarlett;
+            characterPlayerMap.put(missScarletChar, player);
+            System.out.println(characterPlayerMap);
+            if (countPlayers < playerNames.size())
+            {
+                player = playerNames.get(countPlayers);
+                Alert alert = new Alert(AlertType.INFORMATION);
+                alert.setTitle(playerNames.get(countPlayers) + "'s Character");
+                alert.setHeaderText("Please choose a character for " + playerNames.get(countPlayers));
+                alert.setContentText("Select the character by clicking the corresponding picture.");
+                alert.showAndWait();
+                countPlayers++;
+            } else
+            {
+                setGameboard(primaryStage);
+            }
+        });
+
         Rectangle profPlum = new Rectangle(145, 215);
         profPlum.setFill(Color.TRANSPARENT);
         profPlum.setTranslateX(5);
-        profPlum.setTranslateY(230);          
+        profPlum.setTranslateY(230);
         profPlum.setOnMouseClicked(e ->
-                                    {           
-                                        Character professorPlumChar = Character.ProfPlum;
-                                        characterPlayerMap.put(professorPlumChar, player);
-                                        System.out.println(characterPlayerMap);      
-                                        if (countPlayers<playerNames.size()){
-                                            player = playerNames.get(countPlayers);
-                                            Alert alert = new Alert(AlertType.INFORMATION);
-                                            alert.setTitle(playerNames.get(countPlayers) + "'s Character");
-                                            alert.setHeaderText("Please choose a character for " + playerNames.get(countPlayers));
-                                            alert.setContentText("Select the character by clicking the corresponding picture.");
-                                            alert.showAndWait(); 
-                                            countPlayers++;
-                                        }
-                                        else {
-                                            setGameboard(primaryStage);  
-                                        }
-                                    }); 
-        
+        {
+            Character professorPlumChar = Character.ProfPlum;
+            characterPlayerMap.put(professorPlumChar, player);
+            System.out.println(characterPlayerMap);
+            if (countPlayers < playerNames.size())
+            {
+                player = playerNames.get(countPlayers);
+                Alert alert = new Alert(AlertType.INFORMATION);
+                alert.setTitle(playerNames.get(countPlayers) + "'s Character");
+                alert.setHeaderText("Please choose a character for " + playerNames.get(countPlayers));
+                alert.setContentText("Select the character by clicking the corresponding picture.");
+                alert.showAndWait();
+                countPlayers++;
+            } else
+            {
+                setGameboard(primaryStage);
+            }
+        });
+
         Rectangle mrsWhite = new Rectangle(145, 215);
         mrsWhite.setFill(Color.TRANSPARENT);
         mrsWhite.setTranslateX(150);
-        mrsWhite.setTranslateY(230);          
+        mrsWhite.setTranslateY(230);
         mrsWhite.setOnMouseClicked(e ->
-                                    {           
-                                        Character mrsWhiteChar = Character.MrsWhite;
-                                        characterPlayerMap.put(mrsWhiteChar, player);                                         
-                                        System.out.println(characterPlayerMap);      
-                                        if (countPlayers<playerNames.size()){
-                                            player = playerNames.get(countPlayers);
-                                            Alert alert = new Alert(AlertType.INFORMATION);
-                                            alert.setTitle(playerNames.get(countPlayers) + "'s Character");
-                                            alert.setHeaderText("Please choose a character for " + playerNames.get(countPlayers));
-                                            alert.setContentText("Select the character by clicking the corresponding picture.");
-                                            alert.showAndWait(); 
-                                            countPlayers++;
-                                        }
-                                        else {
-                                            setGameboard(primaryStage);  
-                                        }
-                                    }); 
-        
+        {
+            Character mrsWhiteChar = Character.MrsWhite;
+            characterPlayerMap.put(mrsWhiteChar, player);
+            System.out.println(characterPlayerMap);
+            if (countPlayers < playerNames.size())
+            {
+                player = playerNames.get(countPlayers);
+                Alert alert = new Alert(AlertType.INFORMATION);
+                alert.setTitle(playerNames.get(countPlayers) + "'s Character");
+                alert.setHeaderText("Please choose a character for " + playerNames.get(countPlayers));
+                alert.setContentText("Select the character by clicking the corresponding picture.");
+                alert.showAndWait();
+                countPlayers++;
+            } else
+            {
+                setGameboard(primaryStage);
+            }
+        });
+
         Rectangle revGreen = new Rectangle(145, 215);
         revGreen.setFill(Color.TRANSPARENT);
         revGreen.setTranslateX(300);
-        revGreen.setTranslateY(230);          
+        revGreen.setTranslateY(230);
         revGreen.setOnMouseClicked(e ->
-                                    {           
-                                        Character revGreenChar = Character.RevGreen;
-                                        characterPlayerMap.put(revGreenChar, player);                                                                                    
-                                        System.out.println(characterPlayerMap);     
-                                        if (countPlayers<playerNames.size()){
-                                            player = playerNames.get(countPlayers);
-                                            Alert alert = new Alert(AlertType.INFORMATION);
-                                            alert.setTitle(playerNames.get(countPlayers) + "'s Character");
-                                            alert.setHeaderText("Please choose a character for " + playerNames.get(countPlayers));
-                                            alert.setContentText("Select the character by clicking the corresponding picture.");
-                                            alert.showAndWait(); 
-                                            countPlayers++;
-                                        }
-                                        else {
-                                            setGameboard(primaryStage);  
-                                        }
-                                    }); 
-        
-        
+        {
+            Character revGreenChar = Character.RevGreen;
+            characterPlayerMap.put(revGreenChar, player);
+            System.out.println(characterPlayerMap);
+            if (countPlayers < playerNames.size())
+            {
+                player = playerNames.get(countPlayers);
+                Alert alert = new Alert(AlertType.INFORMATION);
+                alert.setTitle(playerNames.get(countPlayers) + "'s Character");
+                alert.setHeaderText("Please choose a character for " + playerNames.get(countPlayers));
+                alert.setContentText("Select the character by clicking the corresponding picture.");
+                alert.showAndWait();
+                countPlayers++;
+            } else
+            {
+                setGameboard(primaryStage);
+            }
+        });
+
         // setting background image 
         Image image = new Image(getClass().getResourceAsStream("characters.jpg"), 450, 450, false, true);
         BackgroundImage backgroundImage = new BackgroundImage(image,
@@ -560,9 +665,10 @@ public class Game extends Application
         root3.getChildren().addAll(mrsPeacock, colonelMustard, missScarlet, profPlum, mrsWhite, revGreen);
         scene4 = new Scene(root3, screenSizeX, screenSizeY);
     }
-    
-    public void createGameboard(Stage primaryStage)
+
+    public void createGameboard(Stage primaryStage, TurnManager tm)
     {
+        gb = tm.getGameBoard();
         Stage window = primaryStage;
         Button exitButton = new Button("Exit Game");
         exitButton.setOnAction(e ->
@@ -572,442 +678,162 @@ public class Game extends Application
             window.close();
             Platform.runLater(() -> new Game().start(new Stage()));
         });
-        
-        /* 
-        gameBoardPanes = new ArrayList<>();
+        exitButton.setAlignment(Pos.CENTER);
+
+        gameBoardGridPane = new GridPane();
 
         //x coord
-        for (int x = 1; x < gb.getWidth(); x++)
+        for (int x = 1; x <= tm.getGameBoard().getWidth(); x++)
         {
-            gameBoardPanes.add(new ArrayList<>());
-            for (int y = 1; y < gb.getHeight(); y++)
+            for (int y = 1; y <= tm.getGameBoard().getHeight(); y++)
             {
                 //Make GUI Tiles in Here
-                StackPane newPane = null;
-                BoardSpace nextBoardSpace = gb.getBoardSpace(x, y);
-                if (nextBoardSpace instanceof BoardSquare)
-                {
-                    newPane = new BoardSquarePane();
-                } //
-                else if (nextBoardSpace instanceof EmptySquare)
-                {
-                    newPane = new EmptySquarePane();
-                } //
-                else if (nextBoardSpace instanceof StaircaseSquare)
-                {
-                    newPane = new StaircaseSquarePane();
-                } //
-                else if (nextBoardSpace instanceof SecretPassage)
-                {
-                    newPane = new SecretPassagePane();
-                } //
-                else if (nextBoardSpace instanceof RoomSquare)
-                {
-                    newPane = new RoomSquarePane((RoomSquare) nextBoardSpace);
-                } //
-                else if (nextBoardSpace instanceof RoomSquareDoor)
-                {
-                    newPane = new RoomSquareDoorPane((RoomSquare) nextBoardSpace);
-                }
-                gameBoardPanes.get(x - 1).add(newPane);
-            }
-        }
-        */
-        
-        Button winningsPage = new Button("Winnings Page");
-        winningsPage.setOnAction(e -> setWinningsPage(primaryStage));
-        winningsPage.setLayoutX(425);
-        winningsPage.setLayoutY(600);
-        
-        exitButton.setLayoutX(525);
-        exitButton.setLayoutY(600);
-        root.getChildren().addAll(exitButton, winningsPage );
+                final BoardSpacePane newPane;
+                BoardSpace nextBoardSpace = tm.getGameBoard().getBoardSpace(x, y);
 
-        /*   timer = new AnimationTimer() {
-            private long lastTime = 0;
+                newPane = nextBoardSpace.getGuiPane();
 
-            @Override
-            public void handle(long now) {
-                if (lastTime != 0) {
-                    if (now > lastTime + 1_000_000_000) {
-                        seconds++;
-                        time = (Integer.toString(seconds));
-                        lastTime = now;
+                newPane.setOnMouseClicked(click ->
+                {
+                    if (waitingForMove)
+                    {
+                        if (availableMoves.contains(newPane.getLogicalBoardSpace()))
+                        {
+                            System.out.println("Space clicked");
+                            movementChoice = newPane.getLogicalBoardSpace();
+                            if (newPane instanceof RoomSquarePane)
+                            {
+                                movementChoice = ((RoomSquare) movementChoice).belongsTo();
+                            }
+                            setNormalColours();
+                            setWaitingForMove(false);
+                        }
                     }
-                } else {
-                    lastTime = now;
+                });
 
-                }
+                gameBoardGridPane.add(newPane, x - 1, y - 1);
             }
+        }
+        for (Player p : tm.getAllPlayers())
+        {
+            System.out.println(p.getCharacter());
+            HashMap<Character, BoardSquare> starting = tm.getGameBoard().getStartingSquares();
+            Character playerChar = p.getCharacter();
+            BoardSquare charSquare = starting.get(playerChar);
+            BoardSpacePane guiPane = charSquare.getGuiPane();
+            PlayerPiece pp = p.getGuiPiece();
+            guiPane.addPlayer(pp);
+        }
 
-            @Override
-            public void stop() {
-                super.stop();
-                lastTime = 0;
-                seconds = 0;
+        // create things to go in the sidepanel, like dice
+        sidePanel = new VBox();
+        sidePanel.setAlignment(Pos.TOP_CENTER);
+
+        VBox.setMargin(exitButton, new Insets(10, 10, 10, 10));
+
+        dice = new HBox();
+        dice.setAlignment(Pos.CENTER);
+        dieOne = new DicePane();
+        HBox.setMargin(dieOne, new Insets(10, 10, 10, 10));
+        dieTwo = new DicePane();
+        HBox.setMargin(dieTwo, new Insets(10, 10, 10, 10));
+        dice.getChildren().addAll(dieOne, dieTwo);
+
+        dice.setOnMouseClicked(click ->
+        {
+            System.out.println("dice clicked");
+            if (waitingForDice)
+            {
+                lastRoll = gb.rollDice();
+                int[] lastRolls = gb.getLastRolls();
+                dieOne.setLastRoll(lastRolls[0]);
+                dieTwo.setLastRoll(lastRolls[1]);
+                setWaitingForDice(false);
+                System.out.println("dice escape");
             }
-        };         
-         
-        timer.start();
-        
-        int numFill = 0;
-        Stage window = primaryStage;        
-        Button button2 = new Button("Exit Game");
-        button2.setOnAction(e -> {mediaPlayer.pause(); window.setScene(scene1); window.close(); Platform.runLater(() -> new Game().start(new Stage()));});
-        Button button3 = new Button("Winnings Page");
-        button3.setOnAction(e -> setWinningsPage(primaryStage));
-        
-        Room study = new Room(7,4,"STUDY","red","black",18);  
-        study.setTranslateX(0);
-        study.setTranslateY(0);
-        
-        Room library = new Room(7,5,"LIBRARY","crimson","black",18);
-        library.setTranslateX(0);
-        library.setTranslateY(150);
-        
-        Room billiard = new Room(6,5,"BILLIARD ROOM","blue","black",18);
-        billiard.setTranslateX(0);
-        billiard.setTranslateY(300);
-        
-        Room conservatory = new Room(6,5,"CONSERVATORY","green","black",18);
-        conservatory.setTranslateX(0);
-        conservatory.setTranslateY(475);
-        
-        Room hall = new Room(6,7,"HALL","orange","black",18);
-        hall.setTranslateX(225);
-        hall.setTranslateY(0);
-                
-        Room cluedo = new Room(5,4,"CLUEDO","black","white",30);
-        cluedo.setTranslateX(225);
-        cluedo.setTranslateY(200);
-        
-        Room game = new Room(5,3,"The Classic Detective Game","black","white",11);
-        game.setTranslateX(225);
-        game.setTranslateY(300);
-        
-        Room ball = new Room(8,6,"BALL ROOM","purple","black",18);
-        ball.setTranslateX(200);
-        ball.setTranslateY(425);
-        
-        Room lounge = new Room(7,5,"LOUNGE","pink","black",18);
-        lounge.setTranslateX(425);
-        lounge.setTranslateY(0);
-        
-        Room dining = new Room(8,7,"DINING ROOM","grey","black",18);
-        dining.setTranslateX(400);
-        dining.setTranslateY(200);
-        
-        Room kitchen = new Room(6,6,"KITCHEN","brown","black",18);
-        kitchen.setTranslateX(450);
-        kitchen.setTranslateY(450);
-        
-        root.getChildren().addAll(study,library,billiard,conservatory,hall,cluedo,game,ball,lounge,dining,kitchen);
-       
-        int count = 0;
-        for (int i=1; i<25; i++){
-            Tile tile = new Tile("yellow", 0);     
-            tile.setTranslateX(175);
-            tile.setTranslateY(count);
-            count = count+25;
-            root.getChildren().add(tile);
-        }
+        });
 
-        count = 25;
-        for (int i=1; i<17; i++){
-            Tile tile = new Tile("yellow", 0);     
-            tile.setTranslateX(200);
-            tile.setTranslateY(count);
-            count = count+25;
-            root.getChildren().add(tile);
+        // Suggestion panel
+        suggestionBox = new VBox();
+        suggestionBox.setAlignment(Pos.CENTER);
+        Text makeSuggestionText = new Text("Choose your selection below, then click 'Make Suggestion'");
+        Label chooseCharacterLabel = new Label("Character:");
+        ChoiceBox characterChoice = new ChoiceBox();
+        for (Character c : Character.values())
+        {
+            characterChoice.getItems().add(c.getCharacterName());
         }
-        
-        count = 275;
-        for (int i=1; i<13; i++){
-            Tile tile = new Tile("yellow", 0);     
-            tile.setTranslateX(150);
-            tile.setTranslateY(count);
-            count = count+25;
-            root.getChildren().add(tile);
+        Label chooseRoomLabel = new Label("Room:");
+        ChoiceBox roomChoice = new ChoiceBox();
+        for (Room r : tm.getGameBoard().getRooms().values())
+        {
+            roomChoice.getItems().add(r.getRoomName());
         }
-        
-        count = 25;
-        for (int i=1; i<8; i++){
-            Tile tile = new Tile("yellow", 0);     
-            tile.setTranslateX(400);
-            tile.setTranslateY(count);
-            count = count+25;
-            root.getChildren().add(tile);
+        Label chooseWeaponLabel = new Label("Weapon:");
+        ChoiceBox weaponChoice = new ChoiceBox();
+        for (Weapon w : Weapon.values())
+        {
+            weaponChoice.getItems().add(w.getWeaponName());
         }
+        Button makeSuggestionBtn = new Button("Make Suggestion");
+        makeSuggestionBtn.setOnAction(btnPress ->
+        {
+            newSuggestion = readSuggestion((String) characterChoice.getValue(), (String) roomChoice.getValue(), (String) weaponChoice.getValue(), tm.getCurrPlayer());
+            if (newSuggestion == null)
+            {
+                Alert alert = new Alert(AlertType.WARNING);
+                alert.setContentText("You must select one Character, Room and Weapon");
+                alert.setTitle("Invalid Suggestion");
+                alert.showAndWait();
+            } else
+            {
+                suggestionEscape = true;
+            }
+        });
 
-        count = 25;
-        for (int i=1; i<17; i++){
-            Tile tile = new Tile("yellow", 0);     
-            tile.setTranslateX(375);
-            tile.setTranslateY(count);
-            count = count+25;
-            root.getChildren().add(tile);
-        }
-        
-        count = 175;
-        for (int i=1; i<11; i++){
-            Tile tile = new Tile("yellow", 0);     
-            tile.setTranslateX(350);
-            tile.setTranslateY(count);
-            count = count+25;
-            root.getChildren().add(tile);
-        }             
-        
-        count = 375;
-        for (int i=1; i<10; i++){
-            Tile tile = new Tile("yellow", 0);     
-            tile.setTranslateX(400);
-            tile.setTranslateY(count);
-            count = count+25;
-            root.getChildren().add(tile);
-        }
-        
-        count = 375;
-        for (int i=1; i<9; i++){
-            Tile tile = new Tile("yellow", 0);     
-            tile.setTranslateX(425);
-            tile.setTranslateY(count);
-            count = count+25;
-            root.getChildren().add(tile);
-        }        
-        
-        count = 25;
-        for (int i=1; i<7; i++){
-            Tile tile = new Tile("yellow", 0);     
-            tile.setTranslateX(count);
-            tile.setTranslateY(100);
-            count = count+25;
-            root.getChildren().add(tile);
-        }  
-        
-        count = 25;
-        for (int i=1; i<7; i++){
-            Tile tile = new Tile("yellow", 0);     
-            tile.setTranslateX(count);
-            tile.setTranslateY(125);
-            count = count+25;
-            root.getChildren().add(tile);
-        }        
-        
-        count = 25;
-        for (int i=1; i<6; i++){
-            Tile tile = new Tile("yellow", 0);     
-            tile.setTranslateX(count);
-            tile.setTranslateY(275);
-            count = count+25;
-            root.getChildren().add(tile);
-        }        
-        
-        count = 25;
-        for (int i=1; i<6; i++){
-            Tile tile = new Tile("yellow", 0);     
-            tile.setTranslateX(count);
-            tile.setTranslateY(425);
-            count = count+25;
-            root.getChildren().add(tile);
-        }     
-        
-        count = 25;
-        for (int i=1; i<6; i++){
-            Tile tile = new Tile("yellow", 0);     
-            tile.setTranslateX(count);
-            tile.setTranslateY(450);
-            count = count+25;
-            root.getChildren().add(tile);
-        }        
-        
-        count = 225;
-        for (int i=1; i<6; i++){
-            Tile tile = new Tile("yellow", 0);     
-            tile.setTranslateX(count);
-            tile.setTranslateY(375);
-            count = count+25;
-            root.getChildren().add(tile);
-        }        
-        
-        count = 225;
-        for (int i=1; i<6; i++){
-            Tile tile = new Tile("yellow", 0);     
-            tile.setTranslateX(count);
-            tile.setTranslateY(400);
-            count = count+25;
-            root.getChildren().add(tile);
-        }        
-        
-        count = 425;
-        for (int i=1; i<7; i++){
-            Tile tile = new Tile("yellow", 0);     
-            tile.setTranslateX(count);
-            tile.setTranslateY(125);
-            count = count+25;
-            root.getChildren().add(tile);
-        }        
-        
-        count = 425;
-        for (int i=1; i<7; i++){
-            Tile tile = new Tile("yellow", 0);     
-            tile.setTranslateX(count);
-            tile.setTranslateY(150);
-            count = count+25;
-            root.getChildren().add(tile);
-        }        
-        
-        count = 425;
-        for (int i=1; i<7; i++){
-            Tile tile = new Tile("yellow", 0);     
-            tile.setTranslateX(count);
-            tile.setTranslateY(175);
-            count = count+25;
-            root.getChildren().add(tile);
-        }    
-        
-        count = 225;
-        for (int i=1; i<6; i++){
-            Tile tile = new Tile("yellow", 0);     
-            tile.setTranslateX(count);
-            tile.setTranslateY(175);
-            count = count+25;
-            root.getChildren().add(tile);
-        }        
-        
-        count = 450;
-        for (int i=1; i<6; i++){
-            Tile tile = new Tile("yellow", 0);     
-            tile.setTranslateX(count);
-            tile.setTranslateY(375);
-            count = count+25;
-            root.getChildren().add(tile);
-        }        
-        
-        count = 450;
-        for (int i=1; i<6; i++){
-            Tile tile = new Tile("yellow", 0);     
-            tile.setTranslateX(count);
-            tile.setTranslateY(400);
-            count = count+25;
-            root.getChildren().add(tile);
-        }        
-        
-        count = 450;
-        for (int i=1; i<7; i++){
-            Tile tile = new Tile("yellow", 0);     
-            tile.setTranslateX(count);
-            tile.setTranslateY(425);
-            count = count+25;
-            root.getChildren().add(tile);
-        }        
-        
-        Tile tile = new Tile("yellow", 1);
-        tile.setTranslateX(400);
-        tile.setTranslateY(0);
-        
-        Tile tile1 = new Tile("beige", 2);
-        tile1.setTranslateX(150);
-        tile1.setTranslateY(200);      
-        
-        Tile tile2 = new Tile("yellow", 1);
-        tile2.setTranslateX(0);
-        tile2.setTranslateY(125);
-        
-        Tile tile3 = new Tile("yellow", 1);
-        tile3.setTranslateX(0);
-        tile3.setTranslateY(450);
-        
-        Tile tile4 = new Tile("yellow", 1);
-        tile4.setTranslateX(575);
-        tile4.setTranslateY(150);
-        
-        Tile tile5 = new Tile("yellow", 0);
-        tile5.setTranslateX(200);
-        tile5.setTranslateY(575);
-        
-        Tile tile6 = new Tile("yellow", 0);
-        tile6.setTranslateX(225);
-        tile6.setTranslateY(575);
-        
-        Tile tile7 = new Tile("yellow", 1);
-        tile7.setTranslateX(250);
-        tile7.setTranslateY(600);
-        
-        Tile tile8 = new Tile("yellow", 1);
-        tile8.setTranslateX(325);
-        tile8.setTranslateY(600);
-        
-        Tile tile9 = new Tile("yellow", 0);
-        tile9.setTranslateX(350);
-        tile9.setTranslateY(575);
-        
-        Tile tile10 = new Tile("yellow", 0);
-        tile10.setTranslateX(375);
-        tile10.setTranslateY(575);
-                
-        Tile tile11 = new Tile("beige", 2);
-        tile11.setTranslateX(150);
-        tile11.setTranslateY(75);
-        
-        Tile tile12 = new Tile("beige", 2);
-        tile12.setTranslateX(75);
-        tile12.setTranslateY(250);
-        
-        Tile tile13 = new Tile("beige", 2);
-        tile13.setTranslateX(125);
-        tile13.setTranslateY(375);
+        suggestionBox.getChildren().addAll(makeSuggestionText, chooseCharacterLabel, characterChoice, chooseRoomLabel, roomChoice, chooseWeaponLabel, weaponChoice, makeSuggestionBtn);
 
-        Tile tile14 = new Tile("beige", 2);
-        tile14.setTranslateX(25);
-        tile14.setTranslateY(300);
-        
-        Tile tile15 = new Tile("beige", 2);
-        tile15.setTranslateX(100);
-        tile15.setTranslateY(475);
-        
-        Tile tile16 = new Tile("beige", 2);
-        tile16.setTranslateX(225);
-        tile16.setTranslateY(100);
-        
-        Tile tile17 = new Tile("beige", 2);
-        tile17.setTranslateX(200);
-        tile17.setTranslateY(475);
-        
-        Tile tile18 = new Tile("beige", 2);
-        tile18.setTranslateX(225);
-        tile18.setTranslateY(425);
-        
-        Tile tile19 = new Tile("beige", 2);
-        tile19.setTranslateX(350);
-        tile19.setTranslateY(425);
-        
-        Tile tile20 = new Tile("beige", 2);
-        tile20.setTranslateX(375);
-        tile20.setTranslateY(475);
-        
-        Tile tile21 = new Tile("beige", 2);
-        tile21.setTranslateX(425);
-        tile21.setTranslateY(100);
-        
-        Tile tile24 = new Tile("beige", 2);
-        tile24.setTranslateX(425);
-        tile24.setTranslateY(200);
-        
-        Tile tile22 = new Tile("beige", 2);
-        tile22.setTranslateX(400);
-        tile22.setTranslateY(300);
-        
-        Tile tile23 = new Tile("beige", 2);
-        tile23.setTranslateX(475);
-        tile23.setTranslateY(450);
-        
-        root.getChildren().addAll(tile, tile1, tile2, tile3, tile4, tile5, tile6, tile7, tile8, tile9, tile10, tile11, tile12, tile13, tile14, tile15, tile16, tile17, tile18, tile19, tile20, tile21, tile22, tile23, tile24); 
-        */       
-        
-        int screenSizeX = (600);
-        int screenSizeY = (625);        
-        
-        scene2 = new Scene(root, screenSizeX, screenSizeY);         
+        // Accusation panel
+        accusationBox = new VBox();
+        accusationBox.setAlignment(Pos.CENTER);
+        Text makeAccusationText = new Text("Decide on your final accusation below and click 'Make Accusation");
+
+        Button makeAccusationBtn = new Button("Make Accusation");
+        makeSuggestionBtn.setOnAction(btnPress ->
+        {
+            newAccusation = readAccusation((String) characterChoice.getValue(), (String) roomChoice.getValue(), (String) weaponChoice.getValue(), tm.getCurrPlayer());
+            if (newAccusation == null)
+            {
+                Alert alert = new Alert(AlertType.WARNING);
+                alert.setContentText("You must select one Character, Room and Weapon");
+                alert.setTitle("Invalid Accusation");
+                alert.showAndWait();
+            } else
+            {
+                accusationEscape = true;
+            }
+        });
+
+        accusationBox.getChildren().addAll(makeAccusationText, chooseCharacterLabel, characterChoice, chooseRoomLabel, roomChoice, chooseWeaponLabel, weaponChoice, makeAccusationBtn);
+
+        sidePanel.getChildren().addAll(exitButton, dice);
+
+        BorderPane centerSideContainer = new BorderPane();
+        centerSideContainer.setCenter(gameBoardGridPane);
+        centerSideContainer.setRight(sidePanel);
+
+//        Button winningsPage = new Button("Winnings Page");
+//        winningsPage.setOnAction(e -> setWinningsPage(primaryStage));
+//        winningsPage.setLayoutX(425);
+//        winningsPage.setLayoutY(600);
+        root.getChildren().add(centerSideContainer);
+
+//        int screenSizeX = (1280);
+//        int screenSizeY = (720);
+        scene2 = new Scene(root);
+        window.setScene(scene2);
+        window.show();
+        System.out.println("GUI Thread: " + Thread.currentThread().getName());
     }
 
     public void createWinningsPage(Stage primaryStage)
@@ -1055,16 +881,17 @@ public class Game extends Application
         dialog.setHeaderText("Please enter the name of Player " + playerNumber);
         dialog.setContentText("Player " + playerNumber + ":");
         dialog.getDialogPane().lookupButton(ButtonType.CANCEL).setDisable(true);
-                
+
         String playerName = null;
-       
+
         // Traditional way to get the response value.
         Optional<String> result = dialog.showAndWait();
         if (result.isPresent())
         {
-            playerName = result.get();            
-            
-            if (playerName.length() == 0){            
+            playerName = result.get();
+
+            if (playerName.length() == 0)
+            {
                 Alert alert = new Alert(AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText("No name entered");
@@ -1072,13 +899,89 @@ public class Game extends Application
 
                 alert.showAndWait();
                 setPlayerNames(playerNumber);
-            }
-            
-            else
+            } else
             {
                 playerNames.add(playerName);
             }
-        }           
+        }
+    }
+
+    private Suggestion readSuggestion(String character, String room, String weapon, Player currPlayer)
+    {
+        Character chosenCharacter = null;
+        for (Character c : Character.values())
+        {
+            if (c.getCharacterName().equals(character))
+            {
+                chosenCharacter = c;
+            }
+        }
+        Room chosenRoom = null;
+        for (Room r : gb.getRooms().values())
+        {
+            if (r.getRoomName().getRoomStringName().equals(room))
+            {
+                chosenRoom = r;
+            }
+        }
+        Weapon chosenWeapon = null;
+        for (Weapon w : Weapon.values())
+        {
+            if (w.getWeaponName().equals(weapon))
+            {
+                chosenWeapon = w;
+            }
+        }
+        return new Suggestion(chosenCharacter, chosenRoom, chosenWeapon, currPlayer);
+    }
+
+    private Accusation readAccusation(String character, String room, String weapon, Player currPlayer)
+    {
+        Character chosenCharacter = null;
+        for (Character c : Character.values())
+        {
+            if (c.getCharacterName().equals(character))
+            {
+                chosenCharacter = c;
+            }
+        }
+        Room chosenRoom = null;
+        for (Room r : gb.getRooms().values())
+        {
+            if (r.getRoomName().getRoomStringName().equals(room))
+            {
+                chosenRoom = r;
+            }
+        }
+        Weapon chosenWeapon = null;
+        for (Weapon w : Weapon.values())
+        {
+            if (w.getWeaponName().equals(weapon))
+            {
+                chosenWeapon = w;
+            }
+        }
+        return new Accusation(chosenCharacter, chosenRoom, chosenWeapon, currPlayer);
+    }
+
+    public void setNormalColours()
+    {
+        for (BoardSpace bs : availableMoves)
+        {
+            if(!(bs instanceof Room))
+            {
+                bs.getGuiPane().setNormalColours();
+            }
+        }
+    }
+
+    public static Background createSolidBackground(Color c)
+    {
+        return new Background(new BackgroundFill(c, CornerRadii.EMPTY, Insets.EMPTY));
+    }
+
+    public static Border createSolidBorder(Color c)
+    {
+        return new Border(new BorderStroke(c, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT));
     }
 }
-

@@ -5,6 +5,7 @@
  */
 package userInterface.boardTiles;
 
+import cluedo.gameLogic.gameBoard.StaircaseSquare;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -13,13 +14,15 @@ import javafx.scene.shape.Rectangle;
  *
  * @author sb816
  */
-public class StaircaseSquarePane extends StackPane
-{     public StaircaseSquarePane()
+public class StaircaseSquarePane extends BoardSpacePane
+{
+    public StaircaseSquarePane(StaircaseSquare ss)
     {
+        super(ss);
         Rectangle tileShape = new Rectangle(25, 25);
-        tileShape.setFill(Color.BLUE);
-        tileShape.setStroke(Color.BLACK);
-        
+        setStdFill(Color.DARKGREY);
+        setStdStroke(Color.DARKGRAY);
+        setNormalColours();
+        getChildren().add(getTileShape());
     }
-    
 }

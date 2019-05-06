@@ -15,8 +15,8 @@ import cluedo.gameLogic.player.Player;
 public class Accusation extends AccuSuggest
 {
 
-    public Accusation(Room room, Weapon weapon, Character character, Player asker) {
-        super(room, weapon, character, asker);
+    public Accusation(Character character, Room room, Weapon weapon, Player asker) {
+        super(character, room, weapon, asker);
     }
            
 }

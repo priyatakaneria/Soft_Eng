@@ -5,6 +5,7 @@
  */
 package userInterface.boardTiles;
 
+import cluedo.gameLogic.gameBoard.EmptySquare;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -13,13 +14,14 @@ import javafx.scene.shape.Rectangle;
  *
  * @author sb816
  */
-public class EmptySquarePane extends StackPane{
-    public EmptySquarePane()
+public class EmptySquarePane extends BoardSpacePane
+{
+    public EmptySquarePane(EmptySquare es)
     {
-        //Could Be Transparent
-        Rectangle tileShape = new Rectangle(25, 25);
-        tileShape.setFill(Color.BLACK);
-        tileShape.setStroke(Color.TRANSPARENT);
-        
+        super(es);
+        setStdFill(Color.BLACK);
+        setStdStroke(Color.BLACK);
+        setNormalColours();
+        getChildren().add(getTileShape());
     }
 }

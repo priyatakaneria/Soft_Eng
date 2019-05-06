@@ -5,6 +5,8 @@
  */
 package cluedo.gameLogic.gameBoard;
 
+import userInterface.boardTiles.SecretPassagePane;
+
 /**
  *
  * @author Jamie Thelin
@@ -35,6 +37,7 @@ public class SecretPassage extends BoardSpace
     {
         super(0);
         this.roomNoA = roomNoA;
+        setGuiPane(new SecretPassagePane(this));
     }
 
     /**

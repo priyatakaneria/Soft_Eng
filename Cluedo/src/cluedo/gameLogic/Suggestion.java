@@ -15,8 +15,8 @@ import cluedo.gameLogic.player.Player;
 public class Suggestion extends AccuSuggest
 {
 
-    public Suggestion(Room room, Weapon weapon, Character character, Player asker) {
-        super(room, weapon, character, asker);
+    public Suggestion(Character character, Room room, Weapon weapon, Player asker) {
+        super(character, room, weapon, asker);
     }
 
         

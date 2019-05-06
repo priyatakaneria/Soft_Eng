@@ -5,6 +5,8 @@
  */
 package cluedo.gameLogic.gameBoard;
 
+import userInterface.boardTiles.StaircaseSquarePane;
+
 /**
  *
  * @author Jamie
@@ -15,6 +17,7 @@ public class StaircaseSquare extends EmptySquare
     public StaircaseSquare()
     {
         super();
+        setGuiPane(new StaircaseSquarePane(this));
     }
 
     /**

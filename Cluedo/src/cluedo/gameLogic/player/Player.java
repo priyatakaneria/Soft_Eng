@@ -21,6 +21,7 @@ import java.util.Iterator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import userInterface.PlayerPiece;
 
 /**
  *
@@ -39,6 +40,8 @@ public class Player
     private boolean playerLost;
     private Suggestion lastSuggestion;
     private Collection<Player> otherPlayers;
+    
+    private PlayerPiece playerPiece;
 
     //Add Gameboard as Parameter
     public Player(Character character, String playerName, GameBoard gb, BoardSpace start, Collection<Player> otherPlayers)
@@ -49,9 +52,13 @@ public class Player
         detNotes = new DetectiveNotes(otherPlayers, gb.getRooms().values());
         this.gb = gb;
         currentPosition = start;
+        start.addOccupant(this);
         playerLost = false;
         lastSuggestion = null;
         this.otherPlayers = otherPlayers;
+        this.playerName = playerName;
+        playerPiece = new PlayerPiece(this);
+        System.out.println("player " + character.getCharacterName() + "'s playerPiece: " + playerPiece);
     }
 
     public GameBoard getGameBoard()
@@ -116,14 +123,16 @@ public class Player
 
     public boolean Move(BoardSpace space)
     {
+        currentPosition.getGuiPane().removePlayer(getGuiPiece());
         currentPosition.removeOccupant(this);
         currentPosition = space;
+        currentPosition.getGuiPane().addPlayer(getGuiPiece());
         return space.addOccupant(this);
     }
 
     public Suggestion makeSuggestion(Character character, Room room, Weapon weapon)
     {
-        lastSuggestion = new Suggestion(room, weapon, character, this);
+        lastSuggestion = new Suggestion(character, room, weapon, this);
         return lastSuggestion;
     }
 
@@ -236,4 +245,13 @@ public class Player
         return foundCard != null;
     }
 
+    public void setGuiPiece(PlayerPiece pp)
+    {
+        playerPiece = pp;
+    }
+    
+    public PlayerPiece getGuiPiece()
+    {
+        return playerPiece;
+    }
 }

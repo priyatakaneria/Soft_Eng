@@ -5,6 +5,8 @@
  */
 package cluedo.gameLogic.gameBoard;
 
+import userInterface.boardTiles.EmptySquarePane;
+
 /**
  *
  * @author Jamie Thelin
@@ -14,6 +16,7 @@ public class EmptySquare extends BoardSpace
     public EmptySquare()
     {
         super(0);
+        setGuiPane(new EmptySquarePane(this));
     }
     
     /**

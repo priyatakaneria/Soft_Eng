@@ -5,6 +5,8 @@
  */
 package cluedo.gameLogic.gameBoard;
 
+import userInterface.boardTiles.RoomSquareDoorPane;
+
 /**
  *
  * @author Jamie
@@ -15,6 +17,7 @@ public class RoomSquareDoor extends RoomSquare
     public RoomSquareDoor()
     {
         super(-1);
+        setGuiPane(new RoomSquareDoorPane(this));
     }
 
     @Override

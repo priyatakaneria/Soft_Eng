@@ -16,7 +16,8 @@ public class Dice
 
     private int numDice;
     private Random rand;
-
+    private int[] lastRoll;
+    
     /**
      * creates a new instance of Dice simulating multiple dice rolls as defined
      * by numDice
@@ -59,11 +60,18 @@ public class Dice
      */
     public int roll()
     {
+        lastRoll = new int[numDice];
         int sum = 0;
         for (int i = 0; i < numDice; i++)
         {
-            sum += rand.nextInt(6) + 1;
+            lastRoll[i] = rand.nextInt(6) + 1;
+            sum += lastRoll[i];
         }
         return sum;
+    }
+    
+    public int[] getLastRolls()
+    {
+        return lastRoll;
     }
 }

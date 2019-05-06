@@ -5,6 +5,8 @@
  */
 package cluedo.gameLogic.gameBoard;
 
+import userInterface.boardTiles.RoomSquarePane;
+
 /**
  * a class used to denote the physical spaces on the board grid which belong to certain rooms
  * @author Jamie
@@ -18,6 +20,7 @@ public class RoomSquare extends BoardSpace
     {
         super(0);
         this.roomNo = roomNo;
+        setGuiPane(new RoomSquarePane(this));
     }
     
     public RoomSquare()
@@ -25,6 +28,9 @@ public class RoomSquare extends BoardSpace
         super(0);
     }
 
+    /**
+     * @return the room that this space belongs to
+     */
     public Room belongsTo()
     {
         return belongsTo;

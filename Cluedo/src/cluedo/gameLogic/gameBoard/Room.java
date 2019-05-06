@@ -17,20 +17,27 @@ public class Room extends BoardSpace implements ClueType
     public enum RoomType
     {
 
-        study("study"), hall("hall"), lounge("lounge"), diningRoom("dining room"),
-        kitchen("kitchen"), ballRoom("ball room"), conservatory("conservatory"),
-        billiardRoom("billiard room"), library("library");
+        kitchen("kitchen", 1), ballRoom("ball room", 2), conservatory("conservatory", 3), 
+        billiardRoom("billiard room", 4), library("library", 5), study("study", 6), 
+        hall("hall", 7), lounge("lounge", 8), diningRoom("dining room", 9);
 
         private final String nameString;
-
-        RoomType(String name)
+        private final int roomNo;
+        
+        RoomType(String name, int roomNo)
         {
             this.nameString = name;
+            this.roomNo = roomNo;
         }
 
         public String getRoomStringName()
         {
             return this.nameString;
+        }
+        
+        public int getRoomNo()
+        {
+            return roomNo;
         }
     };
 
@@ -53,11 +60,15 @@ public class Room extends BoardSpace implements ClueType
     {
         return this.roomName;
     }
+    
+    public int getRoomNo()
+    {
+        return roomName.getRoomNo();
+    }
 
     @Override
     public String toString()
     {
         return roomName.getRoomStringName();
     }
-
 }

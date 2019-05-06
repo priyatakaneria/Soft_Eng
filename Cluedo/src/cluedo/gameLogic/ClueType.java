@@ -12,5 +12,5 @@ package cluedo.gameLogic;
  */
 public interface ClueType
 {
-
+    
 }

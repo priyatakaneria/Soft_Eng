@@ -217,7 +217,7 @@ public class AIPlayer extends Player
     {
         Weapon bestWeapon = (Weapon) randChoice(mostLikely(Weapon.values()));
         Character bestCharacter = (Character) randChoice(mostLikely(Character.values()));
-        return new Suggestion((Room) getCurrentPosition(), bestWeapon, bestCharacter, this);
+        return new Suggestion(bestCharacter, (Room) getCurrentPosition(), bestWeapon, this);
     }
 
     private HashSet<ClueType> mostLikely(ClueType[] allClues)
@@ -322,6 +322,6 @@ public class AIPlayer extends Player
             i++;
         }
         Room bestRoom = (Room) randChoice(mostLikely(roomArray));
-        return new Accusation(bestRoom, bestWeapon, bestCharacter, this);
+        return new Accusation(bestCharacter, bestRoom, bestWeapon, this);
     }
 }

@@ -19,7 +19,7 @@ public class AccuSuggest
     private Character character;
     private cluedo.gameLogic.player.Player asker;
 
-    public AccuSuggest(Room room, Weapon weapon, Character character, Player asker) {
+    public AccuSuggest(Character character, Room room, Weapon weapon, Player asker) {
         this.room = room;
         this.weapon = weapon;
         this.character = character;

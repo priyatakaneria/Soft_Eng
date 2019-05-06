@@ -53,7 +53,6 @@ public class BoardConstructor
                 fileInput.read();
                 for (int x = 1; x <= width; x++)
                 {
-                    // System.out.println("[" + x + "," + y +"]");
                     gb.insertBoardSpace(x, y, readBoardSquare());
                 }
                 fileInput.readLine();

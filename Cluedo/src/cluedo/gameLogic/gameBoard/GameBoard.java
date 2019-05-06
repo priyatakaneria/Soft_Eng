@@ -54,8 +54,6 @@ public class GameBoard
         width = 24;
         height = 25;
         intrigueDeck = createIntrigueDeck();
-        clueDeck = createClueDeck();
-
     }
 
     public int getWidth()
@@ -73,7 +71,7 @@ public class GameBoard
      *
      * @param width
      */
-    public GameBoard(int width, int height)
+    public GameBoard(int width, int height) throws InvalidSetupFileException
     {
         dice = new Dice(2);
         this.width = width;
@@ -92,6 +90,11 @@ public class GameBoard
     public int rollDice()
     {
         return dice.roll();
+    }
+
+    public int[] getLastRolls()
+    {
+        return dice.getLastRolls();
     }
 
     /**
@@ -478,7 +481,7 @@ public class GameBoard
     /**
      * creates the room Objects from the unconnected grid.
      */
-    public void createRooms()
+    public void createRooms() throws InvalidSetupFileException
     {
         for (int y = 1; y < grid.get(1).size(); y++)
         {
@@ -495,28 +498,36 @@ public class GameBoard
                         if (nextRoomNo == 1)
                         {
                             newRoom = new Room(Room.RoomType.kitchen);
-                        } else if (nextRoomNo == 2)
+                        } //
+                        else if (nextRoomNo == 2)
                         {
                             newRoom = new Room(Room.RoomType.ballRoom);
-                        } else if (nextRoomNo == 3)
+                        } //
+                        else if (nextRoomNo == 3)
                         {
                             newRoom = new Room(Room.RoomType.conservatory);
-                        } else if (nextRoomNo == 4)
+                        } //
+                        else if (nextRoomNo == 4)
                         {
                             newRoom = new Room(Room.RoomType.billiardRoom);
-                        } else if (nextRoomNo == 5)
+                        } //
+                        else if (nextRoomNo == 5)
                         {
                             newRoom = new Room(Room.RoomType.library);
-                        } else if (nextRoomNo == 6)
+                        } //
+                        else if (nextRoomNo == 6)
                         {
                             newRoom = new Room(Room.RoomType.study);
-                        } else if (nextRoomNo == 7)
+                        } //
+                        else if (nextRoomNo == 7)
                         {
                             newRoom = new Room(Room.RoomType.hall);
-                        } else if (nextRoomNo == 8)
+                        } //
+                        else if (nextRoomNo == 8)
                         {
                             newRoom = new Room(Room.RoomType.lounge);
-                        } else if (nextRoomNo == 9)
+                        } //
+                        else if (nextRoomNo == 9)
                         {
                             newRoom = new Room(Room.RoomType.diningRoom);
                         }
@@ -527,12 +538,14 @@ public class GameBoard
                 }
             }
         }
+        rooms.remove(-1);
+        clueDeck = createClueDeck();
     }
 
     /**
      * Returns a set of all the available spaces that are accessible from a
      * particular BoardSpace given a particular dice roll.
-     * 
+     *
      * uses a breadth first search.
      *
      * @param start The BoardSpace to start the search at
@@ -638,6 +651,26 @@ public class GameBoard
         Collections.shuffle(deck);
     }
 
+    public HashSet<RoomSquare> getAllFromRoom(Room room)
+    {
+        HashSet<RoomSquare> allFromRoom = new HashSet<>();
+        for (int x = 1; x <= width; x++)
+        {
+            for (int y = 1; y <= width; y++)
+            {
+                BoardSpace nextSpace = getBoardSpace(x, y);
+                if (nextSpace instanceof RoomSquare)
+                {
+                    if (((RoomSquare) nextSpace).belongsTo() == room)
+                    {
+                        allFromRoom.add((RoomSquare) nextSpace);
+                    }
+                }
+            }
+        }
+        return allFromRoom;
+    }
+
     /**
      * @return The board in it's current state in a textual format.
      */
@@ -657,5 +690,4 @@ public class GameBoard
 
         return str;
     }
-
 }

@@ -27,36 +27,9 @@ public enum Character implements ClueType
         return this.nameString;
     }
     
-    /*public enum CharacterType
+    @Override
+    public String toString()
     {
-
-        ColMustard("Col Mustard"), ProfPlum("Prof Plum"), RevGreen("Rev Green"),
-        MrsPeacock("Mrs Peacock"), MissScarlett("Miss Scarlett"), MrsWhite("Mrs White");
-
-        private final String nameString;
-
-        CharacterType(String name)
-        {
-            this.nameString = name;
-        }
-
-        public String getCharacterStringName()
-        {
-            return this.nameString;
-        }
-
-    };
-
-    private final CharacterType characterName;
-
-    public Character(CharacterType characterName)
-    {
-        this.characterName = characterName;
+        return getCharacterName();
     }
-
-    public CharacterType getCharacterName()
-    {
-        return this.characterName;
-    }*/
-
 }
