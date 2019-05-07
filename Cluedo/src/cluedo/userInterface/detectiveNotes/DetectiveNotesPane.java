@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package userInterface.detectiveNotes;
+package cluedo.userInterface.detectiveNotes;
 
 import cluedo.gameLogic.player.DetectiveNotes;
 import cluedo.gameLogic.player.Player;

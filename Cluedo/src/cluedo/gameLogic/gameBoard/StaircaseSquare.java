@@ -1,13 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cluedo.gameLogic.gameBoard;
 
-import userInterface.boardTiles.StaircaseSquarePane;
+import cluedo.userInterface.boardTiles.StaircaseSquarePane;
 
 /**
+ * Represents the places on the board taken up by the staircase image on the
+ * original board.
  *
  * @author Jamie
  */

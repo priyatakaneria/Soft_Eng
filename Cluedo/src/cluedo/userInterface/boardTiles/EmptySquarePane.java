@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package userInterface.boardTiles;
+package cluedo.userInterface.boardTiles;
 
-import cluedo.gameLogic.gameBoard.SecretPassage;
+import cluedo.gameLogic.gameBoard.EmptySquare;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -14,15 +14,14 @@ import javafx.scene.shape.Rectangle;
  *
  * @author sb816
  */
-public class SecretPassagePane extends BoardSpacePane
+public class EmptySquarePane extends BoardSpacePane
 {
-    public SecretPassagePane(SecretPassage sp)
-    {   
-        super(sp);
-        setStdFill(Color.GREY);
+    public EmptySquarePane(EmptySquare es)
+    {
+        super(es);
+        setStdFill(Color.BLACK);
         setStdStroke(Color.BLACK);
         setNormalColours();
         getChildren().add(getTileShape());
     }
-
 }

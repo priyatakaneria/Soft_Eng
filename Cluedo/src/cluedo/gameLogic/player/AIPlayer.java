@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cluedo.gameLogic.player;
 
 import cluedo.gameLogic.Accusation;
@@ -21,7 +16,8 @@ import java.util.HashSet;
 import java.util.Random;
 
 /**
- *
+ * represents an AI controlled player
+ * 
  * @author Jamie
  */
 public class AIPlayer extends Player
@@ -86,7 +82,6 @@ public class AIPlayer extends Player
                 availableRooms.add((Room) bs);
             }
         }
-
         if (availableRooms.size() > 0)
         {
             int randRoom = randDecision.nextInt(availableRooms.size());
@@ -103,21 +98,17 @@ public class AIPlayer extends Player
         else
         {
             newSpace = randChoice(availableMoves);
-//            int randSpace = randDecision.nextInt(availableMoves.size());
-//            int i = 0;
-//            for (BoardSpace r : availableMoves)
-//            {
-//                if (i == randSpace)
-//                {
-//                    newSpace = r;
-//                }
-//                i++;
-//            }
         }
 
         return newSpace;
     }
 
+    /**
+     * Determines a random object from a collection
+     * @param <T> the required return type
+     * @param c the collection
+     * @return a random element from c
+     */
     public <T> T randChoice(Collection<T> c)
     {
         T randChoice = null;
@@ -220,6 +211,11 @@ public class AIPlayer extends Player
         return new Suggestion(bestCharacter, (Room) getCurrentPosition(), bestWeapon, this);
     }
 
+    /**
+     * returns the most likely of an array of clues 
+     * @param allClues the array of clues to search through
+     * @return the set of the equally most likely clues from allClues 
+     */
     private HashSet<ClueType> mostLikely(ClueType[] allClues)
     {
         DetectiveNotes detNotes = getDetNotes();
@@ -255,6 +251,11 @@ public class AIPlayer extends Player
         return bestChoices;
     }
     
+    /**
+     * returns a Set of possible clues from an array of clues
+     * @param allClues the array of clues to search through
+     * @return the set of all possible clues
+     */
     private HashSet<ClueType> possibleClues(ClueType[] allClues)
     {
         // determine possible clues which we don't know a player has / doesn't have

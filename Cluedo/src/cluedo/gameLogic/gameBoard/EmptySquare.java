@@ -1,13 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cluedo.gameLogic.gameBoard;
 
-import userInterface.boardTiles.EmptySquarePane;
+import cluedo.userInterface.boardTiles.EmptySquarePane;
 
 /**
+ * Represents a non-walkable tile which are located at the edges of the board to
+ * ensure that the GameBoard has the same width/height throughout.
  *
  * @author Jamie Thelin
  */
@@ -18,9 +15,9 @@ public class EmptySquare extends BoardSpace
         super(0);
         setGuiPane(new EmptySquarePane(this));
     }
-    
+
     /**
-     * @return An '_' character to represent an empty space.
+     * @return a '#' character to represent an empty space.
      */
     @Override
     public String toString()

@@ -1,23 +1,31 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cluedo.gameLogic;
 
 /**
+ * Represents an instance of a clue card, stores a clue (this is an instance of
+ * ClueType, which can be a room, character or weapon.
  *
  * @author Tymek
  */
-public class ClueCard extends Card {
+public class ClueCard extends Card
+{
     private final ClueType cardType;
 
-    public ClueCard(ClueType card) {
+    /**
+     * Stores the clue specified in the arguments.
+     *
+     * @param clue the clue this object should represent
+     */
+    public ClueCard(ClueType clue)
+    {
         super(CardType.Clue);
-        this.cardType = card;
+        this.cardType = clue;
     }
 
-    public ClueType getClueType() {
+    /**
+     * @return returns the clue this card represents
+     */
+    public ClueType getClueType()
+    {
         return this.cardType;
     }
 }

@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package userInterface.detectiveNotes;
+package cluedo.userInterface.detectiveNotes;
 
 import cluedo.gameLogic.ClueType;
 import cluedo.gameLogic.player.DetNoteType;
 import cluedo.gameLogic.player.DetectiveNotes;
 import cluedo.gameLogic.player.Player;
-import userInterface.Game;
+import cluedo.userInterface.Game;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Border;

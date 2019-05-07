@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cluedo.gameLogic.gameBoard;
 
 import cluedo.gameLogic.Envelope;
@@ -24,7 +19,8 @@ import java.util.Queue;
 import java.util.Stack;
 
 /**
- *
+ * Represents the logical gameboard
+ * 
  * @author Jamie Thelin
  */
 public class GameBoard
@@ -57,11 +53,16 @@ public class GameBoard
         intrigueDeck = createIntrigueDeck();
     }
 
+    /**
+     * @return the width of the board
+     */
     public int getWidth()
     {
         return width;
     }
-
+    /**
+     * @return the height of the board
+     */
     public int getHeight()
     {
         return height;
@@ -93,6 +94,9 @@ public class GameBoard
         return dice.roll();
     }
 
+    /**
+     * @return the int[] containing the previous rolls of the dice
+     */
     public int[] getLastRolls()
     {
         return dice.getLastRolls();
@@ -427,13 +431,16 @@ public class GameBoard
                     if (north instanceof RoomSquare)
                     {
                         ((SecretPassage) currSquare).setRoomB(rooms.get(((RoomSquare) north).getRoomNo()));
-                    } else if (east instanceof RoomSquare)
+                    } //
+                    else if (east instanceof RoomSquare)
                     {
                         ((SecretPassage) currSquare).setRoomB(rooms.get(((RoomSquare) east).getRoomNo()));
-                    } else if (south instanceof RoomSquare)
+                    } //
+                    else if (south instanceof RoomSquare)
                     {
                         ((SecretPassage) currSquare).setRoomB(rooms.get(((RoomSquare) south).getRoomNo()));
-                    } else if (west instanceof RoomSquare)
+                    } //
+                    else if (west instanceof RoomSquare)
                     {
                         ((SecretPassage) currSquare).setRoomB(rooms.get(((RoomSquare) west).getRoomNo()));
                     }
@@ -442,7 +449,8 @@ public class GameBoard
                     try
                     {
                         currSquare.setAdjacent(2, ((SecretPassage) currSquare).getRoomA());
-                    } catch (NullPointerException npe)
+                    } //
+                    catch (NullPointerException npe)
                     {
                         throw new InvalidSetupFileException();
                     }
@@ -624,7 +632,6 @@ public class GameBoard
                              * there is no board space in that direction
                              */
                         }
-                        // ToDo: sort out boardSquareDoors not working!!
                     }
                 } //
                 else

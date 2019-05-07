@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cluedo.gameLogic;
 
 import cluedo.gameLogic.gameBoard.BoardSpace;
@@ -17,9 +12,18 @@ import java.util.Queue;
 import java.util.concurrent.Semaphore;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
-import userInterface.Game;
+import cluedo.userInterface.Game;
 
 /**
+ * This object does the actual management of who's turn it is and what point in
+ * the turn process they are in.
+ *
+ * This is implemented rather poorly and is unfinished, it is very tightly bound
+ * to the Game class in the user interface, which is bad practice.
+ *
+ * Uses some hacky methods which I'm not proud of to retrieve data from the GUI,
+ * there is definitely a better way of doing this, but it's too close to the
+ * deadline for me to refactor the whole thing.
  *
  * @author Jamie Thelin
  */
@@ -34,6 +38,16 @@ public class TurnManagerThread<T> extends Task
     private final Game GUI;
     HashSet<BoardSpace> availableMoves;
 
+    /**
+     * Instantiates the Thread with all the variables defined in TurnManager
+     *
+     * @param gameBoard the GameBoard used in this instance of the game
+     * @param turnQueue the queue of players
+     * @param realPlayers the set of all players who take turns and respond to
+     * suggestions
+     * @param currPlayer the player who's turn it is currently
+     * @param GUI the javafx application
+     */
     public TurnManagerThread(GameBoard gameBoard, Queue<Player> turnQueue, Queue<Player> realPlayers, Player currPlayer, Game GUI)
     {
         this.gameBoard = gameBoard;
@@ -43,6 +57,11 @@ public class TurnManagerThread<T> extends Task
         this.GUI = GUI;
     }
 
+    /**
+     * The initial call to this object.
+     *
+     * @return 1 because the superclass Task requires a return value.
+     */
     @Override
     public Integer call()
     {
@@ -50,12 +69,25 @@ public class TurnManagerThread<T> extends Task
         return 1;
     }
 
+    /**
+     * controls the player turns and performs the following actions in the 
+     * following order:
+     * 
+     *  1. roll dice
+     *  2. move
+     * 3a. pickup intrigue card (if on intrigue space)
+     * 3b. make suggestion (if in room)
+     *  4. possibly make accusation
+     *  5. end turn
+     * 
+     * The loop escapes once there is only one player left in the game or a
+     * player makes a correct accusation.
+     */
     public void gameLoop()
     {
         boolean gameOver = false;
         while (!gameOver)
         {
-            System.out.println("TurnManager Thread: " + Thread.currentThread().getName());
             currPlayer = turnQueue.poll();
             System.out.println(currPlayer.getCharacter().getCharacterName());
             if (turnQueue.size() == 0) // if there are no other player remaining in the game
@@ -72,13 +104,12 @@ public class TurnManagerThread<T> extends Task
                 realPlayers.add(realPlayers.poll());
             }
         }
-        /**
-         * GUI.winningsPage is the end screen, takes the current (winning)
-         * player as an argument.
-         */
-        //GUI.winningsPage(currPlayer);
+        GUI.winningsPage(currPlayer);
     }
 
+    /**
+     * waits for the user to click on the dice
+     */
     private class GetDiceRoll implements Runnable
     {
         private int rollValue;
@@ -101,6 +132,9 @@ public class TurnManagerThread<T> extends Task
         }
     }
 
+    /**
+     * determines the set of available moves
+     */
     private class GetAvailableMoves implements Runnable
     {
         private HashSet<BoardSpace> avail;
@@ -128,6 +162,9 @@ public class TurnManagerThread<T> extends Task
         }
     }
 
+    /**
+     * prompts the user to select a new board space to move to 
+     */
     private class GetChosenMove implements Runnable
     {
         private BoardSpace bs;
@@ -148,6 +185,9 @@ public class TurnManagerThread<T> extends Task
         }
     }
 
+    /**
+     * moves the player to the newly selected boardSpace.
+     */
     private class MovePlayer implements Runnable
     {
         private BoardSpace newSpace;
@@ -167,6 +207,9 @@ public class TurnManagerThread<T> extends Task
         }
     }
 
+    /**
+     * prompts the user to click on the end turn button.
+     */
     private class EndTurn implements Runnable
     {
         private boolean endTurn = false;
@@ -184,6 +227,9 @@ public class TurnManagerThread<T> extends Task
         }
     }
 
+    /**
+     * prompts the user to make a suggestion.
+     */
     private class MakeSuggestion implements Runnable
     {
         private Suggestion suggestion = null;
@@ -201,6 +247,10 @@ public class TurnManagerThread<T> extends Task
         }
     }
 
+    /**
+     * ensures the latest Platform.runLater() call is completed before 
+     * continuing.
+     */
     public static void waitForRunLater()
     {
         try
@@ -217,7 +267,7 @@ public class TurnManagerThread<T> extends Task
     /**
      * runs the whole process of rolling dice, moving players, making a
      * suggestion and an accusation, picking up intrigueCards, showing clues,
-     * marking detective notes etc.
+     * marking detective notes for a single player
      *
      * @param player the player whose turn it is
      * @return a boolean for whether the game has been one (i.e. a correct
@@ -315,7 +365,7 @@ public class TurnManagerThread<T> extends Task
             }
             Platform.runLater(new MovePlayer(newSpace, player));
             waitForRunLater();
-            
+
             Platform.runLater(new Runnable()
             {
                 @Override

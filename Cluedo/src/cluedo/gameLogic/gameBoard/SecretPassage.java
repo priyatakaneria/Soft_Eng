@@ -1,13 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cluedo.gameLogic.gameBoard;
 
-import userInterface.boardTiles.SecretPassagePane;
+import cluedo.userInterface.boardTiles.SecretPassagePane;
 
 /**
+ * Represents the secret passage squares on the board linking two rooms
  *
  * @author Jamie Thelin
  */
@@ -17,22 +13,11 @@ public class SecretPassage extends BoardSpace
     private Room roomB;
     private int roomNoA;
 
-    public SecretPassage(Room roomA, Room roomB)
-    {
-        super(0);
-        this.roomA = roomA;
-        this.roomB = roomB;
-        super.setAdjacent(2, roomA);
-        super.setAdjacent(0, roomB);
-    }
-    
-    public SecretPassage(Room roomA)
-    {
-        super(0);
-        this.roomA = roomA;
-        super.setAdjacent(2, roomA);
-    }
-    
+    /**
+     * Creates a new SecretPassage given the room number it links to
+     *
+     * @param roomNoA the room this space links to
+     */
     public SecretPassage(int roomNoA)
     {
         super(0);
@@ -87,12 +72,11 @@ public class SecretPassage extends BoardSpace
     {
         return roomNoA;
     }
-    
+
     @Override
     public String toString()
     {
         return "" + roomNoA + " ";
     }
-    
-    
+
 }

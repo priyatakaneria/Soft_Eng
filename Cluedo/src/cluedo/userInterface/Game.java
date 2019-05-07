@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package userInterface;
+package cluedo.userInterface;
 
 import cluedo.gameLogic.Accusation;
 import cluedo.gameLogic.ClueCard;
@@ -63,7 +63,7 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser;
-import userInterface.boardTiles.RoomPane;
+import cluedo.userInterface.boardTiles.RoomPane;
 
 import cluedo.gameLogic.Character;
 import cluedo.gameLogic.TurnManager;
@@ -92,14 +92,14 @@ import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import userInterface.boardTiles.BoardSpacePane;
+import cluedo.userInterface.boardTiles.BoardSpacePane;
 import javafx.stage.FileChooser;
-import userInterface.boardTiles.BoardSquarePane;
-import userInterface.boardTiles.EmptySquarePane;
-import userInterface.boardTiles.RoomSquareDoorPane;
-import userInterface.boardTiles.RoomSquarePane;
-import userInterface.boardTiles.SecretPassagePane;
-import userInterface.boardTiles.StaircaseSquarePane;
+import cluedo.userInterface.boardTiles.BoardSquarePane;
+import cluedo.userInterface.boardTiles.EmptySquarePane;
+import cluedo.userInterface.boardTiles.RoomSquareDoorPane;
+import cluedo.userInterface.boardTiles.RoomSquarePane;
+import cluedo.userInterface.boardTiles.SecretPassagePane;
+import cluedo.userInterface.boardTiles.StaircaseSquarePane;
 
 /**
  *

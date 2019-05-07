@@ -1,41 +1,30 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cluedo.gameLogic;
 
 import cluedo.gameLogic.gameBoard.BoardConstructor;
-import cluedo.gameLogic.gameBoard.BoardSpace;
-import cluedo.gameLogic.gameBoard.BoardSquare;
 import cluedo.gameLogic.gameBoard.GameBoard;
 import cluedo.gameLogic.gameBoard.InvalidSetupFileException;
-import cluedo.gameLogic.gameBoard.Room;
 import cluedo.gameLogic.player.AIPlayer;
 import cluedo.gameLogic.player.HumanPlayer;
 import cluedo.gameLogic.player.Player;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.ArrayList;
 import java.util.Queue;
-import javafx.application.Application;
-import userInterface.Game;
+import cluedo.userInterface.Game;
 
 /**
+ * Manages the turn process of the game, along with win conditions
  *
  * @author Jamie
  */
 public class TurnManager
 {
-
     private GameBoard gameBoard;
     private Queue<Player> turnQueue;
     private Queue<Player> realPlayers;
     private ArrayList<Player> allPlayers;
-    
+
     private Player currPlayer;
     private Game GUI;
 
@@ -65,7 +54,7 @@ public class TurnManager
         } //
         catch (FileNotFoundException e)
         {
-            // display some gui error?
+            // this never occurs since the filname is provided by a file chooser
         }
 
         init(characterPlayerMap, noAiPlayers);
@@ -81,13 +70,17 @@ public class TurnManager
         return gameBoard;
     }
 
+    /**
+     * @return the player who's turn it is.
+     */
     public Player getCurrPlayer()
     {
         return currPlayer;
     }
-    
+
     /**
-     * @return the Queue of players in the game, AI and Human 
+     * @return the Queue of players in the game, AI and Human, not including
+     * 'empty' players who do not take turns or respond to suggestions.
      */
     public Queue<Player> getRealPlayers()
     {
@@ -99,8 +92,10 @@ public class TurnManager
      * (../customisation/board layout/default.txt), called if default board
      * button pressed in the GUI
      *
-     * @param characterPlayerMap The mappings from the player's name (as a
-     * String) to their respective chosen Character.
+     * @param characterPlayerMap The mappings from the Character chosen to the
+     * player's name (as a String)
+     * @param noAiPlayers The number of players to be controlled by the AI.
+     * @param GUI the instance of the javafx application that called this constructor
      */
     public TurnManager(HashMap<Character, String> characterPlayerMap, int noAiPlayers, Game GUI) throws InvalidSetupFileException
     {
@@ -121,7 +116,12 @@ public class TurnManager
     }
 
     /**
-     * performs most of the initialisation besides the board construction
+     * performs most of the initialisation besides the board construction,
+     * including creating the players and dealing cards.
+     * 
+     * @param characterPlayerMap The mappings from the Character chosen to the
+     * player's name (as a String)
+     * @param noAiPlayers The number of players to be controlled by the AI.
      */
     private void init(HashMap<Character, String> characterPlayerMap, int noAiPlayers)
     {
@@ -139,9 +139,9 @@ public class TurnManager
             if (characterPlayerMap.keySet().contains(c))
             {
                 int[] startCoords = gameBoard.getSpaceCoords(gameBoard.getStartingSquares().get(c));
-                System.out.println(c.getCharacterName() + " starting at " + startCoords[0]+","+startCoords[1]);
+                System.out.println(c.getCharacterName() + " starting at " + startCoords[0] + "," + startCoords[1]);
                 newPlayer = new HumanPlayer(c, characterPlayerMap.get(c), gameBoard, gameBoard.getStartingSquares().get(c), realPlayers);
-               
+
                 //newPlayer.Move(gameBoard.getStartingSquares().get(newPlayer.getCharacter()));
                 turnQueue.add(newPlayer);
                 realPlayers.add(newPlayer);
@@ -161,7 +161,7 @@ public class TurnManager
             }
             allPlayers.add(newPlayer);
         }
-        
+
         for (Player p : allPlayers)
         {
             if (p instanceof HumanPlayer)
@@ -181,17 +181,19 @@ public class TurnManager
         }
     }
 
+    /**
+     * Creates the separate thread and starts it
+     */
     public void gameLoop()
     {
-        System.out.println("entering turnmanager gameLoop()");
-        //new Thread(new TurnManagerThread(gameBoard, turnQueue, realPlayers, currPlayer, GUI)).start();
         TurnManagerThread<Integer> task = new TurnManagerThread<Integer>(gameBoard, turnQueue, realPlayers, currPlayer, GUI);
-        System.out.println("starting thread");
         Thread th = new Thread(task);
         th.start();
-        System.out.println("thread started");
     }
 
+    /**
+     * @return the set of all players in the game
+     */
     public Iterable<Player> getAllPlayers()
     {
         return allPlayers;

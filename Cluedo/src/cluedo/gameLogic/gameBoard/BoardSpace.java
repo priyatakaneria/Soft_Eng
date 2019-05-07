@@ -1,18 +1,17 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cluedo.gameLogic.gameBoard;
 
 import cluedo.gameLogic.player.Player;
 import java.util.ArrayList;
 import java.util.HashMap;
-import userInterface.boardTiles.BoardSpacePane;
+import cluedo.userInterface.boardTiles.BoardSpacePane;
 
 /**
  * An abstract implementation of an arbitrary space that players can enter on
  * the Cluedo board.
+ *
+ * Each instance has an adjacency HashMap which maps integer 0 through 3 (for
+ * North, East, South and West) to an ArrayList of BoardSpaces, describing the
+ * spaces which a player can move into from this space.
  *
  * @author Jamie Thelin
  */
@@ -65,13 +64,13 @@ public abstract class BoardSpace
         }
         return false;
     }
-    
+
     /**
-     * Removes a player from a space, providing it is currently there. 
+     * Removes a player from a space, providing it is currently there.
      *
      * @param p The player object to remove from the space.
-     * @return true if the player was removed successfully, false if the space 
-     * does not contain the player. 
+     * @return true if the player was removed successfully, false if the space
+     * does not contain the player.
      */
     public boolean removeOccupant(Player p)
     {
@@ -115,14 +114,6 @@ public abstract class BoardSpace
         {
             space.setAdjacent((index + 2) % 4, this);
         }
-        
-        /*
-        adjacency[index] = space;
-        if (space.getAdjacency()[(index + 2) % 4] != this)
-        {
-            space.setAdjacent((index + 2) % 4, this);
-        }
-        */
     }
 
     /**
@@ -143,11 +134,19 @@ public abstract class BoardSpace
         this.occupantLimit = occupantLimit;
     }
 
+    /**
+     * Sets the GUI object representing this logical BoardSpace.
+     *
+     * @param bsp the BoardSquarePane which to store
+     */
     public void setGuiPane(BoardSpacePane bsp)
     {
         guiPane = bsp;
     }
-    
+
+    /**
+     * @return the GUI object stored by this BoardSpace
+     */
     public BoardSpacePane getGuiPane()
     {
         return guiPane;

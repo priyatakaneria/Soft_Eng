@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package userInterface.boardTiles;
+package cluedo.userInterface.boardTiles;
 
 import cluedo.gameLogic.gameBoard.RoomSquare;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import userInterface.PlayerPiece;
+import cluedo.userInterface.PlayerPiece;
 
 /**
  *

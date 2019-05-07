@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package userInterface;
+package cluedo.userInterface;
 
 import cluedo.gameLogic.ClueCard;
 import cluedo.gameLogic.player.Player;
@@ -16,7 +16,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-import userInterface.detectiveNotes.DetectiveNotesPane;
+import cluedo.userInterface.detectiveNotes.DetectiveNotesPane;
 
 /**
  *

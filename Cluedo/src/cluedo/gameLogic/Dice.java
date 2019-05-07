@@ -1,13 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cluedo.gameLogic;
 
 import java.util.Random;
 
 /**
+ * a logical representation of the dice n the game
  *
  * @author jamie
  */
@@ -17,7 +13,7 @@ public class Dice
     private int numDice;
     private Random rand;
     private int[] lastRoll;
-    
+
     /**
      * creates a new instance of Dice simulating multiple dice rolls as defined
      * by numDice
@@ -31,11 +27,19 @@ public class Dice
         this.rand = new Random();
     }
 
+    /**
+     * @return the number of dice this was instantiated with
+     */
     public int getNumDice()
     {
         return numDice;
     }
 
+    /**
+     * changes the number of dice required, unlikely to be used.
+     *
+     * @param numDice the new number of dice to set
+     */
     public void setNumDice(int numDice)
     {
         this.numDice = numDice;
@@ -55,6 +59,8 @@ public class Dice
     }
 
     /**
+     * stores the individual roll of each die and returns the sum.
+     *
      * @return the sum of a series of simulated dice rolls, one for each die as
      * defined by numDice
      */
@@ -69,7 +75,10 @@ public class Dice
         }
         return sum;
     }
-    
+
+    /**
+     * @return the array of previous rolls for each die
+     */
     public int[] getLastRolls()
     {
         return lastRoll;
