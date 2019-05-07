@@ -91,7 +91,7 @@ public class TurnManagerThread<T> extends Task
         @Override
         public void run()
         {
-            GUI.setWaitingForDice(true);
+
             rollValue = GUI.rollDice();
         }
 
@@ -117,6 +117,7 @@ public class TurnManagerThread<T> extends Task
         public void run()
         {
             avail = gameBoard.availableMoves(p.getCurrentPosition(), rollValue);
+            System.out.println(avail);
             GUI.setWaitingForMove(true);
             GUI.chooseSpace(avail);
         }
@@ -138,7 +139,7 @@ public class TurnManagerThread<T> extends Task
         @Override
         public void run()
         {
-            bs = GUI.getChosenSpace();
+            bs = GUI.getMovementChoice();
         }
 
         public BoardSpace getValue()
@@ -146,7 +147,7 @@ public class TurnManagerThread<T> extends Task
             return bs;
         }
     }
-    
+
     private class MovePlayer implements Runnable
     {
         private BoardSpace newSpace;
@@ -157,24 +158,26 @@ public class TurnManagerThread<T> extends Task
             this.newSpace = newSpace;
             this.player = player;
         }
+
         @Override
         public void run()
         {
             player.Move(newSpace);
-            
+
         }
     }
-    
+
     private class EndTurn implements Runnable
     {
         private boolean endTurn = false;
+
         @Override
         public void run()
         {
             GUI.setWaitingForEndTurn(true);
             endTurn = GUI.getEndTurn();
         }
-        
+
         public boolean getEndTurn()
         {
             return endTurn;
@@ -184,18 +187,20 @@ public class TurnManagerThread<T> extends Task
     private class MakeSuggestion implements Runnable
     {
         private Suggestion suggestion = null;
+
         @Override
         public void run()
         {
             suggestion = GUI.makeSuggestion(currPlayer);
+            GUI.setNewSuggestion(null);
         }
-        
+
         public Suggestion getSuggestion()
         {
             return suggestion;
         }
     }
-    
+
     public static void waitForRunLater()
     {
         try
@@ -244,6 +249,7 @@ public class TurnManagerThread<T> extends Task
                     GUI.displayTurn(player);
                 }
             });
+            waitForRunLater();
 
             // roll dice
             int rollValue = 0;
@@ -254,13 +260,31 @@ public class TurnManagerThread<T> extends Task
             } //
             else
             {
+                Platform.runLater(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        GUI.setWaitingForDice(true);
+                    }
+                });
+                waitForRunLater();
+                GetDiceRoll rv = new GetDiceRoll();
                 while (rollValue == 0)
                 {
-                    GetDiceRoll rv = new GetDiceRoll();
                     Platform.runLater(rv);
                     waitForRunLater();
                     rollValue = rv.getValue();
                 }
+                Platform.runLater(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        GUI.setRollValue(0);
+                    }
+                });
+                waitForRunLater();
 
                 System.out.println("received dice");
 
@@ -272,7 +296,7 @@ public class TurnManagerThread<T> extends Task
             Platform.runLater(gam);
             waitForRunLater();
             availableMoves = gam.getValue();
-            
+
             BoardSpace newSpace = null;
             if (ai)
             {
@@ -292,8 +316,18 @@ public class TurnManagerThread<T> extends Task
             Platform.runLater(new MovePlayer(newSpace, player));
             waitForRunLater();
             
+            Platform.runLater(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    GUI.setMovementChoice(null);
+                }
+            });
+            waitForRunLater();
+
             System.out.println("player moved");
-            
+
             // intrigue cards
             BoardSpace playerPosition = player.getCurrentPosition();
             if (playerPosition instanceof BoardSquare)
@@ -359,9 +393,18 @@ public class TurnManagerThread<T> extends Task
                 } //
                 else
                 {
+                    Platform.runLater(new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            GUI.setWaitingForSuggestion(true);
+                        }
+                    });
+                    waitForRunLater();
+                    MakeSuggestion ns = new MakeSuggestion();
                     while (newSuggestion == null)
                     {
-                        MakeSuggestion ns = new MakeSuggestion();
                         Platform.runLater(ns);
                         waitForRunLater();
                         newSuggestion = ns.getSuggestion();

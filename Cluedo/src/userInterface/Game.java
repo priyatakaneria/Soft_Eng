@@ -150,14 +150,15 @@ public class Game extends Application
     //turn manager misc.:
     private boolean waitingForDice;
     private int lastRoll;
-    private boolean suggestionEscape;
+    private boolean waitingForSuggestion;
     private boolean accusationEscape;
 
     private boolean waitingForMove;
     private HashSet<BoardSpace> availableMoves;
     private BoardSpace movementChoice;
     private boolean waitingForEndTurn;
-    private boolean waitingForSuggestion;
+    
+    private Player suggestionAsker;
 
     @Override
     public void start(Stage primaryStage)
@@ -285,7 +286,14 @@ public class Game extends Application
                 for (RoomSquare rs : allSquares)
                 {
                     BoardSpacePane guiPane = rs.getGuiPane();
-                    guiPane.setTmpColours(Color.ORANGE, Color.ORANGERED);
+                    if (guiPane instanceof RoomSquarePane)
+                    {
+                        guiPane.setTmpColours(Color.ORANGE, guiPane.getStdStroke());
+                    }
+                    else
+                    {
+                        guiPane.setTmpColours(Color.ORANGE, Color.ORANGERED);
+                    }
                 }
             } //
             else
@@ -296,9 +304,14 @@ public class Game extends Application
         }
     }
 
-    public BoardSpace getChosenSpace()
+    public BoardSpace getMovementChoice()
     {
         return movementChoice;
+    }
+    
+    public void setMovementChoice(BoardSpace bs)
+    {
+        movementChoice = bs;
     }
 
     public void setWaitingForMove(boolean b)
@@ -339,8 +352,18 @@ public class Game extends Application
      */
     public Suggestion makeSuggestion(Player player)
     {
-        waitingForSuggestion = true;
+        suggestionAsker = player;
         return newSuggestion;
+    }
+    
+    public void setWaitingForSuggestion(boolean b)
+    {
+        waitingForSuggestion = true;
+    }
+    
+    public void setNewSuggestion(Suggestion s)
+    {
+        newSuggestion = s;
     }
 
     /**
@@ -522,6 +545,7 @@ public class Game extends Application
             alert.setTitle("Error");
             alert.showAndWait();
             window.setScene(scene1);
+            e.printStackTrace();
         }
     }
 
@@ -816,7 +840,7 @@ public class Game extends Application
         Button makeSuggestionBtn = new Button("Make Suggestion");
         makeSuggestionBtn.setOnAction(btnPress ->
         {
-            newSuggestion = readSuggestion((String) characterChoice.getValue(), (String) currentRoom.getText(), (String) weaponChoice.getValue(), tm.getCurrPlayer());
+            newSuggestion = readSuggestion((String) characterChoice.getValue(), (String) weaponChoice.getValue(), suggestionAsker);
             if (newSuggestion == null)
             {
                 Alert alert = new Alert(AlertType.WARNING);
@@ -826,7 +850,7 @@ public class Game extends Application
             } //
             else
             {
-                suggestionEscape = true;
+                waitingForSuggestion = true;
             }
         });
 
@@ -984,7 +1008,7 @@ public class Game extends Application
         }
     }
 
-    private Suggestion readSuggestion(String character, String room, String weapon, Player currPlayer)
+    private Suggestion readSuggestion(String character, String weapon, Player currPlayer)
     {
         Character chosenCharacter = null;
         for (Character c : Character.values())
@@ -995,12 +1019,9 @@ public class Game extends Application
             }
         }
         Room chosenRoom = null;
-        for (Room r : gb.getRooms().values())
+        if (currPlayer != null)
         {
-            if (r.getRoomName().getRoomStringName().equals(room))
-            {
-                chosenRoom = r;
-            }
+            chosenRoom = (Room) currPlayer.getCurrentPosition();
         }
         Weapon chosenWeapon = null;
         for (Weapon w : Weapon.values())
@@ -1061,5 +1082,10 @@ public class Game extends Application
     public static Border createSolidBorder(Color c)
     {
         return new Border(new BorderStroke(c, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT));
+    }
+
+    public void setRollValue(int i)
+    {
+        lastRoll = i;
     }
 }

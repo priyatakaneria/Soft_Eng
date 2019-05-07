@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Queue;
 import java.util.Stack;
 
@@ -199,7 +200,13 @@ public class GameBoard
         shuffleDeck(roomDeck);
         shuffleDeck(weaponDeck);
 
-        envelope = new Envelope((ClueCard) characterDeck.pop(), (ClueCard) roomDeck.pop(), (ClueCard) weaponDeck.pop());
+        try
+        {
+            envelope = new Envelope((ClueCard) characterDeck.pop(), (ClueCard) roomDeck.pop(), (ClueCard) weaponDeck.pop());
+        } catch (NoSuchElementException e)
+        {
+            throw new InvalidSetupFileException();
+        }
 
         LinkedList<Card> masterDeck = new LinkedList<>();
         masterDeck.addAll(characterDeck);
@@ -303,7 +310,7 @@ public class GameBoard
     {
         if (x < 1 || x > width || y < 1)
         {
-            return new EmptySquare();
+            return null;
         } else
         {
             return grid.get(x).get(y);
@@ -403,7 +410,7 @@ public class GameBoard
                     BoardSpace east = getBoardSpace(x + 1, y);
                     if (east != null)
                     {
-                        if (south instanceof BoardSquare)
+                        if (east instanceof BoardSquare)
                         {
                             currSquare.setAdjacent(1, east);
                         }
@@ -582,9 +589,10 @@ public class GameBoard
             if (distanceMappings.get(next) == diceRoll)
             {
                 possibleMoves.add(next);
-            } else if (distanceMappings.get(next) < diceRoll)
+            } //
+            else if (distanceMappings.get(next) < diceRoll)
             {
-                seen.add(next);
+                //seen.add(next);
                 if (!(next instanceof Room))
                 {
                     for (int i = 0; i < 4; i++)
@@ -594,13 +602,22 @@ public class GameBoard
                             for (int j = 0; j < next.getAdjacency().get(i).size(); j++)
                             {
                                 BoardSpace nextChild = next.getAdjacency().get(i).get(j);
-                                if (!toDo.contains(nextChild) && !seen.contains(nextChild) && !nextChild.isFull())
+                                if (distanceMappings.keySet().contains(nextChild))
+                                {
+                                    if (distanceMappings.get(nextChild) > distanceMappings.get(next) + 1)
+                                    {
+                                        distanceMappings.put(nextChild, distanceMappings.get(next) + 1);
+                                        toDo.add(nextChild);
+                                    }
+                                }
+                                if (!toDo.contains(nextChild) && !nextChild.isFull())
                                 {
                                     distanceMappings.put(nextChild, distanceMappings.get(next) + 1);
                                     toDo.add(nextChild);
                                 }
                             }
-                        } catch (NullPointerException npe)
+                        } //
+                        catch (NullPointerException npe)
                         {
                             /**
                              * Adjacency array was null in this location i.e.
@@ -609,12 +626,21 @@ public class GameBoard
                         }
                         // ToDo: sort out boardSquareDoors not working!!
                     }
-                } else
+                } //
+                else
                 {
                     possibleMoves.add(next);
                 }
             }
         }
+        for (BoardSpace bs : distanceMappings.keySet())
+        {
+            if (distanceMappings.get(bs) <= diceRoll)
+            {
+                possibleMoves.add(bs);
+            }
+        }
+        System.out.println(possibleMoves);
         return possibleMoves;
     }
 
