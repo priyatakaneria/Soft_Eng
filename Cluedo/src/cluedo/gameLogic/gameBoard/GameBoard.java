@@ -603,34 +603,43 @@ public class GameBoard
                 //seen.add(next);
                 if (!(next instanceof Room))
                 {
-                    for (int i = 0; i < 4; i++)
+                    if (next instanceof SecretPassage)
                     {
-                        try
+                        System.out.println("Secret passage to room "+((SecretPassage) next).getRoomA());
+                        distanceMappings.put(((SecretPassage) next).getRoomA(), 2);
+                        toDo.add(((SecretPassage) next).getRoomA());
+                    }
+                    else
+                    {
+                        for (int i = 0; i < 4; i++)
                         {
-                            for (int j = 0; j < next.getAdjacency().get(i).size(); j++)
+                            try
                             {
-                                BoardSpace nextChild = next.getAdjacency().get(i).get(j);
-                                if (distanceMappings.keySet().contains(nextChild))
+                                for (int j = 0; j < next.getAdjacency().get(i).size(); j++)
                                 {
-                                    if (distanceMappings.get(nextChild) > distanceMappings.get(next) + 1)
+                                    BoardSpace nextChild = next.getAdjacency().get(i).get(j);
+                                    if (distanceMappings.keySet().contains(nextChild))
+                                    {
+                                        if (distanceMappings.get(nextChild) > distanceMappings.get(next) + 1)
+                                        {
+                                            distanceMappings.put(nextChild, distanceMappings.get(next) + 1);
+                                            toDo.add(nextChild);
+                                        }
+                                    }
+                                    if (!toDo.contains(nextChild) && !nextChild.isFull())
                                     {
                                         distanceMappings.put(nextChild, distanceMappings.get(next) + 1);
                                         toDo.add(nextChild);
                                     }
                                 }
-                                if (!toDo.contains(nextChild) && !nextChild.isFull())
-                                {
-                                    distanceMappings.put(nextChild, distanceMappings.get(next) + 1);
-                                    toDo.add(nextChild);
-                                }
+                            } //
+                            catch (NullPointerException npe)
+                            {
+                                /**
+                                 * Adjacency array was null in this location i.e.
+                                 * there is no board space in that direction
+                                 */
                             }
-                        } //
-                        catch (NullPointerException npe)
-                        {
-                            /**
-                             * Adjacency array was null in this location i.e.
-                             * there is no board space in that direction
-                             */
                         }
                     }
                 } //
@@ -647,7 +656,11 @@ public class GameBoard
                 possibleMoves.add(bs);
             }
         }
-        System.out.println(possibleMoves);
+        if (!(start instanceof Room))
+        {
+            possibleMoves.remove(start);
+        }
+        //System.out.println(possibleMoves);
         return possibleMoves;
     }
 

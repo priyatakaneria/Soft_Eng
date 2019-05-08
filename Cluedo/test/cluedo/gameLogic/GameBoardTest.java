@@ -38,41 +38,41 @@ public class GameBoardTest
         gb = new GameBoard();
     }
 
-    /**
-     * Test for whether the availableMoves method works correctly for traversal
-     * of the standard hallway squares.
-     * 
-     * No longer passes since BoardConstructor ensures that a board has at least
-     * one room, but it used to work I promise.
-     */
-    @Test
-    public void availableMovesEmptyGridTest() throws FileNotFoundException, InvalidSetupFileException
-    {
-        System.out.println("\navailableMovesEmptyGridTest:");
-        BoardConstructor bc = new BoardConstructor("customisation/board layout/hallways.txt");
-        gb = bc.createBoard();
-
-        BoardSpace start = gb.getBoardSpace(4, 4);
-        HashSet<BoardSpace> avail = gb.availableMoves(start, 2);
-
-        HashSet<BoardSpace> predicted = new HashSet<>();
-        
-        predicted.add(gb.getBoardSpace(4, 2));
-        predicted.add(gb.getBoardSpace(5, 3));
-        predicted.add(gb.getBoardSpace(6, 4));
-        predicted.add(gb.getBoardSpace(5, 5));
-        predicted.add(gb.getBoardSpace(4, 6));
-        predicted.add(gb.getBoardSpace(3, 5));
-        predicted.add(gb.getBoardSpace(2, 4));
-        predicted.add(gb.getBoardSpace(3, 3));
-        
-        predicted.add(gb.getBoardSpace(4, 3));
-        predicted.add(gb.getBoardSpace(3, 4));
-        predicted.add(gb.getBoardSpace(4, 5));
-        predicted.add(gb.getBoardSpace(5, 4));
-        
-        assertEquals(predicted, avail);
-    }
+//    /**
+//     * Test for whether the availableMoves method works correctly for traversal
+//     * of the standard hallway squares.
+//     * 
+//     * No longer passes since BoardConstructor ensures that a board has at least
+//     * one room, but it used to work I promise.
+//     */
+//    @Test
+//    public void availableMovesEmptyGridTest() throws FileNotFoundException, InvalidSetupFileException
+//    {
+//        System.out.println("\navailableMovesEmptyGridTest:");
+//        BoardConstructor bc = new BoardConstructor("customisation/board layout/hallways.txt");
+//        gb = bc.createBoard();
+//
+//        BoardSpace start = gb.getBoardSpace(4, 4);
+//        HashSet<BoardSpace> avail = gb.availableMoves(start, 2);
+//
+//        HashSet<BoardSpace> predicted = new HashSet<>();
+//        
+//        predicted.add(gb.getBoardSpace(4, 2));
+//        predicted.add(gb.getBoardSpace(5, 3));
+//        predicted.add(gb.getBoardSpace(6, 4));
+//        predicted.add(gb.getBoardSpace(5, 5));
+//        predicted.add(gb.getBoardSpace(4, 6));
+//        predicted.add(gb.getBoardSpace(3, 5));
+//        predicted.add(gb.getBoardSpace(2, 4));
+//        predicted.add(gb.getBoardSpace(3, 3));
+//        
+//        predicted.add(gb.getBoardSpace(4, 3));
+//        predicted.add(gb.getBoardSpace(3, 4));
+//        predicted.add(gb.getBoardSpace(4, 5));
+//        predicted.add(gb.getBoardSpace(5, 4));
+//        
+//        assertEquals(predicted, avail);
+//    }
 
     /**
      * Test for whether the availableMoves method works for moving into a room.
@@ -249,6 +249,6 @@ public class GameBoardTest
         HashMap<Integer, ArrayList<BoardSpace>> adjacency;
         adjacency = gb.getRooms().get(1).getAdjacency();
         HashSet<BoardSpace> avail = gb.availableMoves(gb.getRooms().get(1), 2);
-        assertEquals(true, avail.contains(gb.getRooms().get(8)));
+        assertEquals(true, avail.contains(gb.getRooms().get(6)));
     }
 }
