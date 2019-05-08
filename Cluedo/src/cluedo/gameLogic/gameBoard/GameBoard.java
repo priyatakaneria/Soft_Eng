@@ -647,6 +647,10 @@ public class GameBoard
                 possibleMoves.add(bs);
             }
         }
+        if (!(start instanceof Room))
+        {
+            possibleMoves.remove(start);
+        }
         System.out.println(possibleMoves);
         return possibleMoves;
     }
