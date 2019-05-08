@@ -1,12 +1,15 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package cluedo.gameLogic.player;
 
 /**
- * The possible choices for a detective note
  *
  * @author tymoteuszilczyszyn
  */
-public enum DetNoteType
-{
+public enum DetNoteType {
     doesntHaveClue, mightHaveClue, hasClue, noKnowledge;
-
+    
 }

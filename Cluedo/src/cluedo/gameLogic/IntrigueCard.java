@@ -1,31 +1,27 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package cluedo.gameLogic;
 
 /**
- * Represents an intrigue card
- * 
+ *
  * @author Tymek
  */
 public class IntrigueCard extends Card {
     
-    private final IntrigueType intrigueType;
+    private final IntrigueType intrigueName;
 
-    /**
-     * Creates a new instance and stores the supplied IntrigueType.
-     * 
-     * @param intrigueType the IntrigueType represented by this IntrigueCard
-     */
-    public IntrigueCard(IntrigueType intrigueType)
+    public IntrigueCard(IntrigueType cardName)
     {
         super(CardType.Intrigue);
-        this.intrigueType = intrigueType;
+        this.intrigueName = cardName;
     }
 
-    /**
-     * @return the IntrigueType of this card
-     */
     public IntrigueType getIntrigueType()
     {
-        return this.intrigueType;
+        return this.intrigueName;
     }
     
 }

@@ -1,3 +1,8 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package cluedo.gameLogic.gameBoard;
 
 import cluedo.gameLogic.Character;
@@ -6,7 +11,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 
 /**
- * Creates a new GameBoad from a given text file
  *
  * @author Jamie
  */
@@ -16,36 +20,22 @@ public class BoardConstructor
     public BufferedReader fileInput;
     private GameBoard gb;
 
-    /**
-     * Creates a BufferedReader pointing to the default board file
-     *
-     * @throws FileNotFoundException if the specified file cannot be found, but
-     * this should never happen as this file is a predetermined one.
-     */
     public BoardConstructor() throws FileNotFoundException
     {
         fileInput = new BufferedReader(new FileReader("customisation/board layout/default.txt"));
     }
 
     /**
-     * Creates a BufferedReader from the provided filename
-     *
-     * @param fileName the file to use for the gameboard
-     * @throws FileNotFoundException if the supplied file cannot be found,
-     * should never happen because the filename is defined by a GUI based file
-     * chooser.
+     * subject to change depending on how the input is given from GUI
+     * 
+     * @param fileName
+     * @throws FileNotFoundException 
      */
     public BoardConstructor(String fileName) throws FileNotFoundException
     {
-        fileInput = new BufferedReader(new FileReader(fileName));
+        fileInput = new BufferedReader(new FileReader("customisation/board layout/" + fileName));
     }
 
-    /**
-     * Creates a new GameBoard from the fileInput defined in the constructor.
-     *
-     * @return a new GameBoard
-     * @throws InvalidSetupFileException if some placement of the
-     */
     public GameBoard createBoard() throws InvalidSetupFileException
     {
         try
@@ -63,6 +53,7 @@ public class BoardConstructor
                 fileInput.read();
                 for (int x = 1; x <= width; x++)
                 {
+                    // System.out.println("[" + x + "," + y +"]");
                     gb.insertBoardSpace(x, y, readBoardSquare());
                 }
                 fileInput.readLine();
@@ -73,21 +64,12 @@ public class BoardConstructor
             gb.createClueDeck();
             gb.setAdjacencies();
             return gb;
-        } //
-        catch (IOException e)
+        } catch (IOException e)
         {
             throw new InvalidSetupFileException();
         }
     }
 
-    /**
-     * Reads a single instance of a boardSquare from the file (represented by a
-     * symbol surrounded in square brackets (or parenthesise for a secret
-     * passage)
-     *
-     * @return a valid BoardSpace object
-     * @throws InvalidSetupFileException if the file is formatted incorrectly
-     */
     private BoardSpace readBoardSquare() throws InvalidSetupFileException
     {
         BoardSpace newSquare = null;
@@ -96,12 +78,11 @@ public class BoardConstructor
         try
         {
             fileInput.read(input, 0, 3);
-        } //
-        catch (IOException ioe)
+        } catch (IOException ioe)
         {
             throw new InvalidSetupFileException();
         }
-
+        
         if (input[0] == '[' && input[2] == ']')
         {
             char symbol = input[1];
@@ -130,28 +111,23 @@ public class BoardConstructor
             {
                 newSquare = new BoardSquare(false);
                 gb.setStartSquare(Character.MrsWhite, (BoardSquare) newSquare);
-            } //
-            else if (symbol == 'g')
+            } else if (symbol == 'g')
             {
                 newSquare = new BoardSquare(false);
                 gb.setStartSquare(Character.RevGreen, (BoardSquare) newSquare);
-            } //
-            else if (symbol == 'p')
+            } else if (symbol == 'p')
             {
                 newSquare = new BoardSquare(false);
                 gb.setStartSquare(Character.MrsPeacock, (BoardSquare) newSquare);
-            } //
-            else if (symbol == 'l')
+            } else if (symbol == 'l')
             {
                 newSquare = new BoardSquare(false);
                 gb.setStartSquare(Character.ProfPlum, (BoardSquare) newSquare);
-            } //
-            else if (symbol == 's')
+            } else if (symbol == 's')
             {
                 newSquare = new BoardSquare(false);
                 gb.setStartSquare(Character.MissScarlett, (BoardSquare) newSquare);
-            } //
-            else if (symbol == 'm')
+            } else if (symbol == 'm')
             {
                 newSquare = new BoardSquare(false);
                 gb.setStartSquare(Character.ColMustard, (BoardSquare) newSquare);
@@ -165,14 +141,12 @@ public class BoardConstructor
                     {
                         newSquare = new RoomSquare(roomNo);
                     }
-                } //
-                catch (NumberFormatException nfe)
+                } catch (NumberFormatException nfe)
                 {
                     throw new InvalidSetupFileException();
                 }
             }
-        } //
-        else if (input[0] == '(' && input[2] == ')')
+        } else if (input[0] == '(' && input[2] == ')')
         {
             try
             {
@@ -181,17 +155,16 @@ public class BoardConstructor
                 {
                     newSquare = new SecretPassage(roomNo);
                 }
-            } //
-            catch (NumberFormatException nfe)
+            } catch (NumberFormatException nfe)
             {
                 throw new InvalidSetupFileException();
             }
 
-        } //
-        else
+        } else
         {
             throw new InvalidSetupFileException();
         }
         return newSquare;
     }
+    
 }

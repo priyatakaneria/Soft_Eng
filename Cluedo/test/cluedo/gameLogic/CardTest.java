@@ -51,8 +51,8 @@ public class CardTest
         CardType e1 = CardType.Clue;
         CardType e2 = CardType.Intrigue;
 
-        assertEquals(e1, card1.getCardType());
-        assertEquals(e2, card2.getCardType());
+        assertEquals(e1, card1.getCardName());
+        assertEquals(e2, card2.getCardName());
 
     }
 

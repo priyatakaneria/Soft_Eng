@@ -1,8 +1,12 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package cluedo.gameLogic.gameBoard;
 
 /**
- * An exception thrown when an error is encountered in the board setup file
- * 
+ *
  * @author Jamie
  */
 public class InvalidSetupFileException extends Exception

@@ -3,12 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cluedo.userInterface.detectiveNotes;
+package userInterface.detectiveNotes;
 
 import cluedo.gameLogic.player.DetectiveNotes;
 import cluedo.gameLogic.player.Player;
 import cluedo.gameLogic.Character;
-import cluedo.gameLogic.ClueCard;
 import cluedo.gameLogic.ClueType;
 import cluedo.gameLogic.Weapon;
 import cluedo.gameLogic.gameBoard.Room;
@@ -48,19 +47,18 @@ public class DetectiveNotesPane extends StackPane
     private StackPane leftBox;
     private GridPane clueGrid;
 
-    public DetectiveNotesPane(Player player)
+    public DetectiveNotesPane(DetectiveNotes logicalDetectiveNotes, Player player)
     {
-        this.logicalDetectiveNotes = player.getDetNotes();
+        this.logicalDetectiveNotes = logicalDetectiveNotes;
         this.player = player;
 
         // main container
         mainContainer = new VBox();
         mainContainer.setMaxWidth(500);
-        
+        this.getChildren().add(mainContainer);
         // title 
         title = new Label(player.getPlayerName() + "'s Detective Notes");
         title.setAlignment(Pos.CENTER);
-        title.setTextAlignment(TextAlignment.CENTER);
         mainContainer.getChildren().add(title);
         // horizontal divider
         horizontalDivider = new HBox();
@@ -81,7 +79,6 @@ public class DetectiveNotesPane extends StackPane
         newNotes.setOnAction(enter ->
         {
             this.logicalDetectiveNotes.writeNotes(newNotes.getText());
-            writtenNotes.setText("Notes:\n" + this.logicalDetectiveNotes.getNotes());
             newNotes.clear();
         });
         StackPane.setMargin(newNotes, new Insets(10, 10, 10, 10));
@@ -90,10 +87,9 @@ public class DetectiveNotesPane extends StackPane
         /**
          * Left side
          */
+        leftBox = new StackPane();
         clueGrid = createClueTable();
         leftBox.getChildren().add(clueGrid);
-        
-        getChildren().add(mainContainer);
     }
 
     private GridPane createClueTable()
@@ -103,35 +99,35 @@ public class DetectiveNotesPane extends StackPane
         int row = 1;
         int column = 0;
         clueTableClues.add(null);
-        clueGrid.add(new Label("Characters:"), column, row);
+        clueGrid.add(new Label("Characters:"), 0, row);
         row++;
         for (Character c : Character.values())
         {
             clueTableClues.add(c);
-            clueGrid.add(new Label("  " + c.getCharacterName()), column, row);
+            clueGrid.add(new Label("  " + c.getCharacterName()), 0, row);
             row++;
         }
         clueTableClues.add(null);
-        clueGrid.add(new Label("Rooms:"), column, row);
+        clueGrid.add(new Label("Rooms:"), 0, row);
         row++;
         for (Room r : player.getGameBoard().getRooms().values())
         {
             clueTableClues.add(r);
-            clueGrid.add(new Label("  " + r.getRoomName()), column, row);
+            clueGrid.add(new Label("  " + r.getRoomName()), 0, row);
             row++;
         }
         clueTableClues.add(null);
-        clueGrid.add(new Label("Weapons:"), column, row);
+        clueGrid.add(new Label("Weapons:"), 0, row);
         row++;
         for (Weapon w : Weapon.values())
         {
             clueTableClues.add(w);
-            clueGrid.add(new Label("  " + w.getWeaponName()), column, row);
+            clueGrid.add(new Label("  " + w.getWeaponName()), 0, row);
             row++;
         }
 
         column = 1;
-        row = 1;
+        row = 0;
 
         Label playerLabel = new Label(player.getPlayerName());
         playerLabel.getTransforms().add(new Rotate(-90));
@@ -142,14 +138,6 @@ public class DetectiveNotesPane extends StackPane
             {
                 DetTypeImg detImage = new DetTypeImg(ct, player, logicalDetectiveNotes);
                 clueGrid.add(detImage, column, row);
-                for (ClueCard cc : player.getClueHand())
-                {
-                    if (cc.getClueType() == ct)
-                    {
-                        detImage.toggle();
-                        detImage.toggle();
-                    }
-                }
             }
             row++;
         }

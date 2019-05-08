@@ -6,8 +6,7 @@
 package cluedo.gameLogic;
 
 /**
- * A dummy object used to allow for the the proper inheritance tree, where
- * Weapon, Character and Room are all of type ClueType.
+ * A dummy object used to allow for the the proper inheritance tree.
  *
  * @author Tymek
  */

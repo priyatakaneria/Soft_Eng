@@ -6,37 +6,56 @@
 package cluedo.gameLogic;
 
 /**
- * Represents a weapon clue
- * 
+ *
  * @author Tymek
  */
-public enum Weapon implements ClueType
-{
-
+public enum Weapon implements ClueType {
+    
     dagger("dagger"), candlestick("candlestick"), revolver("revolver"),
     rope("rope"), leadPiping("lead piping"), spanner("spanner");
 
     private final String nameString;
 
-    /**
-     * @param name the name of the weapon to create
-     */
     Weapon(String name)
     {
         this.nameString = name;
     }
 
-    /**
-     * @return a textual representation of this weapon
-     */
     public String getWeaponName()
     {
         return this.nameString;
     }
-    
-    @Override
-    public String toString()
+    /*
+    public enum WeaponType
     {
-        return getWeaponName();
+
+        dagger("dagger"), candlestick("candlestick"), revolver("revolver"),
+        rope("rope"), leadPiping("lead piping"), spanner("spanner");
+
+        private final String nameString;
+
+        WeaponType(String name)
+        {
+            this.nameString = name;
+        }
+
+        public String getWeaponStringName()
+        {
+            return this.nameString;
+        }
+
+    };
+
+    private final WeaponType weaponName;
+
+    public Weapon(WeaponType weaponName)
+    {
+        this.weaponName = weaponName;
     }
+
+    public WeaponType getWeaponName()
+    {
+        return this.weaponName;
+    }
+    */
 }

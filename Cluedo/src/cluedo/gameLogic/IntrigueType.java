@@ -1,8 +1,12 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package cluedo.gameLogic;
 
 /**
- * Represents the four types of Intrigue Card.
- * 
+ *
  * @author Tymek
  */
 public enum IntrigueType {
@@ -10,20 +14,14 @@ public enum IntrigueType {
     extraTurn("extra turn"), throwAgain("throw again"), teleport("teleport"),
     avoidSuggestion("avoid suggestion");
 
-    private final String intrigueString;
+    private final String nameString;
 
-    /**
-     * @param intrigueString the string to setup the IntrigueType with.
-     */
-    IntrigueType(String intrigueString) {
-        this.intrigueString = intrigueString;
+    IntrigueType(String name) {
+        this.nameString = name;
     }
 
-    /**
-     * @return returns the string associated with the IntrigueType
-     */
-    public String getIntrigueString() {
-        return this.intrigueString;
+    public String getCharacterStringName() {
+        return this.nameString;
     }
 
 };
