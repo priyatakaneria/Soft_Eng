@@ -56,7 +56,6 @@ public class GameBoardTest
         HashSet<BoardSpace> avail = gb.availableMoves(start, 2);
 
         HashSet<BoardSpace> predicted = new HashSet<>();
-        
         predicted.add(gb.getBoardSpace(4, 2));
         predicted.add(gb.getBoardSpace(5, 3));
         predicted.add(gb.getBoardSpace(6, 4));
@@ -65,12 +64,7 @@ public class GameBoardTest
         predicted.add(gb.getBoardSpace(3, 5));
         predicted.add(gb.getBoardSpace(2, 4));
         predicted.add(gb.getBoardSpace(3, 3));
-        
-        predicted.add(gb.getBoardSpace(4, 3));
-        predicted.add(gb.getBoardSpace(3, 4));
-        predicted.add(gb.getBoardSpace(4, 5));
-        predicted.add(gb.getBoardSpace(5, 4));
-        
+
         assertEquals(predicted, avail);
     }
 
@@ -93,11 +87,6 @@ public class GameBoardTest
         predicted.add(gb.getBoardSpace(7, 8));
         predicted.add(gb.getBoardSpace(5, 8));
         predicted.add(gb.getBoardSpace(4, 7));
-        
-        predicted.add(gb.getBoardSpace(6, 8));
-        predicted.add(gb.getBoardSpace(5, 7));
-        predicted.add(gb.getBoardSpace(7, 7));
-        
         predicted.add(gb.getRoom(1));
 
         for (BoardSpace bs : avail)
@@ -128,9 +117,6 @@ public class GameBoardTest
         predicted.add(gb.getBoardSpace(4, 7));
         predicted.add(gb.getBoardSpace(6, 7));
         predicted.add(gb.getRoom(1));
-        
-        predicted.add(gb.getBoardSpace(5, 7));
-        
 
         for (BoardSpace bs : avail)
         {
@@ -165,9 +151,6 @@ public class GameBoardTest
         predicted.add(gb.getBoardSpace(7, 4));
 
         predicted.add(gb.getRoom(1));
-        
-        predicted.add(gb.getBoardSpace(7, 3));
-        predicted.add(gb.getBoardSpace(5, 7));
 
         for (BoardSpace bs : avail)
         {
@@ -239,7 +222,6 @@ public class GameBoardTest
         assertEquals(true, (adjacency).get(3).get(0) instanceof BoardSquare);
     }
     
-    
     @Test
     public void secretPassageTest() throws FileNotFoundException, InvalidSetupFileException
     {
@@ -248,7 +230,5 @@ public class GameBoardTest
         
         HashMap<Integer, ArrayList<BoardSpace>> adjacency;
         adjacency = gb.getRooms().get(1).getAdjacency();
-        HashSet<BoardSpace> avail = gb.availableMoves(gb.getRooms().get(1), 2);
-        assertEquals(true, avail.contains(gb.getRooms().get(8)));
     }
 }

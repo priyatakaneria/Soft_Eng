@@ -24,9 +24,7 @@ public class BoardConstructorTest
 
     /**
      * Ensures that the default file is read correctly and returns an accurate
-     * string representing the various BoardSpaces.
-     * 
-     * 
+     * string representing the various BoardSpaces
      *
      * @throws FileNotFoundException if the default file is somehow missing from
      * the project folder
@@ -72,9 +70,22 @@ public class BoardConstructorTest
     @Test
     public void customFileReadTest() throws FileNotFoundException, InvalidSetupFileException
     {
-        
-        BoardConstructor bc = new BoardConstructor("customisation/board layout/one room.txt");
+        BoardConstructor bc = new BoardConstructor("hallways.txt");
         String stringBoard = bc.createBoard().toString();
+        assertEquals(
+                "_ _ _ _ _ _ _ _ \n" +
+                "_ _ _ _ _ _ _ _ \n" +
+                "_ _ _ _ _ _ _ _ \n" +
+                "_ _ _ _ _ _ _ _ \n" +
+                "_ _ _ _ _ _ _ _ \n" +
+                "_ _ _ _ _ _ _ _ \n" +
+                "_ _ _ _ _ _ _ _ \n" +
+                "_ _ _ _ _ _ _ _ \n",
+                stringBoard
+        );
+        
+        bc = new BoardConstructor("one room.txt");
+        stringBoard = bc.createBoard().toString();
         assertEquals(
                 "1 1 1 1 1 1 # _ \n" +
                 "1 1 1 1 1 1 _ _ \n" +
@@ -84,32 +95,6 @@ public class BoardConstructorTest
                 "# 1 1 1 []1 _ _ \n" +
                 "_ _ _ _ _ _ _ _ \n" +
                 "# _ _ _ _ _ _ _ \n",
-                stringBoard
-        );
-        
-        bc = new BoardConstructor("customisation/board layout/example.txt");
-        stringBoard = bc.createBoard().toString();
-        assertEquals(
-                "_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n" +
-                "_ _ _ _ _ _ _ _ _ _ _ _ 2 2 2 2 2 2 2 _ \n" +
-                "_ _ _ _ _ _ _ _ _ _ _ _ []2 []_ _ _ 2 _ \n" +
-                "_ _ _ _ _ _ _ _ _ _ _ _ 2 2 2 _ _ _ 2 _ \n" +
-                "_ _ _ _ _ _ _ _ _ _ _ _ _ 2 2 2 2 []2 _ \n" +
-                "_ _ _ _ _ _ _ _ _ _ _ _ _ _ 2 2 []2 2 _ \n" +
-                "_ _ _ _ _ _ _ _ _ _ _ _ _ _ 2 2 _ _ _ _ \n" +
-                "_ _ _ _ _ _ _ _ _ _ _ _ _ _ 2 2 _ _ _ _ \n" +
-                "_ _ _ _ _ _ _ _ _ _ _ _ _ _ 2 2 _ _ _ _ \n" +
-                "_ _ _ _ _ _ _ _ _ # _ _ _ _ 2 2 _ _ _ _ \n" +
-                "_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n" +
-                "_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n" +
-                "_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n" +
-                "_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n" +
-                "_ _ 1 1 []1 _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n" +
-                "_ _ 1 1 1 1 _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n" +
-                "_ _ 1 1 1 1 _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n" +
-                "_ _ 1 1 1 1 _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n" +
-                "_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n" +
-                "_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n",
                 stringBoard
         );
     }
