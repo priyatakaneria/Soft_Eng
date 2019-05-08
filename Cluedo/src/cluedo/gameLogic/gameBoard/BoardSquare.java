@@ -1,12 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cluedo.gameLogic.gameBoard;
 
+import cluedo.userInterface.boardTiles.BoardSquarePane;
+
 /**
- *
+ * represents one of the yellow hallway tiles that players can move through.
+ * 
  * @author Jamie Thelin
  */
 public class BoardSquare extends BoardSpace
@@ -24,6 +22,7 @@ public class BoardSquare extends BoardSpace
     {
         super(1);
         this.isIntrigue = isIntrigue;
+        setGuiPane(new BoardSquarePane(this));
     }
 
     /**

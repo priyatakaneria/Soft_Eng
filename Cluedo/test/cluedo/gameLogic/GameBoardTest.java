@@ -12,6 +12,8 @@ import cluedo.gameLogic.gameBoard.BoardSpace;
 import cluedo.gameLogic.gameBoard.InvalidSetupFileException;
 import cluedo.gameLogic.gameBoard.Room;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.HashSet;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -39,12 +41,15 @@ public class GameBoardTest
     /**
      * Test for whether the availableMoves method works correctly for traversal
      * of the standard hallway squares.
+     * 
+     * No longer passes since BoardConstructor ensures that a board has at least
+     * one room, but it used to work I promise.
      */
     @Test
     public void availableMovesEmptyGridTest() throws FileNotFoundException, InvalidSetupFileException
     {
         System.out.println("\navailableMovesEmptyGridTest:");
-        BoardConstructor bc = new BoardConstructor("hallways.txt");
+        BoardConstructor bc = new BoardConstructor("customisation/board layout/hallways.txt");
         gb = bc.createBoard();
 
         BoardSpace start = gb.getBoardSpace(4, 4);
@@ -76,7 +81,7 @@ public class GameBoardTest
     public void availableMovesIntoRoomTest() throws FileNotFoundException, InvalidSetupFileException
     {
         System.out.println("\navailableMovesIntoRoomTest:");
-        BoardConstructor bc = new BoardConstructor("one room.txt");
+        BoardConstructor bc = new BoardConstructor("customisation/board layout/one room.txt");
         gb = bc.createBoard();
 
         BoardSpace start = gb.getBoardSpace(6, 7);
@@ -112,7 +117,7 @@ public class GameBoardTest
     public void availableMovesFromRoomTest() throws FileNotFoundException, InvalidSetupFileException
     {
         System.out.println("\navailableMovesFromRoomTest:");
-        BoardConstructor bc = new BoardConstructor("one room.txt");
+        BoardConstructor bc = new BoardConstructor("customisation/board layout/one room.txt");
         gb = bc.createBoard();
 
         BoardSpace start = gb.getRoom(1);
@@ -135,7 +140,7 @@ public class GameBoardTest
 
         assertEquals(predicted, avail);
     }
-    
+
     /**
      * Test for whether the availableMoves method works correctly for when a
      * player starts in a room with no secret passage but two door.
@@ -144,7 +149,7 @@ public class GameBoardTest
     public void availableMovesFromRoomTwoDoorTest() throws FileNotFoundException, InvalidSetupFileException
     {
         System.out.println("\navailableMovesFromRoomTest:");
-        BoardConstructor bc = new BoardConstructor("one room two doors.txt");
+        BoardConstructor bc = new BoardConstructor("customisation/board layout/one room two doors.txt");
         gb = bc.createBoard();
 
         BoardSpace start = gb.getRoom(1);
@@ -154,11 +159,11 @@ public class GameBoardTest
         predicted.add(gb.getBoardSpace(5, 8));
         predicted.add(gb.getBoardSpace(4, 7));
         predicted.add(gb.getBoardSpace(6, 7));
-        
+
         predicted.add(gb.getBoardSpace(7, 2));
         predicted.add(gb.getBoardSpace(8, 3));
         predicted.add(gb.getBoardSpace(7, 4));
-        
+
         predicted.add(gb.getRoom(1));
         
         predicted.add(gb.getBoardSpace(7, 3));
@@ -174,10 +179,16 @@ public class GameBoardTest
         assertEquals(predicted, avail);
     }
 
+    /**
+     * ensures the adjacency of all the starting squares are set appropriately
+     *
+     * @throws FileNotFoundException if the setupFile cannot be found
+     * @throws InvalidSetupFileException if the
+     */
     @Test
     public void variousAdjacencyTest() throws FileNotFoundException, InvalidSetupFileException
     {
-        BoardConstructor bc = new BoardConstructor("one room.txt");
+        BoardConstructor bc = new BoardConstructor("customisation/board layout/one room.txt");
         gb = bc.createBoard();
 
         System.out.println("kitchen adjacency:");

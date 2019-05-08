@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package userInterface.boardTiles;
+package cluedo.userInterface.boardTiles;
 
+import cluedo.gameLogic.gameBoard.StaircaseSquare;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -13,13 +14,15 @@ import javafx.scene.shape.Rectangle;
  *
  * @author sb816
  */
-public class SecretPassagePane extends StackPane{
-     public SecretPassagePane()
+public class StaircaseSquarePane extends BoardSpacePane
+{
+    public StaircaseSquarePane(StaircaseSquare ss)
     {
+        super(ss);
         Rectangle tileShape = new Rectangle(25, 25);
-        tileShape.setFill(Color.GREY);
-        tileShape.setStroke(Color.BLACK);
-        
+        setStdFill(Color.DARKGREY);
+        setStdStroke(Color.DARKGRAY);
+        setNormalColours();
+        getChildren().add(getTileShape());
     }
-    
 }

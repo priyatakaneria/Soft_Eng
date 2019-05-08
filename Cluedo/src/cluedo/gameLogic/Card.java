@@ -1,45 +1,58 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cluedo.gameLogic;
 
 /**
+ * Represents an instance of a card that the player can hold. Is extended by
+ * ClueCard and IntrigueCard.
  *
  * @author Tymek
  */
-public class Card {
-    
+public class Card
+{
+
     public enum CardType
     {
 
         Clue("Clue"), Intrigue("Intrigue");
 
-        private final String nameString;
+        private final String cardTypeString;
 
-        CardType(String name)
+        /**
+         * stores the cardTypeName provided.
+         *
+         * @param cardTypeName
+         */
+        CardType(String cardTypeName)
         {
-            this.nameString = name;
+            this.cardTypeString = cardTypeName;
         }
 
+        /**
+         * @return the textual representation of the card type (either Clue or
+         * Intrigue)
+         */
         public String getCardStringName()
         {
-            return this.nameString;
+            return this.cardTypeString;
         }
 
     };
 
-    private final CardType cardName;
+    private final CardType cardType;
 
-    public Card(CardType cardName)
+    /**
+     * @param cardType stores the type of card this represents
+     */
+    public Card(CardType cardType)
     {
-        this.cardName = cardName;
+        this.cardType = cardType;
     }
 
-    public CardType getCardName()
+    /**
+     * @return returns the type of card this object represents
+     */
+    public CardType getCardType()
     {
-        return this.cardName;
+        return this.cardType;
     }
 
 }

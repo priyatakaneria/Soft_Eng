@@ -1,11 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cluedo.gameLogic;
 
 /**
+ * Represents a character in the game
  *
  * @author Tymek
  */
@@ -14,49 +10,30 @@ public enum Character implements ClueType
 
     MissScarlett("Miss Scarlett"), ColMustard("Col Mustard"), MrsWhite("Mrs White"),
     RevGreen("Rev Green"), ProfPlum("Prof Plum"), MrsPeacock("Mrs Peacock");
-    
+
     private final String nameString;
 
-    Character(String name)
+    /**
+     * creates a new Character with the given name
+     *
+     * @param name the name for the new character
+     */
+    private Character(String name)
     {
         this.nameString = name;
     }
 
+    /**
+     * @return the name of the character
+     */
     public String getCharacterName()
     {
         return this.nameString;
     }
-    
-    /*public enum CharacterType
+
+    @Override
+    public String toString()
     {
-
-        ColMustard("Col Mustard"), ProfPlum("Prof Plum"), RevGreen("Rev Green"),
-        MrsPeacock("Mrs Peacock"), MissScarlett("Miss Scarlett"), MrsWhite("Mrs White");
-
-        private final String nameString;
-
-        CharacterType(String name)
-        {
-            this.nameString = name;
-        }
-
-        public String getCharacterStringName()
-        {
-            return this.nameString;
-        }
-
-    };
-
-    private final CharacterType characterName;
-
-    public Character(CharacterType characterName)
-    {
-        this.characterName = characterName;
+        return getCharacterName();
     }
-
-    public CharacterType getCharacterName()
-    {
-        return this.characterName;
-    }*/
-
 }
