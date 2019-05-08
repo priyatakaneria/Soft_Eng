@@ -8,6 +8,8 @@ package cluedo.gameLogic.player;
 import cluedo.gameLogic.Character;
 import cluedo.gameLogic.gameBoard.BoardSpace;
 import cluedo.gameLogic.gameBoard.GameBoard;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  *
@@ -16,8 +18,8 @@ import cluedo.gameLogic.gameBoard.GameBoard;
 public class HumanPlayer extends Player
 {
 
-    public HumanPlayer(Character character, String playerName, GameBoard gb, BoardSpace start) {
-        super(character, playerName, gb, start);
+    public HumanPlayer(Character character, String playerName, GameBoard gb, BoardSpace start, Collection<Player> otherPlayers) {
+        super(character, playerName, gb, start, otherPlayers);
     }
     
     public void writeNotes(String notes)

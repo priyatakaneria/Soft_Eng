@@ -6,6 +6,7 @@
 package cluedo.gameLogic;
 
 /**
+ * A dummy object used to allow for the the proper inheritance tree.
  *
  * @author Tymek
  */

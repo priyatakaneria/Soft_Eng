@@ -32,8 +32,10 @@ public class TurnManager
 {
 
     private GameBoard gameBoard;
-    private Queue<Player> playerQueue;
+    private Queue<Player> turnQueue;
+    private Queue<Player> realPlayers;
     private ArrayList<Player> allPlayers;
+    
     private Player currPlayer;
     private Game GUI;
 
@@ -111,7 +113,8 @@ public class TurnManager
     private void init(HashMap<Character, String> characterPlayerMap, int noAiPlayers)
     {
         // Create human and AI players and add them to the player queue
-        playerQueue = new LinkedList();
+        turnQueue = new LinkedList<>();
+        realPlayers = new LinkedList<>();
         allPlayers = new ArrayList<>();
 
         int currAiPlayers = 0;
@@ -121,19 +124,22 @@ public class TurnManager
 
             if (characterPlayerMap.keySet().contains(c))
             {
-                newPlayer = new HumanPlayer(c, characterPlayerMap.get(c), gameBoard, gameBoard.getStartingSquares().get(c));
+                newPlayer = new HumanPlayer(c, characterPlayerMap.get(c), gameBoard, gameBoard.getStartingSquares().get(c), realPlayers);
                 //newPlayer.Move(gameBoard.getStartingSquares().get(newPlayer.getCharacter()));
-                playerQueue.add(newPlayer);
+                turnQueue.add(newPlayer);
+                realPlayers.add(newPlayer);
             } //
             else if (currAiPlayers < noAiPlayers)
             {
-                newPlayer = new AIPlayer(0.8, c, c.getCharacterName(), gameBoard, gameBoard.getStartingSquares().get(c));
+                newPlayer = new AIPlayer(0.8, c, c.getCharacterName(), gameBoard, gameBoard.getStartingSquares().get(c), realPlayers);
                 //newPlayer.Move(gameBoard.getStartingSquares().get(newPlayer.getCharacter()));
-                playerQueue.add(newPlayer);
+                turnQueue.add(newPlayer);
+                realPlayers.add(newPlayer);
                 currAiPlayers++;
-            } else
+            } //
+            else
             {
-                newPlayer = new AIPlayer(0, c, c.getCharacterName(), gameBoard, gameBoard.getStartingSquares().get(c));
+                newPlayer = new AIPlayer(0, c, c.getCharacterName(), gameBoard, gameBoard.getStartingSquares().get(c), realPlayers);
                 // newPlayer.Move());
             }
             allPlayers.add(newPlayer);
@@ -143,9 +149,10 @@ public class TurnManager
         LinkedList<Card> clueDeck = gameBoard.getClueDeck();
         while (clueDeck.size() > 1)
         {
-            Player beingDealt = playerQueue.remove();
-            beingDealt.addClueCard((ClueCard) clueDeck.remove());
-            playerQueue.add(beingDealt);
+            Player beingDealt = turnQueue.poll();
+            beingDealt.addClueCard((ClueCard) clueDeck.poll());
+            turnQueue.add(beingDealt);
+            realPlayers.add(realPlayers.poll());
         }
     }
 
@@ -330,24 +337,29 @@ public class TurnManager
                  */
                 ArrayList<ClueCard> possibleClues = new ArrayList<>();
                 Player nextEnquiry = null;
-                while (playerQueue.peek() != player && possibleClues.size() == 0)
+                ArrayList<Player> playersWithoutClues = new ArrayList<>();
+                while (turnQueue.peek() != player && possibleClues.isEmpty())
                 {
-                    nextEnquiry = playerQueue.poll();
+                    nextEnquiry = turnQueue.poll();
                     possibleClues = nextEnquiry.respondToSuggestion(newSuggestion);
-                    playerQueue.add(nextEnquiry);
+                    turnQueue.add(nextEnquiry);
+                    if (possibleClues.isEmpty())
+                    {
+                        playersWithoutClues.add(nextEnquiry);
+                    }
                 }
 
                 /**
                  * ensures the playerQueue is left in the same state that it
                  * started in i.e. the current player is last in the queue.
                  */
-                while (playerQueue.peek() != player)
+                while (realPlayers.peek() != player)
                 {
-                    playerQueue.add(playerQueue.poll());
+                    realPlayers.add(realPlayers.poll());
                 }
-                playerQueue.add(playerQueue.poll());
+                realPlayers.add(realPlayers.poll());
 
-                if (possibleClues.size() == 0)
+                if (possibleClues.isEmpty())
                 {
                     if (ai)
                     {
@@ -355,12 +367,12 @@ public class TurnManager
                          * AIPlayer.noPlayerClues should make the appropriate
                          * detective notes according to the suggestion made
                          */
-                        aiPlayer.noPlayerClues(nextEnquiry, newSuggestion);
+                        aiPlayer.noPlayerClues(nextEnquiry, playersWithoutClues);
                     } //
                     else
                     {
                         /**
-                         * GUI.noPlayerClues should imform the user that their
+                         * GUI.noPlayerClues should inform the user that their
                          * suggestion has provided no clues, and wait for them
                          * to maybe fill in some detective notes and click an
                          * accept button or something.
@@ -403,7 +415,7 @@ public class TurnManager
                          *
                          * returns void.
                          */
-                        aiPlayer.receivedClue(response, nextEnquiry);
+                        aiPlayer.receivedClue(response, nextEnquiry, playersWithoutClues);
                     } //
                     else
                     {
@@ -507,19 +519,19 @@ public class TurnManager
         boolean gameOver = false;
         while (!gameOver)
         {
-            currPlayer = playerQueue.remove();
-            if (playerQueue.size() == 0) // if there are no other player remaining in the game
+            currPlayer = turnQueue.poll();
+            if (turnQueue.size() == 0) // if there are no other player remaining in the game
             {
                 gameOver = true;
             } //
             else
             {
-                playerQueue.add(currPlayer);
-                gameOver = takeTurn(currPlayer);
                 if (!currPlayer.hasPlayerLost())
                 {
-                    playerQueue.add(currPlayer);
+                    gameOver = takeTurn(currPlayer);
+                    turnQueue.add(currPlayer);
                 }
+                realPlayers.add(realPlayers.poll());
             }
         }
         /**
