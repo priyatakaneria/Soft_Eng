@@ -9,7 +9,7 @@ public enum Character implements ClueType
 {
 
     MissScarlett("Miss Scarlett"), ColMustard("Col Mustard"), MrsWhite("Mrs White"),
-    RevGreen("Rev Green"), ProfPlum("Prof Plum"), MrsPeacock("Mrs Peacock");
+    RevGreen("Rev Green"), MrsPeacock("Mrs Peacock"), ProfPlum("Prof Plum");
 
     private final String nameString;
 

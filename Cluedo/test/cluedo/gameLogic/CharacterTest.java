@@ -48,4 +48,10 @@ public class CharacterTest
         assertEquals(s2, c2.getCharacterName());
         assertEquals(s3, c3.getCharacterName());
     }
+    
+    @Test
+    public void characterOrderTest()
+    {
+        assertEquals(new Character[]{Character.MissScarlett, Character.ColMustard, Character.MrsWhite, Character.RevGreen, Character.MrsPeacock, Character.ProfPlum}, Character.values());
+    }
 }

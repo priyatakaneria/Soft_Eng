@@ -136,6 +136,7 @@ public class TurnManager
         System.out.println(gameBoard.getStartingSquares());
         for (Character c : Character.values())
         {
+            System.out.println("Allocating character: " + c.getCharacterName());
             if (characterPlayerMap.keySet().contains(c))
             {
                 int[] startCoords = gameBoard.getSpaceCoords(gameBoard.getStartingSquares().get(c));
@@ -162,8 +163,12 @@ public class TurnManager
             allPlayers.add(newPlayer);
         }
 
+        Player firstPlayer = realPlayers.peek();
+        
+        System.out.println("player order");
         for (Player p : allPlayers)
         {
+            System.out.println("\t" + p.getCharacter().getCharacterName());
             if (p instanceof HumanPlayer)
             {
                 p.getDetNotes().initTable();
@@ -177,7 +182,11 @@ public class TurnManager
             Player beingDealt = turnQueue.poll();
             beingDealt.addClueCard((ClueCard) clueDeck.poll());
             turnQueue.add(beingDealt);
-            realPlayers.add(realPlayers.poll());
+        }
+        
+        while (turnQueue.peek() != firstPlayer)
+        {
+            turnQueue.add(turnQueue.poll());
         }
     }
 
