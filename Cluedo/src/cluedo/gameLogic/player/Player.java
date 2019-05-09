@@ -26,7 +26,7 @@ import cluedo.userInterface.boardTiles.BoardSpacePane;
  *
  * @author Jamie
  */
-public class Player
+public abstract class Player
 {
 
     private ArrayList<ClueCard> clueHand;
