@@ -243,12 +243,42 @@ public class GameBoardTest
     @Test
     public void secretPassageTest() throws FileNotFoundException, InvalidSetupFileException
     {
+        System.out.println("\nSecret Passage Test");
         BoardConstructor bc = new BoardConstructor("customisation/board layout/default.txt");
         gb = bc.createBoard();
         
-        HashMap<Integer, ArrayList<BoardSpace>> adjacency;
-        adjacency = gb.getRooms().get(1).getAdjacency();
         HashSet<BoardSpace> avail = gb.availableMoves(gb.getRooms().get(1), 2);
-        assertEquals(true, avail.contains(gb.getRooms().get(6)));
+        System.out.println(avail);
+        HashSet<BoardSpace> predicted = new HashSet<>();
+        predicted.add(gb.getRooms().get(6));
+        predicted.add(gb.getRooms().get(1));
+        predicted.add(gb.getBoardSpace(5, 8));
+        predicted.add(gb.getBoardSpace(4, 8));
+        predicted.add(gb.getBoardSpace(5, 9));
+        predicted.add(gb.getBoardSpace(6, 8));
+        
+        assertEquals(predicted, avail);
+    }
+    
+    @Test
+    public void availableMovesFromRoomNoPassageTest() throws FileNotFoundException, InvalidSetupFileException
+    {
+        BoardConstructor bc = new BoardConstructor("customisation/board layout/default.txt");
+        gb = bc.createBoard();
+        
+        HashSet<BoardSpace> avail = gb.availableMoves(gb.getRooms().get(5), 2);
+        
+        HashSet<BoardSpace> predicted = new HashSet<>();
+        predicted.add(gb.getBoardSpace(22, 14));
+        predicted.add(gb.getBoardSpace(21, 14));
+        predicted.add(gb.getBoardSpace(20, 14));
+        
+        predicted.add(gb.getBoardSpace(17, 17));
+        predicted.add(gb.getBoardSpace(17, 16));
+        predicted.add(gb.getBoardSpace(17, 18));
+        predicted.add(gb.getBoardSpace(16, 17));
+        predicted.add(gb.getRooms().get(5));
+        
+        assertEquals(predicted, avail);
     }
 }

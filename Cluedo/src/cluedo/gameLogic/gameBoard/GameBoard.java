@@ -605,10 +605,10 @@ public class GameBoard
                 {
                     if (next instanceof SecretPassage)
                     {
-                        System.out.println("Secret passage to room "+((SecretPassage) next).getRoomA());
+                        System.out.println("Secret passage to room " + ((SecretPassage) next).getRoomA());
                         distanceMappings.put(((SecretPassage) next).getRoomA(), 2);
                         toDo.add(((SecretPassage) next).getRoomA());
-                    }
+                    } //
                     else
                     {
                         for (int i = 0; i < 4; i++)
@@ -651,7 +651,7 @@ public class GameBoard
         }
         for (BoardSpace bs : distanceMappings.keySet())
         {
-            if (distanceMappings.get(bs) <= diceRoll)
+            if (distanceMappings.get(bs) <= diceRoll && !(bs instanceof SecretPassage))
             {
                 possibleMoves.add(bs);
             }
