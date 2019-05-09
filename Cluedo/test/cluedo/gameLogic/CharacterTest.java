@@ -6,6 +6,7 @@
 package cluedo.gameLogic;
 
 import cluedo.gameLogic.Character;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -47,5 +48,11 @@ public class CharacterTest
         assertEquals(s1, c1.getCharacterName());
         assertEquals(s2, c2.getCharacterName());
         assertEquals(s3, c3.getCharacterName());
+    }
+    
+    @Test
+    public void characterOrderTest()
+    {
+        Assert.assertArrayEquals(new Character[]{Character.MissScarlett, Character.ColMustard, Character.MrsWhite, Character.RevGreen, Character.MrsPeacock, Character.ProfPlum}, Character.values());
     }
 }

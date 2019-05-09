@@ -17,12 +17,12 @@ public class WeaponPiece extends Pane
     private Weapon weapon;
     private ImageView iv;
     
-    private Image spanner;
-    private Image dagger;
-    private Image candlestick;
-    private Image revolver;
-    private Image leadPiping;
-    private Image rope;
+    private final Image spanner = new Image(getClass().getResourceAsStream("Spanner.png"));
+    private final Image dagger = new Image(getClass().getResourceAsStream("Dagger.png"));;
+    private final Image candlestick = new Image(getClass().getResourceAsStream("Candlestick.png"));;
+    private final Image revolver = new Image(getClass().getResourceAsStream("Revolver.png"));;
+    private final Image leadPiping = new Image(getClass().getResourceAsStream("Lead Piping.png"));;
+    private final Image rope = new Image(getClass().getResourceAsStream("Rope.png"));;
     
     
     
