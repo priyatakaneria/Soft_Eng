@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cluedo.userInterface;
 
 import javafx.scene.image.Image;
@@ -10,7 +5,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
 /**
- *
+ * Displays the two dice and shows the individual rolls for each die.
+ * 
  * @author Jamie Thelin
  */
 public class DicePane extends Pane
@@ -25,6 +21,9 @@ public class DicePane extends Pane
     private Image six;
     
     
+    /**
+     * defines the images used for each die number.
+     */
     public DicePane()
     {
         lastRoll = 1;
@@ -43,12 +42,19 @@ public class DicePane extends Pane
         diceImg.setCache(true);
     }
 
+    /**
+     * stores the last roll of the player 
+     * @param lastRoll 
+     */
     public void setLastRoll(int lastRoll)
     {
         this.lastRoll = lastRoll;
         display();
     }
     
+    /**
+     * updates the visual display of the dice.
+     */
     public void display()
     {
         if (lastRoll == 1)

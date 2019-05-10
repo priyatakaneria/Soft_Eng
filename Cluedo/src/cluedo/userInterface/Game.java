@@ -79,7 +79,8 @@ import javafx.stage.FileChooser;
 import cluedo.userInterface.boardTiles.RoomSquarePane;
 
 /**
- *
+ * This is the main class which launches the GUI
+ * 
  * @author sb816
  */
 public class Game extends Application
@@ -232,11 +233,18 @@ public class Game extends Application
         return lastRoll;
     }
 
+    /**
+     * sets the value of waitingForDice to b
+     * @param b the boolean to set
+     */
     public void setWaitingForDice(boolean b)
     {
         waitingForDice = b;
     }
-
+    
+    /**
+     * @return the value of WaitingForDice
+     */
     public boolean getWaitingForDice()
     {
         return waitingForDice;
@@ -281,16 +289,28 @@ public class Game extends Application
         }
     }
 
+    /**
+     * @return the last movement choice made by the player
+     */
     public BoardSpace getMovementChoice()
     {
         return movementChoice;
     }
     
+    /**
+     * sets the movement choice to a new boardspace
+     * @param bs the new position
+     */
     public void setMovementChoice(BoardSpace bs)
     {
         movementChoice = bs;
     }
 
+    /**
+     * sets the value of WaitingForMove
+     * 
+     * @param b the value to set
+     */
     public void setWaitingForMove(boolean b)
     {
         waitingForMove = true;

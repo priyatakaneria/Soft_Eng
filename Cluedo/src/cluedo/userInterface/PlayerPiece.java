@@ -6,13 +6,22 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 /**
+ * represents the Player when displayed on the board, a solid colour circle with
+ * a black outline.
  *
  * @author Jamie Thelin
  */
 public class PlayerPiece extends Circle
 {
+
     private Player player;
-    
+
+    /**
+     * checks the player's character and applies an appropriate colour to the
+     * circle.
+     *
+     * @param player the player to display
+     */
     public PlayerPiece(Player player)
     {
         super(12.5);
@@ -44,6 +53,5 @@ public class PlayerPiece extends Circle
         } //
         setStroke(Color.BLACK);
     }
-    
-    
+
 }
