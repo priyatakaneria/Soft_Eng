@@ -26,10 +26,13 @@ public class BoardConstructor
     {
         try
         {
-            fileInput = new BufferedReader(new FileReader("customisation/board layout/default.txt"));
+            InputStream is = getClass().getResourceAsStream("customisation/board layout/default.txt");
+            //fileInput = new BufferedReader(new FileReader("cluedo/gameLogic/gameBoard/customisation/board layout/default.txt"));
+            fileInput = new BufferedReader(new InputStreamReader(is));
         }
         catch(Exception e)
         {
+            e.printStackTrace();
             fileInput = new BufferedReader(new FileReader("src/cluedo/gameLogic/gameBoard/customisation/board layout/default.txt"));
         }
         
