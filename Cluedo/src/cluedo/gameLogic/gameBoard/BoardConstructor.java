@@ -24,7 +24,15 @@ public class BoardConstructor
      */
     public BoardConstructor() throws FileNotFoundException
     {
-        fileInput = new BufferedReader(new FileReader("customisation/board layout/default.txt"));
+        try
+        {
+            fileInput = new BufferedReader(new FileReader("customisation/board layout/default.txt"));
+        }
+        catch(Exception e)
+        {
+            fileInput = new BufferedReader(new FileReader("src/cluedo/gameLogic/gameBoard/customisation/board layout/default.txt"));
+        }
+        
     }
 
     /**

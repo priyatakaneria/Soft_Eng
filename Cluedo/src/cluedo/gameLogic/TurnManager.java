@@ -104,7 +104,7 @@ public class TurnManager
         BoardConstructor bc;
         try
         {
-            bc = new BoardConstructor("../Cluedo/customisation/board layout/default.txt");
+            bc = new BoardConstructor();
             gameBoard = bc.createBoard();
         } //
         catch (FileNotFoundException e)
