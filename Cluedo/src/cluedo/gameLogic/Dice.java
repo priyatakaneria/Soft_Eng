@@ -50,7 +50,7 @@ public class Dice
      *
      * @param numDice the number of six sided dice to simulate with this
      * instance of the class
-     * @param seed
+     * @param seed the random seed to start the instance of Random with
      */
     public Dice(int numDice, long seed)
     {

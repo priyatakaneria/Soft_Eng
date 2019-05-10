@@ -211,6 +211,8 @@ public class Game extends Application
      * DisplayTurn displays a message of which player's turn it is. It takes the
      * current player as an argument. Waits a predetermined number of seconds
      * before finishing.
+     * 
+     * @param player the Player to show whose turn it is
      */
     public void displayTurn(Player player)
     {
@@ -227,6 +229,8 @@ public class Game extends Application
     /**
      * GUI.rollDice() should wait for the user to click on the dice, or some
      * 'roll dice' button before returning the rolled value.
+     * 
+     * @return the value of the last dice roll
      */
     public int rollDice()
     {
@@ -255,6 +259,8 @@ public class Game extends Application
      * them as available on the board (including rooms). The method then should
      * wait for the user to select one of the lit up spaces and return the
      * chosen space.
+     * 
+     * @param availableMoves the set of available moves for the 
      */
     public void chooseSpace(HashSet<BoardSpace> availableMoves)
     {
@@ -319,6 +325,8 @@ public class Game extends Application
     /**
      * GUI.teleport should do the same as choose space, but highlight every
      * possible location
+     * 
+     * @return the boardspace chosen by the player
      */
     public BoardSpace teleport()
     {
@@ -328,8 +336,8 @@ public class Game extends Application
     /**
      * GUI.endTurn should prompt the user to end their turn and wait for them to
      * press the end-turn button.
-     *
-     * returns true.
+     * 
+     * @param b the new value to set waitingForTurn to 
      */
     public void setWaitingForEndTurn(boolean b)
     {
@@ -346,6 +354,9 @@ public class Game extends Application
      * suggestion i.e. the asker. The method should query the user and wait
      * until they enter their suggestion details. The return value should be a
      * new suggestion object representing the user's choice.
+     * 
+     * @param Player the player that made the suggestion
+     * @return the new Suggestion made by the player
      */
     public Suggestion makeSuggestion(Player player)
     {
@@ -378,6 +389,10 @@ public class Game extends Application
     /**
      * GUI.ChooseResponse should take a player (nextEnquiry) and prompt that
      * player to select from one of the possible cards to show to the asker.
+     * 
+     * @param nextEnquiry the next player to be asked about the suggestion
+     * @param possibleClues the set of possible clues the player has to choose
+     * @return the ClueCard chosen by the player
      */
     public ClueCard chooseResponse(Player nextEnquiry, ArrayList<ClueCard> possibleClues)
     {
@@ -388,6 +403,10 @@ public class Game extends Application
      * GUI.showClue takes a ClueCard and the enquired player and displays it to
      * the player who made the suggestion, then waits for the user to make some
      * notes and press a continue button.
+     * 
+     * @param response the clue to show
+     * @param player the player to shoe the clue to
+     * @param clueGiver the player giving the clue
      */
     public void showClue(ClueCard response, Player player, Player clueGiver)
     {
@@ -399,7 +418,7 @@ public class Game extends Application
      * make an accusation and waits for their input to click a 'make accusation'
      * button or an 'end turn' button.
      *
-     * Returns true if they press make accusation, or false if the press end
+     * @return true if they press make accusation, or false if the press end
      * turn.
      */
     public boolean accusationQuery()
@@ -412,6 +431,9 @@ public class Game extends Application
      * accusation and prompt them to select the clues they think are the final
      * solution. Waits until they press some 'submit' button then returns an
      * Accusation object.
+     * 
+     * @param player the player making the accusation
+     * @return the new accusation made
      */
     public Accusation makeAccusation(Player player)
     {
@@ -422,12 +444,19 @@ public class Game extends Application
      * GUI.displayExtraTurn should display the fact the a player specified in
      * the parameters is taking an extra turn because of their intrigue card
      * from last turn.
+     * 
+     * @player the player who has an extra turn
      */
     public void displayExtraTurn(Player player)
     {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * display a congratulations to a player who has made an accurate accusation
+     * 
+     * @param currPlayer the player who has won the game
+     */
     public void winningsPage(Player currPlayer)
     {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

@@ -258,6 +258,7 @@ public abstract class Player
      * @param character the character to suggest
      * @param room the room to suggest
      * @param weapon the weapon to suggest
+     * @param envelope the murder envelope to check the accusation against
      * @return the new Accusation
      */
     public boolean makeAccusation(Character character, Room room, Weapon weapon, cluedo.gameLogic.Envelope envelope)
@@ -284,8 +285,12 @@ public abstract class Player
     }
 
     /**
-     * @deprecated
-     * Not used, enquiries are to be made from the TurnManager instead
+     * @deprecated Not used, enquiries are to be made from the TurnManager
+     * instead
+     * 
+     * @param player the player to enquire
+     * @param suggestion the suggestion made
+     * @return the list of clues that the player responded with
      */
     public ArrayList<ClueCard> enquirePlayer(Suggestion suggestion, Player player)
     {
@@ -294,6 +299,7 @@ public abstract class Player
 
     /**
      * adds an intrigue card to the player's hand.
+     *
      * @param ic the card to add
      */
     public void addIntrigueCard(IntrigueCard ic)
@@ -339,8 +345,9 @@ public abstract class Player
     }
 
     /**
-     * sets the corresponding GUI object for this player
-     * @param pp 
+     * sets the corresponding GUI object for this player.
+     *
+     * @param pp the visible playing piece connected to this player
      */
     public void setGuiPiece(PlayerPiece pp)
     {

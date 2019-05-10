@@ -34,7 +34,7 @@ public class RoomSquare extends BoardSpace
 
     /**
      * set the Room that this square belongs to
-     * @param belongsTo 
+     * @param belongsTo the room that this room tile belongs to
      */
     public void setBelongsTo(Room belongsTo)
     {

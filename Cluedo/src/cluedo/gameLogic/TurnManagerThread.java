@@ -5,6 +5,7 @@ import cluedo.gameLogic.gameBoard.BoardSquare;
 import cluedo.gameLogic.gameBoard.GameBoard;
 import cluedo.gameLogic.gameBoard.Room;
 import cluedo.gameLogic.player.AIPlayer;
+import cluedo.gameLogic.player.HumanPlayer;
 import cluedo.gameLogic.player.Player;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -150,10 +151,14 @@ public class TurnManagerThread<T> extends Task
         @Override
         public void run()
         {
+            
             avail = gameBoard.availableMoves(p.getCurrentPosition(), rollValue);
             System.out.println(avail);
-            GUI.setWaitingForMove(true);
-            GUI.chooseSpace(avail);
+            if (p instanceof HumanPlayer)
+            {
+                GUI.setWaitingForMove(true);
+                GUI.chooseSpace(avail);
+            }
         }
 
         public HashSet<BoardSpace> getValue()

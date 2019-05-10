@@ -41,6 +41,8 @@ public class TurnManager
      * player's name (as a String)
      * @param noAiPlayers The number of players to be controlled by the AI.
      * @param customBoardFilename The filename to load as a custom board file
+     * @param GUI the instance of javaFXApplication that is the main GUi application window
+     * @throws InvalidSetupFileException if the supplied setup file is not valid
      */
     public TurnManager(HashMap<Character, String> characterPlayerMap, int noAiPlayers, String customBoardFilename, Game GUI) throws InvalidSetupFileException
     {
@@ -96,6 +98,7 @@ public class TurnManager
      * player's name (as a String)
      * @param noAiPlayers The number of players to be controlled by the AI.
      * @param GUI the instance of the javafx application that called this constructor
+     * @throws InvalidSetupFileException if the setup file used is invalid
      */
     public TurnManager(HashMap<Character, String> characterPlayerMap, int noAiPlayers, Game GUI) throws InvalidSetupFileException
     {

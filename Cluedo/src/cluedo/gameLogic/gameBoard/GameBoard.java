@@ -20,7 +20,7 @@ import java.util.Stack;
 
 /**
  * Represents the logical gameboard
- * 
+ *
  * @author Jamie Thelin
  */
 public class GameBoard
@@ -60,6 +60,7 @@ public class GameBoard
     {
         return width;
     }
+
     /**
      * @return the height of the board
      */
@@ -71,7 +72,10 @@ public class GameBoard
     /**
      * Constructs a board of a given width.
      *
-     * @param width
+     * @param width the width of the gameboard
+     * @param height the height of the gameboard
+     * @throws InvalidSetupFileException if the file used to create this
+     * gameboard was invalid
      */
     public GameBoard(int width, int height) throws InvalidSetupFileException
     {
@@ -636,8 +640,9 @@ public class GameBoard
                             catch (NullPointerException npe)
                             {
                                 /**
-                                 * Adjacency array was null in this location i.e.
-                                 * there is no board space in that direction
+                                 * Adjacency array was null in this location
+                                 * i.e. there is no board space in that
+                                 * direction
                                  */
                             }
                         }

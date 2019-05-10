@@ -44,7 +44,7 @@ public class DicePane extends Pane
 
     /**
      * stores the last roll of the player 
-     * @param lastRoll 
+     * @param lastRoll the value to store
      */
     public void setLastRoll(int lastRoll)
     {

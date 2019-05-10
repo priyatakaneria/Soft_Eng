@@ -141,6 +141,9 @@ public class AIPlayer extends Player
     /**
      * should make the appropriate detective notes for not receiving a new clue
      * after a suggestion according to the suggestion made.
+     * 
+     * @param enquired the last player to not have clues
+     * @param withoutClues the set of players without clues
      */
     public void noPlayerClues(Player enquired, ArrayList<Player> withoutClues)
     {
@@ -159,7 +162,7 @@ public class AIPlayer extends Player
      *
      * @param response the ClueCard being shown
      * @param enquired the player showing the clue
-     * @param playerQueue the queue of players
+     * @param withoutClues the queue of players
      */
     public void receivedClue(ClueCard response, Player enquired, ArrayList<Player> withoutClues)
     {
@@ -181,6 +184,7 @@ public class AIPlayer extends Player
      * should make a somewhat intelligent decision on which of the possible
      * clues to show, perhaps random if pushed for time.
      *
+     * @param possibleClues the set of possible clues
      * @return the ClueCard corresponding to the clue to show
      */
     public ClueCard chooseResponse(ArrayList<ClueCard> possibleClues)
