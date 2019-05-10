@@ -355,7 +355,7 @@ public class Game extends Application
      * until they enter their suggestion details. The return value should be a
      * new suggestion object representing the user's choice.
      * 
-     * @param Player the player that made the suggestion
+     * @param player the player that made the suggestion
      * @return the new Suggestion made by the player
      */
     public Suggestion makeSuggestion(Player player)
